@@ -98,10 +98,10 @@
 	<resheader name="writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
-	<data name="8||Name" xml:space="preserve">
+	<data name="8_Name" xml:space="preserve">
 		<value>8NameinChinese</value>
 	</data>
-	<data name="8||Description" xml:space="preserve">
+	<data name="8_Description" xml:space="preserve">
 		<value>8DescriptioninChinese</value>
 	</data>
 </root>
