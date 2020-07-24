@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_f906525c-cc1d-4ee7-8f07-6c678fe4fea5" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="SCAP Fix Script Setting test" ResourceId="ID-bfec7e08-b200-44e5-b2dd-5662d631bb92" />
+      <Description Text="test what happens during remediate" ResourceId="ID-76516ad4-ef5f-44e7-b36f-aefa48cbc9e4" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_61969da4-aa87-4c87-9f16-b6aad3c10ecd" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Remediate SCAP - wrong original value" ResourceId="ID-9ab54209-7fb4-4725-b22b-643e77edf5ee" />
+            <Description Text="original is wrong, need to remediate" ResourceId="ID-1fb7400a-9874-451e-abcf-7f88847be2de" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">Write-Host "&lt;Setting1 ExpectedValue='expected' ActualValue='wrong' Action='Detect' /&gt;"</DiscoveryScriptBody>
+            <RemediationScriptBody ScriptType="PowerShell">Write-Host "Remediation Output"</RemediationScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_1d6bfb7d-eea1-4e42-b47a-d7a1acde9d8c" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Remediate SCAP - expected original value" ResourceId="ID-3c8edb24-18b4-47da-ae22-e4659fb8a9d7" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">Write-Host "&lt;Setting2 Expected='expected2' Actual='expected2' Action='Detect' /&gt;"</DiscoveryScriptBody>
+            <RemediationScriptBody ScriptType="PowerShell">Write-Host "Remediated Setting2"</RemediationScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_94dd6770-27c8-4bdf-9e7e-3ffe180a7443" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Must equal expected rule" ResourceId="ID-3cc3b865-a9c5-4d10-8923-a3015f672107" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_f906525c-cc1d-4ee7-8f07-6c678fe4fea5" Version="1" DataType="String" SettingLogicalName="ScriptSetting_61969da4-aa87-4c87-9f16-b6aad3c10ecd" SettingSourceType="Script" Method="Value" Changeable="true" />
+            <ConstantValue Value="&lt;Setting1 ExpectedValue='expected' ActualValue='expected' Action='Remediate' /&gt;" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_b194b239-3165-467b-a428-c0fa03dfc842" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Setting2 rule - compliant already" ResourceId="ID-cce0f183-6cf2-4ccb-8342-1b4fde2bd128" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_f906525c-cc1d-4ee7-8f07-6c678fe4fea5" Version="1" DataType="String" SettingLogicalName="ScriptSetting_1d6bfb7d-eea1-4e42-b47a-d7a1acde9d8c" SettingSourceType="Script" Method="Value" Changeable="true" />
+            <ConstantValue Value="&lt;Setting2 Expected='expected2' Actual='expected2' Action='Remediate' /&gt;" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
