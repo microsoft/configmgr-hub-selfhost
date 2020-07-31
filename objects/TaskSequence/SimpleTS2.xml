@@ -1,0 +1,28 @@
+<sequence version="3.10">
+  <referenceList>
+    <reference package="OPC00318" program="testprgm1" />
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_f50cb461-c1cb-4718-9865-f3bd6a448639" />
+  </referenceList>
+  <step type="SMS_TaskSequence_InstallSoftwareAction" name="Install Package" description="" runIn="FullOS" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>smsswd.exe /pkg:OPC00318 /install /basevar: /continueOnError:</action>
+    <defaultVarList>
+      <variable name="PackageID" property="PackageID" hidden="true">OPC00318</variable>
+      <variable name="_SMSSWDProgramName" property="ProgramName">testprgm1</variable>
+    </defaultVarList>
+  </step>
+  <step type="SMS_TaskSequence_InstallApplicationAction" name="Install Application2" description="" runIn="FullOS" successCodeList="0" retryCount="2" runFromNet="false">
+    <action>smsappinstall.exe /app:ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_f50cb461-c1cb-4718-9865-f3bd6a448639 /basevar: /continueOnError:False</action>
+    <defaultVarList>
+      <variable name="OSDApp" property="AppInfo" hidden="true">1</variable>
+      <variable name="OSDApp0Description" property="AppInfo0Description">Valid</variable>
+      <variable name="OSDApp0DisplayName" property="AppInfo0DisplayName">Adobe Reader 8.1.2-copy</variable>
+      <variable name="OSDApp0Name" property="AppInfo0Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_f50cb461-c1cb-4718-9865-f3bd6a448639</variable>
+      <variable name="ApplicationName" property="ApplicationName" hidden="true">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_f50cb461-c1cb-4718-9865-f3bd6a448639</variable>
+      <variable name="BaseVariableName" property="BaseVariableName" hidden="true"></variable>
+      <variable name="OSDAppClearCache" property="ClearCache">false</variable>
+      <variable name="ContinueOnInstallError" property="ContinueOnInstallError" hidden="true">false</variable>
+      <variable name="OSDAppCount" property="NumApps">1</variable>
+      <variable name="RetryCount" property="RetryCount" hidden="true">2</variable>
+    </defaultVarList>
+  </step>
+</sequence>
