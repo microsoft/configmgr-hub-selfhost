@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_cdc16207-2e5e-4056-beff-64a679578af2" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>No Gravity</Title>
+        <Description />
+        <Publisher />
+        <Version>1.1.7</Version>
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_34143b03-4bbf-4e04-8b5b-ec7b83b77395" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_688098970">No Gravity</Title>
+    <Description ResourceId="Res_347095391" />
+    <Publisher ResourceId="Res_1062639204" />
+    <SoftwareVersion ResourceId="Res_1087730781">1.1.7</SoftwareVersion>
+    <CustomId ResourceId="Res_1240192035" />
+    <Owners>
+      <User Qualifier="LogonName" Id="msilvey" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="msilvey" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_34143b03-4bbf-4e04-8b5b-ec7b83b77395" Version="1">
+    <Title ResourceId="Res_1738813503">No Gravity - App Package for Android (*.apk file)</Title>
+    <Requirements>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="APILevelRule" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Expression>
+          <Operator>GreaterEquals</Operator>
+          <Operands>
+            <GlobalSettingReference AuthoringScopeId="GLOBAL" LogicalName="Device_MinAPILevel" DataType="Int64" SettingLogicalName="MinAPILevel_Setting_LogicalName" SettingSourceType="CIM" Method="Value" />
+            <ConstantValue Value="8" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Requirements>
+    <DeploymentTechnology>GLOBAL/AndroidDeploymentTechnology</DeploymentTechnology>
+    <Technology>Android</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="Android">
+      <Contents>
+        <Content ContentId="Content_c3d2652f-2c90-4521-9c7b-46e099541d8d" Version="1">
+          <File Name="AngryBird.apk" Size="579471" />
+          <Location>\\novafs01\supernova\BVT\AppMgmtBVT\DemoApps\Android\</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>Android</Provider>
+        <Args>
+          <Arg Name="Package" Type="String">com.realtechvr.nogravity</Arg>
+          <Arg Name="PackageVersionCode" Type="String">17</Arg>
+          <Arg Name="AWTVersion" Type="String" />
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>Android</Provider>
+        <Args>
+          <Arg Name="Package" Type="String">com.realtechvr.nogravity</Arg>
+          <Arg Name="PackageName" Type="String">No Gravity</Arg>
+          <Arg Name="PackageVersionCode" Type="String">17</Arg>
+          <Arg Name="PackageVersionName" Type="String">1.1.7</Arg>
+          <Arg Name="AWTVersion" Type="String" />
+        </Args>
+        <Contents>
+          <Content ContentId="Content_c3d2652f-2c90-4521-9c7b-46e099541d8d" Version="1" />
+        </Contents>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>Android</Provider>
+        <Args>
+          <Arg Name="Package" Type="String">com.realtechvr.nogravity</Arg>
+          <Arg Name="PackageName" Type="String">No Gravity</Arg>
+          <Arg Name="PackageVersionCode" Type="String">17</Arg>
+          <Arg Name="PackageVersionName" Type="String">1.1.7</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <ApplicationFileName>AngryBird</ApplicationFileName>
+        <Package>com.realtechvr.nogravity</Package>
+        <PackageName>No Gravity</PackageName>
+        <PackageVersionCode>17</PackageVersionCode>
+        <PackageVersionName>1.1.7</PackageVersionName>
+        <MinSDKVersion>8</MinSDKVersion>
+        <InstallContent ContentId="Content_c3d2652f-2c90-4521-9c7b-46e099541d8d" Version="1" />
+        <AWTVersion />
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
