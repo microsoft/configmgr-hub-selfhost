@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_cdc16207-2e5e-4056-beff-64a679578af2" Version="1">
+  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_cdc16207-2e5e-4056-beff-64a679578af2" Version="2">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>No Gravity</Title>
-        <Description />
-        <Publisher />
         <Version>1.1.7</Version>
       </Info>
     </DisplayInfo>
     <DeploymentTypes>
       <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_34143b03-4bbf-4e04-8b5b-ec7b83b77395" Version="1" />
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_66ec823d-9c3b-41f0-a0b8-e20ae60ab834" Version="1" />
     </DeploymentTypes>
     <Title ResourceId="Res_688098970">No Gravity</Title>
-    <Description ResourceId="Res_347095391" />
-    <Publisher ResourceId="Res_1062639204" />
     <SoftwareVersion ResourceId="Res_1087730781">1.1.7</SoftwareVersion>
-    <CustomId ResourceId="Res_1240192035" />
     <Owners>
       <User Qualifier="LogonName" Id="msilvey" />
     </Owners>
@@ -88,7 +84,74 @@
         <PackageVersionName>1.1.7</PackageVersionName>
         <MinSDKVersion>8</MinSDKVersion>
         <InstallContent ContentId="Content_c3d2652f-2c90-4521-9c7b-46e099541d8d" Version="1" />
-        <AWTVersion />
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_66ec823d-9c3b-41f0-a0b8-e20ae60ab834" Version="1">
+    <Title ResourceId="Res_820233412">script1</Title>
+    <Description ResourceId="Res_770518731" />
+    <DeploymentTechnology>GLOBAL/ScriptDeploymentTechnology</DeploymentTechnology>
+    <Technology>Script</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="Script">
+      <ExecutionContext>User</ExecutionContext>
+      <RequiresLogOn>true</RequiresLogOn>
+      <DetectAction>
+        <Provider>Script</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+          <Arg Name="ScriptType" Type="Int32">0</Arg>
+          <Arg Name="ScriptBody" Type="String">Write-Host "This is fake"</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>Script</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">"C:\Windows\hh.exe"</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+          <Arg Name="RequiresLogOn" Type="String">True</Arg>
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">true</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Normal</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+      </InstallAction>
+      <CustomData>
+        <DetectionMethod>Script</DetectionMethod>
+        <DetectionScript Language="PowerShell">Write-Host "This is fake"</DetectionScript>
+        <InstallCommandLine>"C:\Windows\hh.exe"</InstallCommandLine>
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <InstallFolder />
+        <UninstallCommandLine />
+        <UninstallFolder />
+        <RequiresUserInteraction>true</RequiresUserInteraction>
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <AllowUninstall>true</AllowUninstall>
       </CustomData>
     </Installer>
   </DeploymentType>
