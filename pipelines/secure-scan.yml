@@ -12,13 +12,13 @@ steps:
     displayName: 'Run PoliCheck'
     inputs:
       targetType: F
-      targetArgument: '$(Build.SourcesDirectory)\Documentation'
+      targetArgument: '$(Build.SourcesDirectory)\objects'
     continueOnError: true
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
     displayName: 'Run AntiMalware Scan'
     inputs:
-      FileDirPath: '$(Build.SourcesDirectory)\src'
+      FileDirPath: '$(Build.SourcesDirectory)\objects'
       EnableServices: true
       TreatSignatureUpdateFailureAs: Standard
       TreatStaleSignatureAs: Warning
