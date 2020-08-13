@@ -1,7 +1,6 @@
 name: 'Azure Pipelines Action' 
 description: 'Trigger a run in Azure pipelines' 
 inputs:
-
   azure-devops-project-url: 'https://dev.azure.com/test-memhub/test-hub/'
   azure-pipeline-name: 'microsoft.configmgr-hub-selfhost'
   azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
