@@ -25,4 +25,14 @@
       <variable name="RetryCount" property="RetryCount" hidden="true">2</variable>
     </defaultVarList>
   </step>
+  <step type="SMS_TaskSequence_RunCommandLineAction" name="Run Command Line" description="" runIn="WinPEandFullOS" successCodeList="0 3010" retryCount="0" runFromNet="false">
+    <action>smsswd.exe /run: cmd /c calc.exe</action>
+    <defaultVarList>
+      <variable name="CommandLine" property="CommandLine" hidden="true">cmd /c calc.exe</variable>
+      <variable name="SMSTSDisableWow64Redirection" property="DisableWow64Redirection">false</variable>
+      <variable name="SMSTSRunCommandLineOutputVariableName" property="OutputVariableName"></variable>
+      <variable name="_SMSTSRunCommandLineAsUser" property="RunAsUser">false</variable>
+      <variable name="SuccessCodes" property="SuccessCodes" hidden="true">0 3010</variable>
+    </defaultVarList>
+  </step>
 </sequence>
