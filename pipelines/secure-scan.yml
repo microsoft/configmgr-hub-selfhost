@@ -1,0 +1,22 @@
+# Pipeline for running SDL scans
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+steps:
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
+    displayName: 'Run PoliCheck'
+    inputs:
+      targetType: F
+      targetArgument: '$(Build.SourcesDirectory)\Documentation'
+    continueOnError: true
+
+  - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
+    displayName: 'Run AntiMalware Scan'
+    inputs:
+      FileDirPath: '$(Build.SourcesDirectory)\src'
+      EnableServices: true
+      TreatSignatureUpdateFailureAs: Standard
+      TreatStaleSignatureAs: Warning
+    continueOnError: true
