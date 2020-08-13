@@ -1,0 +1,15 @@
+name: 'Azure Pipelines Action' 
+description: 'Trigger a run in Azure pipelines' 
+inputs:
+  azure-devops-project-url: 'https://dev.azure.com/test-memhub/test-hub/'
+    description: 'Runs a policheck and virus check on the pending pull request.' 
+    required: true 
+  azure-pipeline-name:'microsoft.configmgr-hub-selfhost'
+    description: 'Name of the Azure Pipline to be triggered' 
+    required: true 
+  azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+    description: 'Paste personal access token of the user as value of secret variable:AZURE_DEVOPS_TOKEN' 
+    required: true 
+runs: 
+  using: 'node12' 
+  main: 'lib/main.js' 
