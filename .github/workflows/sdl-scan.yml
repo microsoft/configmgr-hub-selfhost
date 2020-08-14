@@ -1,11 +1,15 @@
-name: 'Azure Pipelines Action' 
+name: 'Run SDL Tools' 
 
 on:
   pull_request:
     branches: [ master ]
 
-uses: Azure/pipelines@v1
-with:
-  azure-devops-project-url: 'https://dev.azure.com/test-memhub/test-hub/'
-  azure-pipeline-name: 'microsoft.configmgr-hub-selfhost'
-  azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: Azure/pipelines@v1
+      with:
+        azure-devops-project-url: 'https://dev.azure.com/test-memhub/test-hub/'
+        azure-pipeline-name: 'microsoft.configmgr-hub-selfhost'
+        azure-devops-token: '${{ secrets.AZURE_DEVOPS_TOKEN }}'
