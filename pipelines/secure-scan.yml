@@ -6,6 +6,8 @@ trigger:
 
 pool:
   vmImage: 'windows-2019'
+  
+required: true
 
 steps:
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
@@ -13,6 +15,7 @@ steps:
     inputs:
       targetType: F
       targetArgument: '$(Build.SourcesDirectory)\objects'
+      result: '$(Build.SourcesDirectory)\Scans\PoliCheck.xml'
     continueOnError: true
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
@@ -23,3 +26,9 @@ steps:
       TreatSignatureUpdateFailureAs: Standard
       TreatStaleSignatureAs: Warning
     continueOnError: true
+    
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Pipeline Artifact'
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)\Scans\'
+      artifact: Scans
