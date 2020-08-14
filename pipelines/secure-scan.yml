@@ -13,7 +13,7 @@ steps:
     inputs:
       targetType: F
       targetArgument: '$(Build.SourcesDirectory)\objects'
-      result: '$(Build.SourcesDirectory)\Scans\PoliCheck.xml'
+      result: '$(Build.SourcesDirectory)\Scans\pc.xml'
     continueOnError: true
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
