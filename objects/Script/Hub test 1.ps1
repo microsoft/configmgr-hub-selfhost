@@ -1,1 +1,1 @@
-﻿Write-Host "wow, not THAT cool"
+﻿Write-Host "wow, not THAT cool, but kindof... I guess"
