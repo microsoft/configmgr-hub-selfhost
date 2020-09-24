@@ -1,5 +1,6 @@
 
 # Contributing
+Submissions to this repository should be made from the Microsoft Endpoint Configuration Manager Community hub.  See https://docs.microsoft.com/en-us/mem/configmgr/core/servers/manage/community-hub for more information.
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
