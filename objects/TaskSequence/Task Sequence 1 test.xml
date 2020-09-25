@@ -1,5 +1,5 @@
 <sequence version="3.10">
-  <step type="SMS_TaskSequence_RebootAction" name="Restart Computer" description="" runIn="WinPEandFullOS" successCodeList="0" retryCount="0" runFromNet="false">
+  <step type="SMS_TaskSequence_RebootAction" name="Restart Computer" description="modifying here" runIn="WinPEandFullOS" successCodeList="0" retryCount="0" runFromNet="false">
     <action>smsboot.exe /target:WinPE</action>
     <defaultVarList>
       <variable name="SMSRebootMessage" property="Message">A new Microsoft Windows operating system is being installed. The computer must restart to continue.</variable>
