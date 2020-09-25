@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_0EC033E5-BCC9-4615-AFBD-D8911469F7FB" LogicalName="Application_7daf0b09-d221-4a52-ac11-71769bcb550f" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>update app test 2002</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_2015589447">update app test 2002</Title>
+    <Description ResourceId="Res_2055245622" />
+    <Publisher ResourceId="Res_1629830270" />
+    <SoftwareVersion ResourceId="Res_125358574" />
+    <CustomId ResourceId="Res_1109678391" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
