@@ -1,2 +1,2 @@
-﻿$var
-echo($var)
+﻿$var1
+echo($var1)
