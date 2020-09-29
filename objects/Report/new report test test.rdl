@@ -239,7 +239,7 @@
           <rdl:ReportItems>
             <rdl:Image Name="RightHeaderImage">
               <rdl:Source>External</rdl:Source>
-              <rdl:Value>/ConfigMgr_COV/Report Resources/Report_Header_Right.png</rdl:Value>
+              <rdl:Value>/ConfigMgr_QHQ/Report Resources/Report_Header_Right.png</rdl:Value>
               <rdl:Top>0.0in</rdl:Top>
               <rdl:Left>4.0350000858306885in</rdl:Left>
               <rdl:Height>0.75in</rdl:Height>
@@ -253,7 +253,7 @@
             <rdl:Image Name="CenterHeaderImage">
               <rdl:Source>External</rdl:Source>
               <rdl:Sizing>Fit</rdl:Sizing>
-              <rdl:Value>/ConfigMgr_COV/Report Resources/Report_Header_Center.png</rdl:Value>
+              <rdl:Value>/ConfigMgr_QHQ/Report Resources/Report_Header_Center.png</rdl:Value>
               <rdl:Top>0.0in</rdl:Top>
               <rdl:Left>0.20999999344348907in</rdl:Left>
               <rdl:Height>0.75in</rdl:Height>
@@ -266,7 +266,7 @@
             </rdl:Image>
             <rdl:Image Name="LeftHeaderImage">
               <rdl:Source>External</rdl:Source>
-              <rdl:Value>/ConfigMgr_COV/Report Resources/Report_Header_Left.png</rdl:Value>
+              <rdl:Value>/ConfigMgr_QHQ/Report Resources/Report_Header_Left.png</rdl:Value>
               <rdl:Top>0.0in</rdl:Top>
               <rdl:Left>0.0in</rdl:Left>
               <rdl:Height>0.75in</rdl:Height>
