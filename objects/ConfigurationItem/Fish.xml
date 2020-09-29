@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_922224D6-1EBD-417B-A52F-3F0C4D263D28" LogicalName="OperatingSystem_6c1b77a0-a24e-40db-b4fa-320391ed6f09" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="Fish" ResourceId="ID-4d6fd8a7-eb93-4e4e-b929-79b84fc0243c" />
+      <Description Text="&quot;...are friends, not food&quot;" ResourceId="ID-4b4b0118-4e92-43d2-8120-d70a7c774358" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <RegistryKey Hive="HKEY_LOCAL_MACHINE" Is64Bit="false" LogicalName="RegKey_8ec60d9e-c2b3-432f-834a-83a44dc90cd0">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="Intel" ResourceId="ID-879005d8-bda9-4521-b933-5a43fd7599d2" />
+          <Description Text="" />
+        </Annotation>
+        <Key>SOFTWARE\Intel</Key>
+      </RegistryKey>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_1cb9255a-0b17-4019-84a0-2b0aec734228" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Intel key must exist" ResourceId="ID-de8ea720-0f3c-4920-a12f-c5ca70c24c7f" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_922224D6-1EBD-417B-A52F-3F0C4D263D28" LogicalName="OperatingSystem_6c1b77a0-a24e-40db-b4fa-320391ed6f09" Version="1" DataType="Int64" SettingLogicalName="RegKey_8ec60d9e-c2b3-432f-834a-83a44dc90cd0" SettingSourceType="RegistryKey" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
