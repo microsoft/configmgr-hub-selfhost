@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="OperatingSystem_9d92abd8-1030-4d0d-8e9c-47aec7714d25" Version="3">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="DetOfficeAct" ResourceId="ID-0826a4cf-1478-4d62-ae3c-96ef66af96b5" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_33c18650-37b2-411d-bf54-99794c84f7ce" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="OfficeActivation" ResourceId="ID-faf0f4ab-8024-4d15-8223-2a53ead1fee5" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource IsPerUser="true" Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">#=============================================================================================================================
+#
+# Script Name:     DetOffAct.ps1 
+# Description:     Purpose of this script is to Office Activation state                     
+# Notes:           No variable substitution needed, Remediate if "Match"
+#
+#=============================================================================================================================
+
+# Define Variables
+
+try{
+
+$OfficeLic=Get-CimInstance SoftwareLicensingProduct -Filter "Name like 'Office%'" | select name, applicationid, licensestatus 
+    if(!($OfficeLic.count -eq 0)){
+        if(($OfficeLic.licensestatus -ccontains 2) -or ($OfficeLic.licensestatus -ccontains 1)){
+             #We want "Activated" so this "No_Match", do not need to remediate
+             Write-Host "No_Match"
+             exit 0             
+        }
+        else{
+            #Office is not activated so we want "Match", as of 10/2019 need to exit 1 for Intune to remeditate
+            Write-Host "Match"        
+            exit 1
+        }
+    }
+    else{
+        #Office installed and activated, do not need to remediate
+        Write-Host "No_Match"
+        exit 0
+    }
+
+}
+catch{
+    $errMsg = $_.Exception.Message
+    Write-Error $errMsg
+    exit 1
+}
+
+# ENCODEDSCRIPT # Begin Configuration Manager encoded script block # 77u/Iz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQojDQojIFNjcmlwdCBOYW1lOiAgICAgRGV0T2ZmQWN0LnBzMSANCiMgRGVzY3JpcHRpb246ICAgICBQdXJwb3NlIG9mIHRoaXMgc2NyaXB0IGlzIHRvIE9mZmljZSBBY3RpdmF0aW9uIHN0YXRlICAgICAgICAgICAgICAgICAgICAgDQojIE5vdGVzOiAgICAgICAgICAgTm8gdmFyaWFibGUgc3Vic3RpdHV0aW9uIG5lZWRlZCwgUmVtZWRpYXRlIGlmICJNYXRjaCINCiMNCiM9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQojIERlZmluZSBWYXJpYWJsZXMNCg0KdHJ5ew0KDQokT2ZmaWNlTGljPUdldC1DaW1JbnN0YW5jZSBTb2Z0d2FyZUxpY2Vuc2luZ1Byb2R1Y3QgLUZpbHRlciAiTmFtZSBsaWtlICdPZmZpY2UlJyIgfCBzZWxlY3QgbmFtZSwgYXBwbGljYXRpb25pZCwgbGljZW5zZXN0YXR1cyANCiAgICBpZighKCRPZmZpY2VMaWMuY291bnQgLWVxIDApKXsNCiAgICAgICAgaWYoKCRPZmZpY2VMaWMubGljZW5zZXN0YXR1cyAtY2NvbnRhaW5zIDIpIC1vciAoJE9mZmljZUxpYy5saWNlbnNlc3RhdHVzIC1jY29udGFpbnMgMSkpew0KICAgICAgICAgICAgICNXZSB3YW50ICJBY3RpdmF0ZWQiIHNvIHRoaXMgIk5vX01hdGNoIiwgZG8gbm90IG5lZWQgdG8gcmVtZWRpYXRlDQogICAgICAgICAgICAgV3JpdGUtSG9zdCAiTm9fTWF0Y2giDQogICAgICAgICAgICAgZXhpdCAwICAgICAgICAgICAgIA0KICAgICAgICB9DQogICAgICAgIGVsc2V7DQogICAgICAgICAgICAjT2ZmaWNlIGlzIG5vdCBhY3RpdmF0ZWQgc28gd2Ugd2FudCAiTWF0Y2giLCBhcyBvZiAxMC8yMDE5IG5lZWQgdG8gZXhpdCAxIGZvciBJbnR1bmUgdG8gcmVtZWRpdGF0ZQ0KICAgICAgICAgICAgV3JpdGUtSG9zdCAiTWF0Y2giICAgICAgICANCiAgICAgICAgICAgIGV4aXQgMQ0KICAgICAgICB9DQogICAgfQ0KICAgIGVsc2V7DQogICAgICAgICNPZmZpY2UgaW5zdGFsbGVkIGFuZCBhY3RpdmF0ZWQsIGRvIG5vdCBuZWVkIHRvIHJlbWVkaWF0ZQ0KICAgICAgICBXcml0ZS1Ib3N0ICJOb19NYXRjaCINCiAgICAgICAgZXhpdCAwDQogICAgfQ0KDQp9DQpjYXRjaHsNCiAgICAkZXJyTXNnID0gJF8uRXhjZXB0aW9uLk1lc3NhZ2UNCiAgICBXcml0ZS1FcnJvciAkZXJyTXNnDQogICAgZXhpdCAxDQp9 # ENCODEDSCRIPT# End Configuration Manager encoded script block
+
+</DiscoveryScriptBody>
+            <RemediationScriptBody ScriptType="PowerShell">#=============================================================================================================================
+#
+# Script Name:     RemOffAct.ps1
+# Description:     Remediate Office Activation state 
+# Notes:           Customers should change the value of the variable $osppSharePath from "&lt;\\yourpathhere&gt;" to accessible path                  
+#
+#=============================================================================================================================
+
+# Define Variables
+$osppSharePath = "\\scfs\users\ermatt\ForAman\UX_Analytics"
+
+Function Get-OfficeSoftwareProtectionPlatform {
+     [CmdletBinding()][OutputType([string])]
+       param ()
+    
+       $file = Get-ChildItem "$env:ProgramFiles\Microsoft Office" -Filter "OSPP.VBS" -Recurse -ErrorAction SilentlyContinue
+       if (($file -eq $null) -or ($File -eq '')) {
+            $file = Get-ChildItem "${env:ProgramFiles(x86)}\Microsoft Office" -Filter "OSPP.VBS" -Recurse -ErrorAction SilentlyContinue
+       }
+
+       $File = $File.FullName
+       if(($file -eq $Null) -or ($file -eq '')){
+            Copy-item -Path $osppSharePath $env:windir\Temp -Recurse -Force -ErrorAction SilentlyContinue
+            $file = Get-ChildItem $env:windir\Temp\OSPP -Filter "OSPP.VBS" -Recurse -ErrorAction SilentlyContinue
+       }
+     Return $file
+}
+
+     Start-Service sppsvc -ea SilentlyContinue
+     sleep 5
+     $errors = $false
+     
+try{
+     $vOSPP = Get-OfficeSoftwareProtectionPlatform
+     $vExecutable = $env:windir + "\System32\cscript.exe"
+     $vSwitches = [char]34 + $vOSPP + [char]34 + [char]32 + "/act"
+     if ((Test-Path $vExecutable) -eq $true) {
+          $errCode = (Start-Process -FilePath $vExecutable -ArgumentList $vSwitches -Wait -WindowStyle Hidden -Passthru).ExitCode
+       }
+
+     if (($errCode -eq 0) -or ($errCode -eq 3010)) {         
+         $vOfficeLic= Get-CimInstance SoftwareLicensingProduct -Filter "Name like 'Office%'" | select name, applicationid, licensestatus 
+         $local:Product=$OfficeLic.name
+        
+         if(($vOfficeLic.licensestatus -ccontains 2) -or ($vOfficeLic.licensestatus -ccontains 1) -or ($vOfficeLic.licensestatus -ccontains 3)){
+              $result="Office is activated"              
+              Return $result
+              exit 0
+         }
+         else{
+             $result= "Office is not activated"             
+             Return $result
+             #exit 1 here for Intune during initial phase since cannot yet differentiate based upon result returned
+             exit 1
+        }
+     }
+     else {
+          $result= "Failed with error code $errCode"
+          Return $result
+          #exit 1 here for Intune during initial phase since cannot yet differentiate based upon result returned
+          exit 1
+     }
+}
+catch{
+    $errMsg = $_.Exception.Message
+    Write-Error $errMsg
+    exit 1
+}
+
+# ENCODEDSCRIPT # Begin Configuration Manager encoded script block # 77u/Iz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQojDQojIFNjcmlwdCBOYW1lOiAgICAgUmVtT2ZmQWN0LnBzMQ0KIyBEZXNjcmlwdGlvbjogICAgIFJlbWVkaWF0ZSBPZmZpY2UgQWN0aXZhdGlvbiBzdGF0ZSANCiMgTm90ZXM6ICAgICAgICAgICBDdXN0b21lcnMgc2hvdWxkIGNoYW5nZSB0aGUgdmFsdWUgb2YgdGhlIHZhcmlhYmxlICRvc3BwU2hhcmVQYXRoIGZyb20gIjxcXHlvdXJwYXRoaGVyZT4iIHRvIGFjY2Vzc2libGUgcGF0aCAgICAgICAgICAgICAgICAgIA0KIw0KIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCiMgRGVmaW5lIFZhcmlhYmxlcw0KJG9zcHBTaGFyZVBhdGggPSAiXFxzY2ZzXHVzZXJzXGVybWF0dFxGb3JBbWFuXFVYX0FuYWx5dGljcyINCg0KRnVuY3Rpb24gR2V0LU9mZmljZVNvZnR3YXJlUHJvdGVjdGlvblBsYXRmb3JtIHsNCiAgICAgW0NtZGxldEJpbmRpbmcoKV1bT3V0cHV0VHlwZShbc3RyaW5nXSldDQogICAgICAgcGFyYW0gKCkNCiAgICANCiAgICAgICAkZmlsZSA9IEdldC1DaGlsZEl0ZW0gIiRlbnY6UHJvZ3JhbUZpbGVzXE1pY3Jvc29mdCBPZmZpY2UiIC1GaWx0ZXIgIk9TUFAuVkJTIiAtUmVjdXJzZSAtRXJyb3JBY3Rpb24gU2lsZW50bHlDb250aW51ZQ0KICAgICAgIGlmICgoJGZpbGUgLWVxICRudWxsKSAtb3IgKCRGaWxlIC1lcSAnJykpIHsNCiAgICAgICAgICAgICRmaWxlID0gR2V0LUNoaWxkSXRlbSAiJHtlbnY6UHJvZ3JhbUZpbGVzKHg4Nil9XE1pY3Jvc29mdCBPZmZpY2UiIC1GaWx0ZXIgIk9TUFAuVkJTIiAtUmVjdXJzZSAtRXJyb3JBY3Rpb24gU2lsZW50bHlDb250aW51ZQ0KICAgICAgIH0NCg0KICAgICAgICRGaWxlID0gJEZpbGUuRnVsbE5hbWUNCiAgICAgICBpZigoJGZpbGUgLWVxICROdWxsKSAtb3IgKCRmaWxlIC1lcSAnJykpew0KICAgICAgICAgICAgQ29weS1pdGVtIC1QYXRoICRvc3BwU2hhcmVQYXRoICRlbnY6d2luZGlyXFRlbXAgLVJlY3Vyc2UgLUZvcmNlIC1FcnJvckFjdGlvbiBTaWxlbnRseUNvbnRpbnVlDQogICAgICAgICAgICAkZmlsZSA9IEdldC1DaGlsZEl0ZW0gJGVudjp3aW5kaXJcVGVtcFxPU1BQIC1GaWx0ZXIgIk9TUFAuVkJTIiAtUmVjdXJzZSAtRXJyb3JBY3Rpb24gU2lsZW50bHlDb250aW51ZQ0KICAgICAgIH0NCiAgICAgUmV0dXJuICRmaWxlDQp9DQoNCiAgICAgU3RhcnQtU2VydmljZSBzcHBzdmMgLWVhIFNpbGVudGx5Q29udGludWUNCiAgICAgc2xlZXAgNQ0KICAgICAkZXJyb3JzID0gJGZhbHNlDQogICAgIA0KdHJ5ew0KICAgICAkdk9TUFAgPSBHZXQtT2ZmaWNlU29mdHdhcmVQcm90ZWN0aW9uUGxhdGZvcm0NCiAgICAgJHZFeGVjdXRhYmxlID0gJGVudjp3aW5kaXIgKyAiXFN5c3RlbTMyXGNzY3JpcHQuZXhlIg0KICAgICAkdlN3aXRjaGVzID0gW2NoYXJdMzQgKyAkdk9TUFAgKyBbY2hhcl0zNCArIFtjaGFyXTMyICsgIi9hY3QiDQogICAgIGlmICgoVGVzdC1QYXRoICR2RXhlY3V0YWJsZSkgLWVxICR0cnVlKSB7DQogICAgICAgICAgJGVyckNvZGUgPSAoU3RhcnQtUHJvY2VzcyAtRmlsZVBhdGggJHZFeGVjdXRhYmxlIC1Bcmd1bWVudExpc3QgJHZTd2l0Y2hlcyAtV2FpdCAtV2luZG93U3R5bGUgSGlkZGVuIC1QYXNzdGhydSkuRXhpdENvZGUNCiAgICAgICB9DQoNCiAgICAgaWYgKCgkZXJyQ29kZSAtZXEgMCkgLW9yICgkZXJyQ29kZSAtZXEgMzAxMCkpIHsgICAgICAgICANCiAgICAgICAgICR2T2ZmaWNlTGljPSBHZXQtQ2ltSW5zdGFuY2UgU29mdHdhcmVMaWNlbnNpbmdQcm9kdWN0IC1GaWx0ZXIgIk5hbWUgbGlrZSAnT2ZmaWNlJSciIHwgc2VsZWN0IG5hbWUsIGFwcGxpY2F0aW9uaWQsIGxpY2Vuc2VzdGF0dXMgDQogICAgICAgICAkbG9jYWw6UHJvZHVjdD0kT2ZmaWNlTGljLm5hbWUNCiAgICAgICAgDQogICAgICAgICBpZigoJHZPZmZpY2VMaWMubGljZW5zZXN0YXR1cyAtY2NvbnRhaW5zIDIpIC1vciAoJHZPZmZpY2VMaWMubGljZW5zZXN0YXR1cyAtY2NvbnRhaW5zIDEpIC1vciAoJHZPZmZpY2VMaWMubGljZW5zZXN0YXR1cyAtY2NvbnRhaW5zIDMpKXsNCiAgICAgICAgICAgICAgJHJlc3VsdD0iT2ZmaWNlIGlzIGFjdGl2YXRlZCIgICAgICAgICAgICAgIA0KICAgICAgICAgICAgICBSZXR1cm4gJHJlc3VsdA0KICAgICAgICAgICAgICBleGl0IDANCiAgICAgICAgIH0NCiAgICAgICAgIGVsc2V7DQogICAgICAgICAgICAgJHJlc3VsdD0gIk9mZmljZSBpcyBub3QgYWN0aXZhdGVkIiAgICAgICAgICAgICANCiAgICAgICAgICAgICBSZXR1cm4gJHJlc3VsdA0KICAgICAgICAgICAgICNleGl0IDEgaGVyZSBmb3IgSW50dW5lIGR1cmluZyBpbml0aWFsIHBoYXNlIHNpbmNlIGNhbm5vdCB5ZXQgZGlmZmVyZW50aWF0ZSBiYXNlZCB1cG9uIHJlc3VsdCByZXR1cm5lZA0KICAgICAgICAgICAgIGV4aXQgMQ0KICAgICAgICB9DQogICAgIH0NCiAgICAgZWxzZSB7DQogICAgICAgICAgJHJlc3VsdD0gIkZhaWxlZCB3aXRoIGVycm9yIGNvZGUgJGVyckNvZGUiDQogICAgICAgICAgUmV0dXJuICRyZXN1bHQNCiAgICAgICAgICAjZXhpdCAxIGhlcmUgZm9yIEludHVuZSBkdXJpbmcgaW5pdGlhbCBwaGFzZSBzaW5jZSBjYW5ub3QgeWV0IGRpZmZlcmVudGlhdGUgYmFzZWQgdXBvbiByZXN1bHQgcmV0dXJuZWQNCiAgICAgICAgICBleGl0IDENCiAgICAgfQ0KfQ0KY2F0Y2h7DQogICAgJGVyck1zZyA9ICRfLkV4Y2VwdGlvbi5NZXNzYWdlDQogICAgV3JpdGUtRXJyb3IgJGVyck1zZw0KICAgIGV4aXQgMQ0KfQ== # ENCODEDSCRIPT# End Configuration Manager encoded script block
+
+</RemediationScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_3472e5d0-a821-4c94-a7ad-9e80f4b4f38b" Severity="None" NonCompliantWhenSettingIsNotFound="true">
+        <Annotation>
+          <DisplayName Text="OfficeActivation" ResourceId="ID-a7abc11d-0bef-431d-a95c-644b8dd0effa" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="OperatingSystem_9d92abd8-1030-4d0d-8e9c-47aec7714d25" Version="3" DataType="String" SettingLogicalName="ScriptSetting_33c18650-37b2-411d-bf54-99794c84f7ce" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="No_Match" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
