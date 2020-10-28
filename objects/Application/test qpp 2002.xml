@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_1EA3620E-C2FB-4CD2-BD04-8C662FDEDABD" LogicalName="Application_7090dbfb-1fab-40b8-81f1-ae5f56282f4f" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>test qpp 2002</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_154973045">test qpp 2002</Title>
+    <Description ResourceId="Res_1843911295" />
+    <Publisher ResourceId="Res_446536343" />
+    <SoftwareVersion ResourceId="Res_1838521397" />
+    <CustomId ResourceId="Res_2120661305" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
