@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_396066FB-721D-4D03-BE67-26EA6E19BA96" LogicalName="Application_da62c607-9ffa-4bcf-ba90-5ee4b4184347" Version="2">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>test qpp 2006</Title>
+        <Publisher />
+        <Version />
+        <ReleaseDate>10/29/2020</ReleaseDate>
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_698222048">test qpp 2006</Title>
+    <Description ResourceId="Res_546280838">editing here</Description>
+    <Publisher ResourceId="Res_1651884369" />
+    <SoftwareVersion ResourceId="Res_1815432463" />
+    <ReleaseDate ResourceId="Res_852979267">10/29/2020</ReleaseDate>
+    <CustomId ResourceId="Res_381109573" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
