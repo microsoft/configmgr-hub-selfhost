@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <BusinessPolicy AuthoringScopeId="ScopeId_2D24AE42-B08F-40E1-A4C8-10EC87B85DCF" LogicalName="BusinessPolicy_c0ae4566-049a-41e2-949e-1a4c1ac5dd94" Version="1">
+  <BusinessPolicy AuthoringScopeId="ScopeId_2D24AE42-B08F-40E1-A4C8-10EC87B85DCF" LogicalName="BusinessPolicy_c0ae4566-049a-41e2-949e-1a4c1ac5dd94" Version="2">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="CI 2006 for 2012" ResourceId="ID-7a5a12fd-5d72-4743-a346-1a2d4c92380e" />
-      <Description Text="" />
+      <Description Text="updating" ResourceId="ID-18cb7d44-52e7-440c-910d-766a51902b6d" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
