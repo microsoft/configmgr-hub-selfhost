@@ -1,0 +1,2520 @@
+﻿<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:cl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="SCCM_DB">
+      <DataSourceReference>default_reference</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>449fcc40-64f5-4c16-9abf-6c7f1178d9ae</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="KeyProtectorsLookup">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <CommandText>
+        SELECT N'0' [KeyProtectorId], N'protectorTypeUnknown' [KeyProtectorName]
+        UNION
+        SELECT N'1' [KeyProtectorId], N'protectorTypeTPM' [KeyProtectorName]
+        UNION
+        SELECT N'2' [KeyProtectorId], N'protectorTypeExternalKey' [KeyProtectorName]
+        UNION
+        SELECT N'3' [KeyProtectorId], N'protectorTypeNumericPassword' [KeyProtectorName]
+        UNION
+        SELECT N'4' [KeyProtectorId], N'protectorTypeTPMPIN' [KeyProtectorName]
+        UNION
+        SELECT N'5' [KeyProtectorId], N'protectorTypeTPMUSBStartupKey' [KeyProtectorName]
+        UNION
+        SELECT N'6' [KeyProtectorId], N'protectorTypeTPMPINUSBStartupKey' [KeyProtectorName]
+        UNION
+        SELECT N'7' [KeyProtectorId], N'protectorTypePublicKey' [KeyProtectorName]
+        UNION
+        SELECT N'8' [KeyProtectorId], N'protectorTypePassword' [KeyProtectorName]
+        UNION
+        SELECT N'9' [KeyProtectorId], N'ProtectorTPMCertificate' [KeyProtectorName]
+        UNION
+        SELECT N'10' [KeyProtectorId], N'ProtectorSID' [KeyProtectorName]
+        UNION
+        SELECT N'200' [KeyProtectorId], N'ProtectorDRA' [KeyProtectorName]
+        </CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="KeyProtectorId">
+          <DataField>KeyProtectorId</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="KeyProtectorName">
+          <DataField>KeyProtectorName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="InventoryViewExistence">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <CommandText>
+          DECLARE @query nvarchar(70)
+          SET @query = N'SELECT COUNT(EncodedComputerName0) AS Status FROM V_GS_MBAM_POLICY'
+          BEGIN TRY
+            EXEC(@query)
+          END TRY
+          BEGIN CATCH
+            SELECT 0 AS Status
+          END CATCH
+        </CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ComplianceDetails">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@encodedComputerNameParameter">
+            <Value>=Code.EncodeString(Parameters!computerNameParameter.Value)</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>
+        
+          DECLARE @CICompliant int 
+          DECLARE @CINotCompliant int 
+          DECLARE @ResourceId int
+
+          SET @ResourceId = (SELECT ResourceID FROM v_GS_MBAM_POLICY WHERE EncodedComputerName0 = @encodedComputerNameParameter)
+
+          -- Set CI compliant value 
+          SET @CICompliant = 1
+
+          -- Set CI non compliant value 
+          SET @CINotCompliant = 2
+                    
+          SELECT 
+              ComputerName [ComputerName],
+              DomainName [DomainName],
+              ComputerType [ComputerType],
+              OS [OS],
+              Precedence [Precedence],
+              OSDriveCompliance AS OSDComplianceStatus,
+              FDDriveCompliance AS FDDComplianceStatus,
+              ComplianceStatusUpdateDate [ComplianceStatusUpdateDate],
+              Exemption [Exemption],
+              ExemptedUser [ExemptedUser],
+              ComplianceStatusDetails [ComplianceStatusDetails],
+              Manufacturer [Manufacturer],
+              Model [Model],
+              PolicyCipherStrength [PolicyCipherStrength],
+              PolicyOSDriveEncryptRequired [PolicyOSDriveEncryptRequired],
+              PolicyOSDrive [PolicyOSDrive],
+              PolicyFixedDriveEncryptRequired [PolicyFixedDriveEncryptRequired],
+              PolicyFixedDrivePasswordRequired [PolicyFixedDrivePasswordRequired],
+              DeviceUsers [DeviceUsers]
+          FROM (
+
+          SELECT MBAMPolicy.EncodedComputerName0 [ComputerName],
+                  RSystem.ResourceID [ResourceID],
+                  ComputerSystem.Domain0 [DomainName],
+                  ComputerSystemExt.PCSystemType0 [ComputerType],
+                  OpSystem.Caption0 [OS],
+                  CompStat.ComplianceState [ComplianceStatus],
+                  AssignmentStatus.LastEvaluationMessageTime [ComplianceStatusUpdateDate],
+                  CASE
+                  WHEN MBAMPolicy.MBAMPolicyEnforced0 IS NULL THEN -1 -- (when outer join returns null : N/A)
+                  WHEN CompStat.ComplianceState = @CINotCompliant AND MBAMPolicy.MBAMPolicyEnforced0 = 3 THEN 1 -- tmp user exempt
+                  WHEN CompStat.ComplianceState = @CICompliant AND MBAMPolicy.MBAMPolicyEnforced0 = 2 THEN 2 -- user exempt    
+                  ELSE 0 -- not exempted
+                  END [Exemption],
+                  CASE     
+                  WHEN (CompStat.ComplianceState = @CICompliant) AND ((MBAMPolicy.MBAMPolicyEnforced0 = 2) OR (MBAMPolicy.MBAMPolicyEnforced0 = 3)) THEN MBAMPolicy.LastConsoleUser0 
+                  ELSE N'' -- no user is exempted 
+                  END [ExemptedUser],
+                  CASE
+                  WHEN CompStat.ComplianceState = @CICompliant AND MBAMPolicy.MBAMPolicyEnforced0 = 0 THEN 50 -- policy not enforced
+                  WHEN CompStat.ComplianceState = @CICompliant AND MBAMPolicy.MBAMPolicyEnforced0 = 1 THEN 0 -- no error
+                  WHEN CompStat.ComplianceState = @CINotCompliant AND MBAMPolicy.MBAMMachineError0 IS NOT NULL THEN MBAMPolicy.MBAMMachineError0 -- MBAM agent error status
+                  ELSE -1 -- No Details \ Errors
+                  END [ComplianceStatusDetails],
+                  ComputerSystem.Manufacturer0 [Manufacturer],
+                  ComputerSystem.Model0 [Model],
+                  MBAMPolicy.EncryptionMethod0 [PolicyCipherStrength],
+                  MBAMPolicy.OSDriveEncryption0 [PolicyOSDriveEncryptRequired],
+                  MBAMPolicy.OsDriveProtector0 [PolicyOSDrive],
+                  MBAMPolicy.FixedDataDriveEncryption0 [PolicyFixedDriveEncryptRequired],
+                  MBAMPolicy.FixedDataDrivePassphrase0 [PolicyFixedDrivePasswordRequired],
+                  (RSystem.User_Domain0 + N'\' + RSystem.User_Name0) [DeviceUsers],
+                  compliance.OSDriveCompliance AS OSDriveCompliance,
+                  compliance.FDDriveCompliance As FDDriveCompliance,
+                  ConfigItems.Precedence
+              FROM v_R_System_Valid RSystem
+                  INNER JOIN v_SMSCICurrentComplianceStatus CompStat
+                  ON CompStat.ItemKey = RSystem.ResourceID
+                  INNER JOIN v_ConfigurationItems ConfigItems
+                  ON ConfigItems.ModelID = CompStat.ModelID
+                  INNER JOIN v_GS_COMPUTER_SYSTEM_EXT ComputerSystemExt
+                  ON RSystem.ResourceID = ComputerSystemExt.ResourceID
+                  INNER JOIN v_GS_COMPUTER_SYSTEM ComputerSystem
+                  ON RSystem.ResourceID = ComputerSystem.ResourceID
+                  INNER JOIN v_GS_OPERATING_SYSTEM OpSystem
+                  ON RSystem.ResourceID = OpSystem.ResourceID
+                  LEFT OUTER JOIN v_CIAssignmentToCI AssignmentCI 
+                  ON AssignmentCI.CI_ID = ConfigItems.CI_ID
+                  LEFT OUTER JOIN v_CIAssignmentStatus AssignmentStatus
+                  ON AssignmentStatus.AssignmentID = AssignmentCI.AssignmentID 
+                  AND AssignmentStatus.ResourceID = RSystem.ResourceID
+                  LEFT OUTER JOIN v_GS_MBAM_POLICY MBAMPolicy
+                  ON MBAMPolicy.ResourceID = RSystem.ResourceID
+                  JOIN fn_BLM_ComputerComplianceStatus(@ResourceId) compliance
+                  ON compliance.CI_ID = ConfigItems.CI_ID AND compliance.ItemKey = CompStat.ItemKey
+              WHERE(ConfigItems.CI_ID IN (select CI_ID from v_BLM_CI_IDs ))
+                  AND (MBAMPolicy.EncodedComputerName0 = @encodedComputerNameParameter)
+                  
+                  ) Tmp
+          ORDER BY DomainName, ComputerName
+
+        </CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="ComputerName">
+          <DataField>ComputerName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DomainName">
+          <DataField>DomainName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ComputerType">
+          <DataField>ComputerType</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OS">
+          <DataField>OS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Precedence">
+          <DataField>Precedence</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OSDComplianceStatus">
+          <DataField>OSDComplianceStatus</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FDDComplianceStatus">
+          <DataField>FDDComplianceStatus</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ComplianceStatusUpdateDate">
+          <DataField>ComplianceStatusUpdateDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Exemption">
+          <DataField>Exemption</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ExemptedUser">
+          <DataField>ExemptedUser</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ComplianceStatusDetails">
+          <DataField>ComplianceStatusDetails</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Manufacturer">
+          <DataField>Manufacturer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Model">
+          <DataField>Model</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PolicyCipherStrength">
+          <DataField>PolicyCipherStrength</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PolicyOSDriveEncryptRequired">
+          <DataField>PolicyOSDriveEncryptRequired</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PolicyOSDrive">
+          <DataField>PolicyOSDrive</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PolicyFixedDriveEncryptRequired">
+          <DataField>PolicyFixedDriveEncryptRequired</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PolicyFixedDrivePasswordRequired">
+          <DataField>PolicyFixedDrivePasswordRequired</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DeviceUsers">
+          <DataField>DeviceUsers</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="VolumeDetails">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@encodedComputerNameParameter">
+            <Value>=Code.EncodeString(Parameters!computerNameParameter.Value)</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>
+          SELECT BitlockerDetails.DriveLetter0 [DriveLetter],
+            ComputerSystem.Name0 [ComputerName],
+            ComputerSystem.Domain0 [DomainName],
+            BitlockerDetails.MbamVolumeType0 [MbamVolumeType],
+            BitlockerDetails.EncryptionMethod0 [EncryptionMethod],
+            BitlockerDetails.ConversionStatus0 [ConversionStatus],
+            BitlockerDetails.ProtectionStatus0 [ProtectionStatus],
+            BitlockerDetails.IsAutoUnlockEnabled0 [IsAutoUnlockEnabled],
+            BitlockerDetails.KeyProtectorTypes0 [KeyProtectorTypes]
+          FROM v_GS_BITLOCKER_DETAILS BitlockerDetails
+            INNER JOIN v_R_System_Valid RSystem 
+              ON BitlockerDetails.ResourceID = RSystem.ResourceID
+            INNER JOIN v_GS_COMPUTER_SYSTEM ComputerSystem
+              ON RSystem.ResourceID = ComputerSystem.ResourceID
+            LEFT OUTER JOIN v_GS_MBAM_POLICY MBAMPolicy
+              ON MBAMPolicy.ResourceID = RSystem.ResourceID
+          WHERE (MBAMPolicy.EncodedComputerName0 = @encodedComputerNameParameter)
+            AND (BitlockerDetails.MbamVolumeType0 = 1 OR BitlockerDetails.MbamVolumeType0 = 2)
+          ORDER BY DomainName, ComputerName, DriveLetter 
+        </CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ComputerName">
+          <DataField>ComputerName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DomainName">
+          <DataField>DomainName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DriveLetter">
+          <DataField>DriveLetter</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MbamVolumeType">
+          <DataField>MbamVolumeType</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="EncryptionMethod">
+          <DataField>EncryptionMethod</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ConversionStatus">
+          <DataField>ConversionStatus</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ProtectionStatus">
+          <DataField>ProtectionStatus</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="IsAutoUnlockEnabled">
+          <DataField>IsAutoUnlockEnabled</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="KeyProtectorTypes">
+          <DataField>KeyProtectorTypes</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="DataSetAdminID">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@UserTokenSIDs">
+            <Value>=Parameters!UserTokenSIDs.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>select dbo.fn_rbac_GetAdminIDsfromUserSIDs(@UserTokenSIDs) as UserSIDs</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="UserSIDs">
+          <DataField>UserSIDs</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Image Name="image1">
+            <Source>Embedded</Source>
+            <Value>icon_report</Value>
+            <MIMEType>image/png</MIMEType>
+            <Sizing>Fit</Sizing>
+            <Top>0.15333in</Top>
+            <Left>0.25209in</Left>
+            <Height>0.5in</Height>
+            <Width>0.5in</Width>
+            <ToolTip>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_01", User!Language)</ToolTip>
+            <Style />
+          </Image>
+          <Textbox Name="reportTitleTxt">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_02", User!Language)</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>16pt</FontSize>
+                      <Color>#444444</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.13944in</Top>
+            <Left>0.89923in</Left>
+            <Height>0.33333in</Height>
+            <Width>4.78071in</Width>
+            <ZIndex>1</ZIndex>
+            <ToolTip>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_03", User!Language)</ToolTip>
+            <Style>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="reportTitleDetailsTxt">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_04", User!Language)</Value>
+                    <Style>
+                      <Color>#666666</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.51444in</Top>
+            <Left>0.89923in</Left>
+            <Height>0.86368in</Height>
+            <Width>4.78071in</Width>
+            <ZIndex>2</ZIndex>
+            <ToolTip>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_05", User!Language)</ToolTip>
+            <Style>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="complianceDetailsTableTitleTxt">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_06", User!Language)</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>11pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.06719in</Top>
+            <Left>0.25209in</Left>
+            <Height>0.25in</Height>
+            <Width>34.4in</Width>
+            <ZIndex>3</ZIndex>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") &lt;= 0, True, False)</Hidden>
+            </Visibility>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <Border>
+                <Color>#b6b8e4</Color>
+                <Style>Solid</Style>
+              </Border>
+              <BackgroundColor>SkyBlue</BackgroundColor>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Tablix Name="ComplianceDetailsTable">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.43in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.32in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.46in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.56in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.02in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.96in</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.63492cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsComputerNameHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_07", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>35</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsComputerDomainHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_08", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>34</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsComputerTypeHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_09", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>33</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsOSHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_10", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>32</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsComplianceStatusHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_11", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>31</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_12", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox1</rd:DefaultName>
+                          <ZIndex>30</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_13", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox7</rd:DefaultName>
+                          <ZIndex>29</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsUpdateDateHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_14", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>28</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox15">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_15", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox15</rd:DefaultName>
+                          <ZIndex>27</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox17">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_16", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox17</rd:DefaultName>
+                          <ZIndex>26</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox21">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_17", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox21</rd:DefaultName>
+                          <ZIndex>24</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsPolicyCipherStrengthHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_18", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>23</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsPolicyOSDriveHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_19", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>22</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsPolicyFixedDriveHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_20", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>21</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox23">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_21", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox23</rd:DefaultName>
+                          <ZIndex>20</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox25">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_22", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox25</rd:DefaultName>
+                          <ZIndex>19</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="complianceDetailsDeviceUsersHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_23", User!Language)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>18</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.63492cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="computerDetailsTableComputerNameValue">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Code.DecodeString(Fields!ComputerName.Value)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>17</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DomainName.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox12</rd:DefaultName>
+                          <ZIndex>16</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(Fields!ComputerType.Value = 2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Portable", User!Language), IIF(InStr(CStr(Fields!ComputerType.Value), "1;3;4;5;6;7;8") &gt;= 0, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Nonportable", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language)))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox2</rd:DefaultName>
+                          <ZIndex>15</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox4">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!OS.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox4</rd:DefaultName>
+                          <ZIndex>14</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox13">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Precedence.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox13</rd:DefaultName>
+                          <ZIndex>13</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(Fields!OSDComplianceStatus.Value = 1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Compliant", User!Language), IIF(Fields!OSDComplianceStatus.Value = 3, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Noncompliant", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language)))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox3</rd:DefaultName>
+                          <ZIndex>12</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox14">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(Fields!FDDComplianceStatus.Value = 1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Compliant", User!Language), IIF(Fields!FDDComplianceStatus.Value = 3, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Noncompliant", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language)))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox14</rd:DefaultName>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Code.ToLocalTime(First(Fields!ComplianceStatusUpdateDate.Value, "ComplianceDetails"))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox5</rd:DefaultName>
+                          <ZIndex>10</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox16">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(Fields!Exemption.Value = 1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Temporary_User_Exempted", User!Language), IIF(Fields!Exemption.Value = 2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_User_Exempted", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Not_Exempted", User!Language)))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox16</rd:DefaultName>
+                          <ZIndex>9</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox18">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ExemptedUser.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox18</rd:DefaultName>
+                          <ZIndex>8</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox22">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIf(Fields!ComplianceStatusDetails.Value = 0, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_No_Error", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_An_unknown_error_has_occurred", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 5, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_User_postponed_encryption", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 6, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_System_Partition_not_available_or_large_enough", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 7, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unable_to_find_compatible_TPM", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 8, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_TPM_visible_but_not_initialized", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 9, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Policy_conflict", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 10, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Waiting_for_TPM_auto_provisioning", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 11, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Volume_is_locked", User!Language), IIf(Fields!ComplianceStatusDetails.Value = 50, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_No_Policy_Enforced", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_N_A", User!Language)))))))))))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox22</rd:DefaultName>
+                          <ZIndex>6</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF((Fields!PolicyCipherStrength.Value = 4294967294) OR (IsNothing(Fields!PolicyCipherStrength.Value) = True), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language), 
+ Switch(Fields!PolicyCipherStrength.Value = 0, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_None", User!Language), (Fields!PolicyCipherStrength.Value = 1), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_128_Bit_with_Diffuser", User!Language), Fields!PolicyCipherStrength.Value = 2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_256_Bit_with_Diffuser", User!Language), Fields!PolicyCipherStrength.Value = 3, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_128_Bit", User!Language), Fields!PolicyCipherStrength.Value = 4, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_256_Bit", User!Language), Fields!PolicyCipherStrength.Value=5, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Hardware", User!Language)))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox6</rd:DefaultName>
+                          <ZIndex>5</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(Fields!PolicyOSDriveEncryptRequired.Value = -1, "", IIF((Fields!PolicyOSDriveEncryptRequired.Value = 0) Or (IsNothing(Fields!PolicyOSDriveEncryptRequired.Value) = True), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Forbidden", User!Language),
+Switch((Fields!PolicyOSDrive.Value = 1) Or (IsNothing(Fields!PolicyOSDrive.Value) = True), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__TPM", User!Language),
+       Fields!PolicyOSDrive.Value = 2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__External_Key", User!Language),
+       Fields!PolicyOSDrive.Value = 3, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__Numeric_password", User!Language), 
+       Fields!PolicyOSDrive.Value = 4, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__TPM__PIN", User!Language),
+       Fields!PolicyOSDrive.Value = 5, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__TPM__USB_Startup_Key", User!Language),
+       Fields!PolicyOSDrive.Value = 6, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__TPM__PIN__USB_Startup_Key", User!Language),
+       Fields!PolicyOSDrive.Value = 7, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__Public_Key", User!Language),
+       Fields!PolicyOSDrive.Value = 8, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__Password", User!Language))))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox11</rd:DefaultName>
+                          <ZIndex>4</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox9">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(Fields!PolicyFixedDriveEncryptRequired.Value = -1, "", IIF((Fields!PolicyFixedDriveEncryptRequired.Value = 1) AND ((Fields!PolicyFixedDrivePasswordRequired.Value = 1) Or (IsNothing(Fields!PolicyFixedDrivePasswordRequired.Value) = True)), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Required__Password", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Forbidden", User!Language)))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox9</rd:DefaultName>
+                          <ZIndex>3</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox24">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Manufacturer.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox24</rd:DefaultName>
+                          <ZIndex>2</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox26">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Model.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox26</rd:DefaultName>
+                          <ZIndex>1</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox8">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DeviceUsers.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox8</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>Gray</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                  <KeepTogether>true</KeepTogether>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="ComplianceDetailsTable_Details_Group">
+                    <DataElementName>Detail</DataElementName>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                  <DataElementName>Detail_Collection</DataElementName>
+                  <DataElementOutput>Output</DataElementOutput>
+                  <KeepTogether>true</KeepTogether>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>ComplianceDetails</DataSetName>
+            <Top>6cm</Top>
+            <Left>0.25209in</Left>
+            <Height>1.26984cm</Height>
+            <Width>87.44959cm</Width>
+            <ZIndex>4</ZIndex>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") &lt;= 0, True, False)</Hidden>
+            </Visibility>
+            <DataElementOutput>Output</DataElementOutput>
+            <Style>
+              <Border>
+                <Color>Gray</Color>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="errorViewMissingTxt">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_33", User!Language)</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>Red</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>4cm</Top>
+            <Left>0.25209in</Left>
+            <Height>0.75cm</Height>
+            <Width>20.71624cm</Width>
+            <ZIndex>5</ZIndex>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") &gt; 0, True, False)</Hidden>
+            </Visibility>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Tablix Name="volumesTable">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>1.87in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.36in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.18in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.36in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.36in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.56in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.56in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.56in</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.75cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textboxComputerName">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_34", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textboxDomainName">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_35", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox33">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_36", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox34">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_37", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>10</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox44">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_38", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>9</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox45">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_39", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>8</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox46">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_40", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>7</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox47">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_41", User!Language)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>6</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>Gainsboro</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.79268cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textboxComputerNameValue">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ComputerName.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>5</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textboxDomainNameValue">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DomainName.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>5</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox27">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DriveLetter.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>5</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox28">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Switch(Fields!MbamVolumeType.Value = 0, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown_Drive_Type", User!Language), Fields!MbamVolumeType.Value = 1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Operating_System_Drive", User!Language), Fields!MbamVolumeType.Value = 2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Fixed_Data_Drive", User!Language))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>4</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox29">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Switch(Fields!EncryptionMethod.Value=4294967294, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language), Fields!EncryptionMethod.Value=0, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_None", User!Language), Fields!EncryptionMethod.Value=1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_128_Bit_with_Diffuser", User!Language), Fields!EncryptionMethod.Value=2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_256_Bit_with_Diffuser", User!Language), Fields!EncryptionMethod.Value=3, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_128_Bit", User!Language), Fields!EncryptionMethod.Value=4, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_256_Bit", User!Language), Fields!EncryptionMethod.Value=5, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Hardware", User!Language), Fields!EncryptionMethod.Value=6, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_128_Bit_XTS", User!Language), Fields!EncryptionMethod.Value=7, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_256_Bit_XTS", User!Language))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>3</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox30">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Code.TrimPrefixComma(
+  IIF(
+    (Fields!IsAutoUnlockEnabled.Value = 1), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_AutoUnlock_Enabled", User!Language) + ", ",""
+  ) + Join(
+    MultiLookup(
+      Split(
+        Fields!KeyProtectorTypes.Value,", "
+      ), Fields!KeyProtectorId.Value, Fields!KeyProtectorName.Value, "KeyProtectorsLookup"
+    ), ", "
+  )
+).Replace("protectorTypeUnknown",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language)).Replace("protectorTypeTPM",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_TPM", User!Language)).Replace("protectorTypeExternalKey",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_External_Key", User!Language)).Replace("protectorTypeNumericPassword",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Numerical_password", User!Language)).Replace("protectorTypeTPMPIN",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_TPM__PIN", User!Language)).Replace("protectorTypeTPMUSBStartupKey",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_TPM__USB_Startup_Key", User!Language)).Replace("protectorTypeTPMPINUSBStartupKey",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_TPM__PIN__USB_Startup_Key", User!Language)).Replace("protectorTypePublicKey",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Public_Key", User!Language)).Replace("protectorTypePassword",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Password", User!Language)).Replace("ProtectorTPMCertificate",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_TPM_Certificate", User!Language)).Replace("ProtectorSID",
+  SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_SID", User!Language)).Replace("ProtectorDRA", SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_DRA_Certificate", User!Language))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>2</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox31">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIf(Fields!ProtectionStatus.Value = 1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_On", User!Language), IIf(Fields!ProtectionStatus.Value = 2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Off", User!Language)))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <ZIndex>1</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox32">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIf(Fields!ConversionStatus.Value = 1, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encrypted", User!Language), IIf(Fields!ConversionStatus.Value = 0, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Not_Encrypted", User!Language), IIf(Fields!ConversionStatus.Value = 2, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encrypting", User!Language), IIf(Fields!ConversionStatus.Value = 3, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Decrypting", User!Language), IIf(Fields!ConversionStatus.Value = 4, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Encryption_Paused", User!Language), IIf(Fields!ConversionStatus.Value = 5, SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Decryption_Paused", User!Language), SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_Unknown", User!Language)))))))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Dotted</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                  <KeepTogether>true</KeepTogether>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="volumesTable_Details_Group">
+                    <DataElementName>Detail</DataElementName>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                  <DataElementName>Detail_Collection</DataElementName>
+                  <DataElementOutput>Output</DataElementOutput>
+                  <KeepTogether>true</KeepTogether>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>VolumeDetails</DataSetName>
+            <Top>8.75cm</Top>
+            <Left>0.25209in</Left>
+            <Height>1.54268cm</Height>
+            <Width>45.25cm</Width>
+            <ZIndex>6</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="textbox48">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=SrsResources.Localization.GetString("Bitlocker_Computer_Compliance_47", User!Language)</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>3.2in</Top>
+            <Left>0.25209in</Left>
+            <Height>0.2in</Height>
+            <Width>45.25cm</Width>
+            <ZIndex>7</ZIndex>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") &lt;= 0, True, False)</Hidden>
+            </Visibility>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <Border>
+                <Color>#b6b8e4</Color>
+                <Style>Solid</Style>
+              </Border>
+              <BackgroundColor>SkyBlue</BackgroundColor>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>4.05224in</Height>
+        <Style />
+      </Body>
+      <Width>36.81563in</Width>
+      <Page>
+        <PageHeight>29.7cm</PageHeight>
+        <PageWidth>21cm</PageWidth>
+        <InteractiveHeight>11in</InteractiveHeight>
+        <InteractiveWidth>8.5in</InteractiveWidth>
+        <LeftMargin>2.5cm</LeftMargin>
+        <RightMargin>2.5cm</RightMargin>
+        <TopMargin>2.5cm</TopMargin>
+        <BottomMargin>2.5cm</BottomMargin>
+        <ColumnSpacing>1cm</ColumnSpacing>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="UserTokenSIDs">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=SrsResources.UserIdentity.GetUserSIDs(User!UserID)</Value>
+        </Values>
+      </DefaultValue>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="UserSIDs">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>DataSetAdminID</DataSetName>
+          <ValueField>UserSIDs</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="computerNameParameter">
+      <DataType>String</DataType>
+      <Prompt>Computer Name</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Code>
+Public Function TrimPrefixComma( ByVal str As String ) As String
+        Dim RemoveChar() As Char = {","}
+        Return str.TrimStart(RemoveChar)
+End Function
+
+Public Function EncodeString(ByVal toEncode As String) As String
+        On Error GoTo EncodeError
+        Dim bytesToEncode As Byte() = System.Text.UnicodeEncoding.Unicode.GetBytes(toEncode.ToUpper())
+        Dim encodedValue As String = System.Convert.ToBase64String(bytesToEncode)
+        Return encodedValue
+EncodeError:
+        Return ""
+End Function
+
+Public Function DecodeString(ByVal toDecode As String) As String
+        On Error GoTo ErrorExit
+        Dim decodedBytes As Byte() = System.Convert.FromBase64String(toDecode)
+        Dim decodedValue As String = System.Text.UnicodeEncoding.Unicode.GetString(decodedBytes)
+        Return decodedValue
+ErrorExit:
+        Return ""
+End Function
+
+Public Function ToLocalTime(ByVal utcTime As DateTime) As DateTime
+        On Error GoTo ErrorExit
+        Return utcTime.ToLocalTime()
+ErrorExit:
+        Return utcTime
+End Function
+  </Code>
+  <EmbeddedImages>
+    <EmbeddedImage Name="icon_report">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAAC4AAAAsCAYAAAAacYo8AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNAay06AAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTEvMDcvMDd3s0FQAAAKmklEQVRYha2ZWYxlVRWGv7X2udV1q7q7CmmayFQioiGmVVqcutUQE30wPqmIEoIaTD8gCd1pNR1eIYbn8sk4oTghStQoYpw6GiVtCLaJ+gBoByccQKuotoZ76+zfhz2cc6saQkKdm3PPPsPd599r/+vfa61rknD3ZmZm9kWhaVxRtNoUQSAE9ZCaWzbrffeu2cQ12/acTT4/+ftneUdcXVtdGm+MxwAmicsuW3jvwYNX31cevP6jH/jlwmsueWJzNJ6ScIEDDjJqO+0GjlkwzAwr1y3dMzfMBZaxG7mt7jxfkvUNUY2VDjYzOzNc/u0zlwOsrKzc3qS78fX9Ec7OzcwN54ez7Whq2rCGBCiYWQCCQeiDVw9sNoaBHECSKYGyck/IIjHjFDFdyzhlSkflewB68KFTC284dCkAex7Z88nm6LHjJx548Mcf29hY53Of+TS//MWv+MPZP7zyt38//UrfdNwcxzEMt3QMFrK5HLPnnuZksmRBIagMzN/KdxSJ+QyQUjtKiguzC9Nbe21iO+beb9z7u5Xl5QO/PnWK2LZgspaYOxSRiJsTlY6S8iCE6dmB93yjtqVq2WxNbfsgiETl9/c66d7VLC4u3nXeeeddcflLLj8gRLOroY2pQ5S5ZpMvri8oDO05lxC2xcJly/QowGqfpZ2fl6RicSXKnAM4wNzeObvk0ks6aygSFUFgZjidtesLc3d+Drr0KTFh9f6gt9q6dy8SM18SXbqRW+2tATC32LELoloisVqyglbsBkLEZLS0OF77tr4icO6Z2kqLc4HvW71v8WKi
+BmB5eXncd4s2xgrcZHUABWAkZm22CsrMJkD3qVkocs5BPFu7o0q1eBKrDPzoseMnfvKznx9ZXV3lq/fczU9/cpLXck2yLlYVRRKttbi8AnS8DqA/wD7ICcAZThlM31G3UKXMdHa2PJutVZo3sR1zxx13nFpfXzv8xJk/Jn5ni5OUrANZeG2p/acnz7C2tp46fS5ZrAC3fz9zdoXXHrh6K4UkdcPpuklKBllVZmaGL7vyypcfbpqGJjSsjzYwVK1uec12vFrEMFbX1vjYoY8/O+Dnsd16360TkKOitoLvkGe6kDk+HM7ooosuqlM3Ho8Y0ICgpSVYSCrTo4WbVwoc3P3qFwS+GCMmOpfVdZsqbZNDSZVOAjbbMQ0hUUQ+Ad4tO2iWy53YorZresY1ATw8GgBYXl5OsUpwDyIiDKSyZtWOKnhCokmWRO0Q8j7Y7pBiGmUz7zsY/nLt/msvK79pjh47fuIHP/rpTU8/9W++ff83eeDb3+eluoLCLocU9oikKngdyE6ZvK8qRbGiopUBPPSfh546sPeATp48WV54exPbMR+4/rrvTg0G71leWkISYzYIJswCgZA1JSQnzUrjhB0BPQG+05QUSSLPbRexBU4BTwGfbBYXF+/as3v35xYWXsLceXMgGPkam+EseIpWXY4p4DENoOzrcWOHUKvIqUkSRo3DMcyE5zViL7AJ2TkHU1PthRdemCmRdpnAIshoLQJtfkkOrQUj1ncE99m1DWrEVlZHGSY3ZNa2wdvQjIGpvCfgm5ubMSKI2UXyRE1mWtkqdS2bXClfyLY6XqfESabk+kQzZGbRLbayjfF4E4h5T8AvvvjivVUOVeYoi2OZNjMkMOs75A7pYYg1rjdhKMrcIBq4HOSEqAw6UeXoseMn7r3v/vefPXuWL3/pC3zrG/dzKS/OoDuyFZMIy70bq8+sc+t9t74gzM2g6WZXScFMxTxmhrsUPVqbZSH/LrZj3nz4jV+ZGQ5vvOaa1+Hu
+9W6RpzyHKfXscgwuu3o/yLHCr7KyRcv5L921uupZ7/l0lCK1FJBnF2HmLimaQmt4FDAg5bv44uLiXUij+fl5Hn/8MeZetHfSJDkFtozFDdwNz8u/G5gbbtY9Eyw/l/Z0XSnltmQEWewEwCN4m49CHk0mk7cub5FFl0Vl0APIHA8htPv27aME9mWS+jF3kqsSneViRLVo75n+eZm5Ungo0WaeQFlZ2ouNhMpMBSwpCy6iR4stSdo651xbW9uUYlHCLJ4lbbAJGGaeM5EEXpaQVcUpR7f0iqQRxOwyKeko78k/qWFP5mEtrhiSGURC47vS3CfndIAjR45cp9gFNW5piUkRiWPmBHOChXTPPflCLl0ES1Rxd9yM4EYgnZtbplg+enk2DdYNLICH5EJm5BJSppO3Jm818MFwND26AngT8Knm6LHjJz5885H5666/gXu++Hm+863vcJVelmaqc6dqBOvNAbkuVUOBkspRlb9zFMvnOccs1heO5TJFNMPUKReSSShaa7Ype8cb3zGpKgdfc+CLu2dnbzZ3hlMzmLr013ov74PvsPcXoS3KUOQnUyONTTUZKCu1spG8ukJ6JtFQDkJOe/r0aQEsLS3dbpKYm5v77P4L9t9cosBr73wzu97qaH0SbknP+qw/Zz2ox9+6DHThaj0vEagytyNlIJMR4yiOeP3MocdfdebVDpwG3p1rh8S5+bncoZLFNajBTwWqxNMCfWJF6CPur1vZGCoTUEDlX5eqoWRYgt57JiflDp4mpShLUpWVlZVxVwxKztlYSF0Xxaj83kKRCfS9EKBIXQVfUoJCgwI4Vk5LjixZPrVzdisDtxKntJBpdcstt7xPJfORcAJBDYFubwiprQGBwZZ73SdosOW3+duarEpZmSwkpfJQVcnMsoKVonUuuqb7ZQGaAghLyysnbrjxpncdOvwW+/vf/srvH/kdV73zKqYXpvHNLv4ONtkOWSqdkNoWqnw6IRdFvXfN6rf1gBZV
+cstrRKGiFVqCaLlocOk/L3j6whlgBbiiie2Ytxx6w+enh9MfQcb01DROoGGAcsnNSPFIdU5ZFZDtm3qtrsRTztySBKqyuBQ8HSPmb+U8FIzIZhpsIeUs5FhlODPDvvP3cf6+85ndO0uQ06ihYUCjQUeDbdQYpN0GvfuDHkXKU4Veg4k+QiGShUSjfCWUBY9Q75nVbGZYnTPGGHfv2QOCSMkwmxoddp9tAcDWqCRZ1jp7l5ZXy3Yl5a72G3MNPutKDimiRSQr2S7AxgTwpmmCYufllSql8Jnrh1VVbCv8SZpIRVVUBW6yxBMz5IjnM8/XoE0xkBJpokWchkGY2gWsAnsAmttuO/rg9x744duWl5f5+lfv4eGHH8aqxSPgeJbEAtOfg+N5wa6LivcWl+7T5lJ1W40Te2IbiVX/SQiY3jWtDHwOoJHiyZtuvOF/oHevra4SRxGPTojZOUkKUCNCkveXDK6fJPVpQm9FLE5ItbZnwI5oM+wu4jRFYknOAZNjcs3Pzx9eWloCOGKSGA6Hd++amvrgaDRiejDkzq/d+Y8Dbz/w5Hht3JhZUdVMmY4q/XYXkPWTva1/RqU6GUgxrXhK/z4opv98oiIxKt2PMZ+3avWKuVf8+ft3/+Bnn/jQJ75UOY7ZY9PTwzNmFjDx70f/dWbpgv8+OdoYNRhFUQtZKmkK1N5ZFxAm0SwreKxl8XzeO0ZSfSG3JbB8ruQI5ptP7PpL+5vTj/yreyvsBxbcfR/U3MHdPPRJwMTJ88/ud6CEYcBI6J/tZvuopJVycQBMww7X1J4foOe7RWAEbChl1vwfVP+tNXjrRUsAAAAASUVORK5CYII=</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <Language>=User!Language</Language>
+  <CodeModules>
+    <CodeModule>SrsResources, culture=neutral</CodeModule>
+  </CodeModules>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>50395b3b-d5c6-43c9-b97c-9c26161995d0</rd:ReportID>
+</Report>
