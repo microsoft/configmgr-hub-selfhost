@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_997A0607-01C0-411A-BB7E-29DEB44011B8" LogicalName="Application_8fa28851-5439-4410-9243-30c2dd3cdf3d" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>Orca</Title>
+        <Description />
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_997A0607-01C0-411A-BB7E-29DEB44011B8" LogicalName="DeploymentType_1c5fc634-7e6f-4101-af3c-94a642ae48e5" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_446503955">Orca</Title>
+    <Description ResourceId="Res_2127130751" />
+    <Publisher ResourceId="Res_1983259157" />
+    <SoftwareVersion ResourceId="Res_2014620530" />
+    <CustomId ResourceId="Res_1310601273" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_997A0607-01C0-411A-BB7E-29DEB44011B8" LogicalName="DeploymentType_1c5fc634-7e6f-4101-af3c-94a642ae48e5" Version="1">
+    <Title ResourceId="Res_1144002409">Orca - Windows Installer (*.msi file)</Title>
+    <DeploymentTechnology>GLOBAL/MSIDeploymentTechnology</DeploymentTechnology>
+    <Technology>MSI</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="MSI">
+      <ExecutionContext>System</ExecutionContext>
+      <Contents>
+        <Content ContentId="Content_ed94d041-9271-40d9-be95-5849b9df59e5" Version="1">
+          <File Name="Orca.Msi" Size="2479104" />
+          <Location>\\R61331503\Shared\App\</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="ProductCode" Type="String">{6F7CB29F-1319-4816-B345-0856916EB801}</Arg>
+          <Arg Name="PackageCode" Type="String" />
+          <Arg Name="PatchCodes" Type="String[]" />
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">msiexec /i "Orca.Msi" /q</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Hidden</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_ed94d041-9271-40d9-be95-5849b9df59e5" Version="1" />
+        </Contents>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">msiexec /x {6F7CB29F-1319-4816-B345-0856916EB801} /q</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Hidden</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_ed94d041-9271-40d9-be95-5849b9df59e5" Version="1" />
+        </Contents>
+      </UninstallAction>
+      <CustomData>
+        <DetectionMethod>ProductCode</DetectionMethod>
+        <ProductCode>{6F7CB29F-1319-4816-B345-0856916EB801}</ProductCode>
+        <ProductVersion>1.50.3698.0000</ProductVersion>
+        <InstallCommandLine>msiexec /i "Orca.Msi" /q</InstallCommandLine>
+        <InstallContent ContentId="Content_ed94d041-9271-40d9-be95-5849b9df59e5" Version="1" />
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <UninstallCommandLine>msiexec /x {6F7CB29F-1319-4816-B345-0856916EB801} /q</UninstallCommandLine>
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <UserInteractionMode>Hidden</UserInteractionMode>
+        <UserInstall>true</UserInstall>
+        <ContainsSystemFolders>true</ContainsSystemFolders>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
