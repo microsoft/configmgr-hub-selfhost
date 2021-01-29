@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_D77EFB40-5937-475C-98F7-E79E797CF24F" LogicalName="Application_2b81888d-e664-4c9f-90bf-2d1edeea0cdf" Version="2">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>Ansari App</Title>
+        <Publisher />
+        <Version />
+        <ReleaseDate>1/7/2021</ReleaseDate>
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_2130698568">AnsariApp</Title>
+    <Description ResourceId="Res_1772505728">editing here</Description>
+    <Publisher ResourceId="Res_1037352076" />
+    <SoftwareVersion ResourceId="Res_1309811541" />
+    <ReleaseDate ResourceId="Res_2071263794">1/7/2021</ReleaseDate>
+    <CustomId ResourceId="Res_1667897164" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
