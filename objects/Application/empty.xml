@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_FD3137A6-DA47-448E-9417-9063A303AAF0" LogicalName="Application_47197523-6f70-48b0-b2a7-0c8bf2944963" Version="2">
+  <Application AuthoringScopeId="ScopeId_FD3137A6-DA47-448E-9417-9063A303AAF0" LogicalName="Application_47197523-6f70-48b0-b2a7-0c8bf2944963" Version="3">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>empty</Title>
@@ -10,7 +10,7 @@
       </Info>
     </DisplayInfo>
     <Title ResourceId="Res_300180318">empty</Title>
-    <Description ResourceId="Res_198104603" />
+    <Description ResourceId="Res_198104603">editing here</Description>
     <Publisher ResourceId="Res_2038272360" />
     <SoftwareVersion ResourceId="Res_1743736693" />
     <ReleaseDate ResourceId="Res_185052131">1/7/2021</ReleaseDate>
