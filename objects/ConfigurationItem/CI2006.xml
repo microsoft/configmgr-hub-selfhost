@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <OperatingSystem AuthoringScopeId="ScopeId_1CD3FDB7-D44C-45AC-A8F5-3EC50DA65FE1" LogicalName="OperatingSystem_a48c3352-4ec5-45a7-a0c4-5242a133c3e6" Version="2">
+  <OperatingSystem AuthoringScopeId="ScopeId_1CD3FDB7-D44C-45AC-A8F5-3EC50DA65FE1" LogicalName="OperatingSystem_a48c3352-4ec5-45a7-a0c4-5242a133c3e6" Version="3">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="CI2006" ResourceId="ID-359a367b-1199-4994-a752-a597528d697d" />
-      <Description Text="Upate here" ResourceId="ID-650b02de-50dc-4d6d-b9da-fc4642921fc2" />
+      <Description Text="Upate here 29/11 11:28PM" ResourceId="ID-650b02de-50dc-4d6d-b9da-fc4642921fc2" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
@@ -32,7 +32,7 @@
         <Expression>
           <Operator>NotEquals</Operator>
           <Operands>
-            <SettingReference AuthoringScopeId="ScopeId_1CD3FDB7-D44C-45AC-A8F5-3EC50DA65FE1" LogicalName="OperatingSystem_a48c3352-4ec5-45a7-a0c4-5242a133c3e6" Version="2" DataType="Int64" SettingLogicalName="RegSetting_5a6bd126-8088-4666-a2b2-5e507ddaa831" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <SettingReference AuthoringScopeId="ScopeId_1CD3FDB7-D44C-45AC-A8F5-3EC50DA65FE1" LogicalName="OperatingSystem_a48c3352-4ec5-45a7-a0c4-5242a133c3e6" Version="3" DataType="Int64" SettingLogicalName="RegSetting_5a6bd126-8088-4666-a2b2-5e507ddaa831" SettingSourceType="Registry" Method="Count" Changeable="false" />
             <ConstantValue Value="0" DataType="Int64" />
           </Operands>
         </Expression>
