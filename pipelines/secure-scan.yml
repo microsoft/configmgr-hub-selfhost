@@ -4,6 +4,7 @@
 trigger:
 - master
 
+
 pool:
   vmImage: 'windows-2019'
 
@@ -23,3 +24,18 @@ steps:
       TreatSignatureUpdateFailureAs: Standard
       TreatStaleSignatureAs: Warning
     continueOnError: true
+
+  - task: PostAnalysis@1
+    displayName: "Run SDL Post Analysis"
+    inputs:
+      AllTools: true
+      BinSkimBreakOn: 'Error'
+      CodesignValidationBreakOn: 'Error'
+      FxCopBreakOn: 'ErrorAbove'
+      ModernCopBreakOn: 'Error'
+      PoliCheckBreakOn: 'Severity1'
+      RoslynAnalyzersBreakOn: 'Error'
+      SemmleBreakOn: 'Error'
+      TSLintBreakOn: 'Error'
+      ToolLogsNotFoundAction: 'Standard'
+    continueOnError: false
