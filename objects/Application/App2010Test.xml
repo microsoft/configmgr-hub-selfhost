@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_D77EFB40-5937-475C-98F7-E79E797CF24F" LogicalName="Application_9091c913-eaae-4d87-9991-288e9b2e9a45" Version="1">
+  <Application AuthoringScopeId="ScopeId_D77EFB40-5937-475C-98F7-E79E797CF24F" LogicalName="Application_9091c913-eaae-4d87-9991-288e9b2e9a45" Version="2">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>App2010Test</Title>
-        <Description />
         <Publisher />
         <Version />
       </Info>
@@ -13,7 +12,7 @@
       <DeploymentType AuthoringScopeId="ScopeId_D77EFB40-5937-475C-98F7-E79E797CF24F" LogicalName="DeploymentType_61c78ddb-b10f-4fe3-ba1e-266813ce4687" Version="1" />
     </DeploymentTypes>
     <Title ResourceId="Res_1744781424">App2010Test</Title>
-    <Description ResourceId="Res_355999303" />
+    <Description ResourceId="Res_355999303">Updated Here</Description>
     <Publisher ResourceId="Res_654963394" />
     <SoftwareVersion ResourceId="Res_1420066449" />
     <CustomId ResourceId="Res_1876503231" />
