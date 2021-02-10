@@ -1,5 +1,7 @@
 Write-host 'Extension downloader starting...'
 
+dir env:
+
 write-host "Agent build directory: " $env:Agent.BuildDirectory;
 
 $root = $env:Agent.BuildDirectory + "\configmgr-hub-selfhost\objects\consoleextension\";
