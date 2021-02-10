@@ -1,7 +1,5 @@
 Write-host 'Extension downloader starting...'
 
-$jsonFiles = gci -Path "C:\users\msilvey\source\repos\configmgr-hub-selfhost\objects\ConsoleExtension\" -file *.json
-
 write-host "Repository local path: " + $Env:BUILD_REPOSITORY_LOCALPATH;
 
 $root = $env:BUILD_REPOSITORY_LOCALPATH + "\objects\consoleextension\";
