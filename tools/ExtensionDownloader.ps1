@@ -6,7 +6,7 @@ write-host "Repository local path: " + $Env:BUILD_REPOSITORY_LOCALPATH;
 
 gci $Env:BUILD_REPOSITORY_LOCALPATH;
 
-$root = $env:BUILD_REPOSITORY_LOCALPATH + "\configmgr-hub-selfhost\objects\consoleextension\";
+$root = $env:BUILD_REPOSITORY_LOCALPATH + "\objects\consoleextension\";
 
 write-host "Root directory for extensions: " $root;
 $jsonFiles = gci -Path $root -file *.json
