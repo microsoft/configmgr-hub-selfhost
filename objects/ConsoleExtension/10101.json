@@ -1,5 +1,5 @@
 {
-    "itemId": "10101",
-    "downloadLocation": "https://raw.githubusercontent.com/sihlamMSFT/testing/master/SignedCab/AllStatusMessageForTsDeployment.cab",
-    "sha": ""
+  "itemId": "10101",
+  "downloadLocation": "https://releases.recastsoftware.com/releases/downloadcab/750",
+  "sha": ""
 }
