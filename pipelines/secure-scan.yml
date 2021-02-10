@@ -24,13 +24,6 @@ steps:
       TreatStaleSignatureAs: Warning
     continueOnError: true
 
-  - task: NuGetCommand@2
-    displayName: "Restore package"
+  - task: CredScan@2
     inputs:
-      command: 'restore'
-      restoreSolution: 'packages.config'
-      feedsToUse: 'select'
-      vstsFeed: 'https://msazure.pkgs.visualstudio.com/One/_packaging/OneBranch-Consumption-Extended/nuget/v3/index.json'
-      includeNuGetOrg: false
-      noCache: true
-      restoreDirectory: '.\packages\'
+      toolMajorVersion: 'V1'
