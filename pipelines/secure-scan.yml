@@ -12,7 +12,7 @@ steps:
     inputs:
       filePath: '$(Build.SourcesDirectory)\tools\Extensiondownloader.ps1'
       failOnStderr: true
-      workingDirectory: '$(Build.SourcesDirectory)'\objects'
+      workingDirectory: '$(Build.SourcesDirectory)\objects'
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
     displayName: 'Run PoliCheck'
