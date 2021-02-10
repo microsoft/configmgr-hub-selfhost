@@ -1,15 +1,22 @@
 Write-host 'Extension downloader starting...'
+env:Build.SourcesDirectory
+$root = env:Build.SourcesDirectory + "\configmgr-hub-selfhost\objects\consoleextension\";
 
-$root = "C:\users\msilvey\source\repos\configmgr-hub-selfhost\";
-$jsonFile = $root + "objects\consoleextension\10101.json"
+$jsonFiles = gci -Path $root -file *.json
 
-$objectInfo = Get-Content $jsonFile  | ConvertFrom-Json;
-$itemDir = $root + ".\objects\ConsoleExtension\" + $objectInfo.itemId + "\";
+ForEach-Object -InputObject $jsonFile -Process{
 
-write-host $objectInfo;
-$file = $itemDir + $objectInfo.itemId + ".cab";
+    Write-Host "Processing console extension json file " $_;
 
-mkdir $itemDir;
-
- Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $file;
- expand $file $itemDir -F:*
+    $objectInfo = Get-Content $_  | ConvertFrom-Json;
+    $itemDir = $root + ".\objects\ConsoleExtension\" + $objectInfo.itemId + "\";
+    
+    write-host $objectInfo;
+    $file = $itemDir + $objectInfo.itemId + ".cab";
+    
+    mkdir $itemDir;
+    
+    Write-Host "Downloading cab from " + $objectInfo.downloadLocation;
+     Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $file;
+     expand $file $itemDir -F:*
+}
