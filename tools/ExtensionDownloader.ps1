@@ -4,14 +4,14 @@ dir env:
 
 write-host "Repository local path: " + $Env:BUILD_REPOSITORY_LOCALPATH;
 
-gci $Env:BUILD_REPOSITORY_LOCALPATH;
-
 $root = $env:BUILD_REPOSITORY_LOCALPATH + "\objects\consoleextension\";
 
 write-host "Root directory for extensions: " $root;
 $jsonFiles = gci -Path $root -file *.json
 
-ForEach-Object -InputObject $jsonFile -Process{
+write-host "Json files to enumerate: " $jsonFiles
+
+ForEach-Object -InputObject $jsonFiles -Process{
 
     Write-Host "Processing console extension json file " $_;
 
