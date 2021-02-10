@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <BusinessPolicy AuthoringScopeId="ScopeId_01CD9A61-0BF4-4F06-BA4E-869DB5E24E98" LogicalName="LogicalName_ace564b1-f0a4-4d72-9183-2e0e3e8d1e00" Version="13" ConfigurationFlags="64">
+  <Application AuthoringScopeId="ScopeId_2B3C9CC1-226A-4ED3-95D6-513D3BB316FD" LogicalName="Application_289a08a9-0df7-467b-8c1f-f5b976e52fb1" Version="1" Is64Bit="false">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-      <DisplayName Text="liharris_test_txt_file" ResourceId="ID-9bd704cb-d22d-4284-bb07-c24b55a9c7df" />
+      <DisplayName Text="CI 2010" ResourceId="ID-dc6edad7-fc76-4b77-9ea0-543a897db784" />
       <Description Text="" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
-      <File Is64Bit="false" LogicalName="File_35d65dd1-ada6-4bc7-af5e-4f5170975453">
-        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-          <DisplayName Text="file1" ResourceId="ID-7aa99994-4dcb-4841-8d6e-4a6b74ad6570" />
-          <Description Text="" />
-        </Annotation>
-        <Path>C:\Windows\CCM</Path>
-        <Filter>liharris_test.txt</Filter>
-      </File>
     </Parts>
     <Settings>
       <RootComplexSetting />
@@ -28,5 +20,8 @@
         </Operands>
       </OperatingSystemExpression>
     </PlatformApplicabilityCondition>
-  </BusinessPolicy>
+    <ScriptDiscoveryInfo ScriptType="JScript">
+      <Script>WScript.echo("088eda47-b1c8-434a-8e84-8f707c8d1a76");</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
 </DesiredConfigurationDigest>

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <OperatingSystem AuthoringScopeId="ScopeId_4DDB8EBA-3E08-4909-9AED-541C013304ED" LogicalName="OperatingSystem_bc5bfa7f-f038-469b-a3d7-84932c8df98c" Version="4">
+  <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_bc83b078-abb0-4a31-b09b-e8fa1068d8c4" Version="2">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-      <DisplayName Text="Registry CI" ResourceId="ID-588d187c-15e1-410f-aa4b-d8ac292a6c93" />
-      <Description Text="This CI contains a registry setting" ResourceId="ID-8055743d-5876-4622-bbf1-fdf93b7265e7" />
+      <DisplayName Text="See Eye" ResourceId="ID-9381009f-db83-4d9a-ab01-b250e7c3fb33" />
+      <Description Text="A CI - with a fancy update!" ResourceId="ID-3d33b4db-3b9b-44ff-b894-22b018eaa808" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
-      <RegistryKey Hive="HKEY_LOCAL_MACHINE" Is64Bit="false" LogicalName="RegKey_bf941ccf-7c97-4d3b-9247-ba3c5ab33544">
+      <RegistryKey Hive="HKEY_LOCAL_MACHINE" Is64Bit="false" LogicalName="RegKey_7947624b-78aa-4177-b1f2-72c22340b017">
         <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-          <DisplayName Text="Microsoft" ResourceId="ID-31618451-d33b-4340-974f-c79d5036a7f7" />
+          <DisplayName Text="CCMSetup" ResourceId="ID-de6f545c-8d7b-4b14-902d-1475c6e6f266" />
           <Description Text="" />
         </Annotation>
-        <Key>SOFTWARE\Microsoft</Key>
+        <Key>SOFTWARE\Microsoft\CCMSetup</Key>
       </RegistryKey>
     </Parts>
     <Settings>
       <RootComplexSetting />
     </Settings>
     <Rules>
-      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_0b215990-ee55-4515-9d84-0294dba6f0e3" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_3391adb6-8467-45dc-8b05-99f2abf0bef6" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
         <Annotation>
-          <DisplayName Text="Microsoft key must exist" ResourceId="ID-a6331cd9-987b-4f71-b052-b3174c99e30b" />
+          <DisplayName Text="CCMSetup key must exist" ResourceId="ID-680dc99f-cd67-4a89-b51f-a719c969bcd9" />
           <Description Text="" />
         </Annotation>
         <Expression>
           <Operator>NotEquals</Operator>
           <Operands>
-            <SettingReference AuthoringScopeId="ScopeId_4DDB8EBA-3E08-4909-9AED-541C013304ED" LogicalName="OperatingSystem_bc5bfa7f-f038-469b-a3d7-84932c8df98c" Version="4" DataType="Int64" SettingLogicalName="RegKey_bf941ccf-7c97-4d3b-9247-ba3c5ab33544" SettingSourceType="RegistryKey" Method="Count" Changeable="false" />
+            <SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_bc83b078-abb0-4a31-b09b-e8fa1068d8c4" Version="2" DataType="Int64" SettingLogicalName="RegKey_7947624b-78aa-4177-b1f2-72c22340b017" SettingSourceType="RegistryKey" Method="Count" Changeable="false" />
             <ConstantValue Value="0" DataType="Int64" />
           </Operands>
         </Expression>

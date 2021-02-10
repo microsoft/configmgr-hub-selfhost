@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <BusinessPolicy AuthoringScopeId="ScopeId_01CD9A61-0BF4-4F06-BA4E-869DB5E24E98" LogicalName="LogicalName_ace564b1-f0a4-4d72-9183-2e0e3e8d1e00" Version="13" ConfigurationFlags="64">
+  <BusinessPolicy AuthoringScopeId="ScopeId_12F29CB3-C0E5-4890-9C45-28A3FBB20C32" LogicalName="LogicalName_2b9e9b7f-ed7f-4abb-8cbf-b8dfa8b38f50" Version="13" ConfigurationFlags="64">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="liharris_test_txt_file" ResourceId="ID-9bd704cb-d22d-4284-bb07-c24b55a9c7df" />
       <Description Text="" />

@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <BusinessPolicy AuthoringScopeId="ScopeId_01CD9A61-0BF4-4F06-BA4E-869DB5E24E98" LogicalName="LogicalName_ace564b1-f0a4-4d72-9183-2e0e3e8d1e00" Version="13" ConfigurationFlags="64">
+  <BusinessPolicy AuthoringScopeId="ScopeId_2D24AE42-B08F-40E1-A4C8-10EC87B85DCF" LogicalName="BusinessPolicy_c0ae4566-049a-41e2-949e-1a4c1ac5dd94" Version="2">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-      <DisplayName Text="liharris_test_txt_file" ResourceId="ID-9bd704cb-d22d-4284-bb07-c24b55a9c7df" />
-      <Description Text="" />
+      <DisplayName Text="CI 2006 for 2012" ResourceId="ID-7a5a12fd-5d72-4743-a346-1a2d4c92380e" />
+      <Description Text="updating" ResourceId="ID-18cb7d44-52e7-440c-910d-766a51902b6d" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
-      <File Is64Bit="false" LogicalName="File_35d65dd1-ada6-4bc7-af5e-4f5170975453">
-        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-          <DisplayName Text="file1" ResourceId="ID-7aa99994-4dcb-4841-8d6e-4a6b74ad6570" />
-          <Description Text="" />
-        </Annotation>
-        <Path>C:\Windows\CCM</Path>
-        <Filter>liharris_test.txt</Filter>
-      </File>
     </Parts>
     <Settings>
       <RootComplexSetting />
@@ -24,7 +16,7 @@
       <OperatingSystemExpression>
         <Operator>OneOf</Operator>
         <Operands>
-          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
         </Operands>
       </OperatingSystemExpression>
     </PlatformApplicabilityCondition>

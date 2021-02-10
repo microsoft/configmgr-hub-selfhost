@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <BusinessPolicy AuthoringScopeId="ScopeId_01CD9A61-0BF4-4F06-BA4E-869DB5E24E98" LogicalName="LogicalName_ace564b1-f0a4-4d72-9183-2e0e3e8d1e00" Version="13" ConfigurationFlags="64">
+  <OperatingSystem AuthoringScopeId="ScopeId_94D664F2-79D1-4D00-8733-4F64FE7DBA6A" LogicalName="OperatingSystem_26057f4d-1881-4202-ad48-4148d741a3f2" Version="1">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-      <DisplayName Text="liharris_test_txt_file" ResourceId="ID-9bd704cb-d22d-4284-bb07-c24b55a9c7df" />
+      <DisplayName Text="CI1" ResourceId="ID-881bab7a-2cc6-432a-8a87-b592bcc4c898" />
       <Description Text="" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
-      <File Is64Bit="false" LogicalName="File_35d65dd1-ada6-4bc7-af5e-4f5170975453">
+      <File Is64Bit="false" LogicalName="File_3e72f517-e23f-44d3-b91d-458209118510">
         <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-          <DisplayName Text="file1" ResourceId="ID-7aa99994-4dcb-4841-8d6e-4a6b74ad6570" />
+          <DisplayName Text="file1" ResourceId="ID-39923df7-fb11-4176-8cc7-459d5e8e112d" />
           <Description Text="" />
         </Annotation>
-        <Path>C:\Windows\CCM</Path>
-        <Filter>liharris_test.txt</Filter>
+        <Path>%windir%\CCM</Path>
+        <Filter>test.txt</Filter>
       </File>
     </Parts>
     <Settings>
       <RootComplexSetting />
     </Settings>
-    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <OperatingSystemExpression>
         <Operator>OneOf</Operator>
         <Operands>
           <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
         </Operands>
       </OperatingSystemExpression>
-    </PlatformApplicabilityCondition>
-  </BusinessPolicy>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
 </DesiredConfigurationDigest>

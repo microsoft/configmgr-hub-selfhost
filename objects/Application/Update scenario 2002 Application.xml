@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_1EA3620E-C2FB-4CD2-BD04-8C662FDEDABD" LogicalName="Application_d783f8e4-5737-48dd-a140-a12cf1f32209" Version="1">
+    <DisplayInfo DefaultLanguage="fr-FR">
+      <Info Language="fr-FR">
+        <Title>Update scenario 2002 Application</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_352716150">Update scenario 2002 Application</Title>
+    <Description ResourceId="Res_225331749" />
+    <Publisher ResourceId="Res_1730381824" />
+    <SoftwareVersion ResourceId="Res_1482148080" />
+    <CustomId ResourceId="Res_80220149" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
