@@ -1,7 +1,10 @@
 Write-host 'Extension downloader starting...'
 
-$root = $env:Build.SourcesDirectory + "\configmgr-hub-selfhost\objects\consoleextension\";
+write-host "Agent build directory: " $env:Agent.BuildDirectory;
 
+$root = $env:Agent.BuildDirectory + "\configmgr-hub-selfhost\objects\consoleextension\";
+
+write-host "Root directory for extensions: " $root;
 $jsonFiles = gci -Path $root -file *.json
 
 ForEach-Object -InputObject $jsonFile -Process{
