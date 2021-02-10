@@ -1,6 +1,6 @@
 Write-host 'Extension downloader starting...'
 
-dir env:
+$jsonFiles = gci -Path "C:\users\msilvey\source\repos\configmgr-hub-selfhost\objects\ConsoleExtension\" -file *.json
 
 write-host "Repository local path: " + $Env:BUILD_REPOSITORY_LOCALPATH;
 
@@ -15,8 +15,8 @@ ForEach-Object -InputObject $jsonFiles -Process{
 
     Write-Host "Processing console extension json file " $_;
 
-    $objectInfo = Get-Content $_  | ConvertFrom-Json;
-    $itemDir = $root + ".\objects\ConsoleExtension\" + $objectInfo.itemId + "\";
+    $objectInfo = Get-Content $_.FullName  | ConvertFrom-Json;
+    $itemDir = $root + $objectInfo.itemId + "\";
     
     write-host $objectInfo;
     $file = $itemDir + $objectInfo.itemId + ".cab";
