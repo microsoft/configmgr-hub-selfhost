@@ -55,7 +55,7 @@ foreach($jsonFile in $jsonFiles)
     
     if((Test-Path $file) -eq $False )
     {
-        Write-Host "Downloading cab from" + $objectInfo.downloadLocation;
+        Write-Host "Downloading cab from" $objectInfo.downloadLocation;
         Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $file;
     }
     
