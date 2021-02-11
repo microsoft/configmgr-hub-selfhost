@@ -12,7 +12,7 @@ if(!$buildRoot)
 
 write-host "Repository local path:" + $buildRoot;
 
-$root = $buildRoot.Path + "\objects\consoleextension\";
+$root = $buildRoot + "\objects\consoleextension\";
 
 write-host "Root directory for extensions:" $root;
 $jsonFiles = gci -Path $root -file *.json
