@@ -51,14 +51,15 @@ steps:
     inputs:
       AllTools: true
       BinSkimBreakOn: 'Error'
-      CodesignValidationBreakOn: 'Error'
+      CodesignValidationBreakOn: 'WarningAbove'
       FxCopBreakOn: 'ErrorAbove'
       ModernCopBreakOn: 'Error'
       PoliCheckBreakOn: 'Severity1'
       RoslynAnalyzersBreakOn: 'Error'
       SemmleBreakOn: 'Error'
       TSLintBreakOn: 'Error'
-      ToolLogsNotFoundAction: 'Standard'
+      ToolLogsNotFoundAction: 'Error'
+      CustomLogsFolder: '$(Build.ArtifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
     inputs:
