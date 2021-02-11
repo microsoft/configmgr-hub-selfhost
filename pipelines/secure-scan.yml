@@ -37,6 +37,8 @@ steps:
   - task: CodeSign@1
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
+      Targets: '**.dll;**.exe;**sys'
+      OutputDirectory: '$(Build.ArtifactStagingDirectory)'
 
   - task: PublishSecurityAnalysisLogs@2
     inputs:
