@@ -1,3 +1,25 @@
+function searchAndExpand {
+    param($directory)
+
+    if((Test-Path $directory) -eq $true)
+    {
+        write-host "Searching directory" $directory "for cab files to expand.";
+
+        $cabFiles = Get-ChildItem -path $directory -file *.cab -recurse;
+        
+        foreach($cabFile in $cabFiles)
+        {
+            $cabDir = $directory + "\_" + $cabFile.Name
+
+            write-host "Expanding cab file" $cabFile.Name " to directory"  $cabDir;
+
+            mkdir $cabDir;
+            expand $cabFile.FullName $cabDir -F:*;
+            searchAndExpand -directory $cabDir;
+        }
+    }
+}
+
 Write-host 'Extension downloader starting...'
 
 dir env:
@@ -39,27 +61,4 @@ foreach($jsonFile in $jsonFiles)
     
     write-host "Recursively searching for cab files.."
     searchAndExpand -directory $itemDir
-}
-
-
-function searchAndExpand {
-    param($directory)
-
-    if((Test-Path $directory) -eq $true)
-    {
-        write-host "Searching directory" $directory "for cab files to expand.";
-
-        $cabFiles = Get-ChildItem -path $directory -file *.cab -recurse;
-        
-        foreach($cabFile in $cabFiles)
-        {
-            $cabDir = $directory + "\_" + $cabFile.Name
-
-            write-host "Expanding cab file" $cabFile.Name " to directory"  $cabDir;
-
-            mkdir $cabDir;
-            expand $cabFile.FullName $cabDir -F:*;
-            searchAndExpand -directory $cabDir;
-        }
-    }
 }
