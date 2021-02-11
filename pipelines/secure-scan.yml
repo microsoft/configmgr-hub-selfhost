@@ -37,3 +37,23 @@ steps:
   - task: CodeSign@1
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
+
+  - task: PublishSecurityAnalysisLogs@2
+    inputs:
+      ArtifactName: 'CodeAnalysisLogs'
+      ArtifactType: 'Container'
+      AllTools: true
+      ToolLogsNotFoundAction: 'Standard'
+
+  - task: PostAnalysis@1
+    inputs:
+      AllTools: true
+      BinSkimBreakOn: 'Error'
+      CodesignValidationBreakOn: 'Error'
+      FxCopBreakOn: 'ErrorAbove'
+      ModernCopBreakOn: 'Error'
+      PoliCheckBreakOn: 'Severity1'
+      RoslynAnalyzersBreakOn: 'Error'
+      SemmleBreakOn: 'Error'
+      TSLintBreakOn: 'Error'
+      ToolLogsNotFoundAction: 'Standard'
