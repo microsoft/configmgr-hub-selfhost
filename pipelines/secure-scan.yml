@@ -32,4 +32,4 @@ steps:
 
   - task: CredScan@2
     inputs:
-      toolMajorVersion: 'V1'
+      toolMajorVersion: 'V2'

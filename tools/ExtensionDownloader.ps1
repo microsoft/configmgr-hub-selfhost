@@ -1,27 +1,65 @@
 Write-host 'Extension downloader starting...'
 
-write-host "Repository local path: " + $Env:BUILD_REPOSITORY_LOCALPATH;
+dir env:
 
-$root = $env:BUILD_REPOSITORY_LOCALPATH + "\objects\consoleextension\";
+$buildRoot = $Env:BUILD_REPOSITORY_LOCALPATH
 
-write-host "Root directory for extensions: " $root;
+if(!$buildRoot)
+{
+    Set-Location -Path ..;
+    $buildRoot = (get-location);
+}
+
+write-host "Repository local path:" + $buildRoot;
+
+$root = $buildRoot.Path + "\objects\consoleextension\";
+
+write-host "Root directory for extensions:" $root;
 $jsonFiles = gci -Path $root -file *.json
 
-write-host "Json files to enumerate: " $jsonFiles
+write-host "Json files to enumerate:" $jsonFiles
 
-ForEach-Object -InputObject $jsonFiles -Process{
+foreach($jsonFile in $jsonFiles)
+{
+    Write-Host "Processing console extension json file" $jsonFile;
 
-    Write-Host "Processing console extension json file " $_;
-
-    $objectInfo = Get-Content $_.FullName  | ConvertFrom-Json;
-    $itemDir = $root + $objectInfo.itemId + "\";
+    $objectInfo = Get-Content $jsonFile.FullName  | ConvertFrom-Json;
+    $itemDir = $root + $objectInfo.itemId;
     
     write-host $objectInfo;
-    $file = $itemDir + $objectInfo.itemId + ".cab";
+    $file = $itemDir + "\" + $objectInfo.itemId + ".cab";
     
     mkdir $itemDir;
     
-    Write-Host "Downloading cab from " + $objectInfo.downloadLocation;
-     Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $file;
-     expand $file $itemDir -F:*
+    if((Test-Path $file) -eq $False )
+    {
+        Write-Host "Downloading cab from" + $objectInfo.downloadLocation;
+        Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $file;
+    }
+    
+    write-host "Recursively searching for cab files.."
+    searchAndExpand -directory $itemDir
+}
+
+
+function searchAndExpand {
+    param($directory)
+
+    if((Test-Path $directory) -eq $true)
+    {
+        write-host "Searching directory" $directory "for cab files to expand.";
+
+        $cabFiles = Get-ChildItem -path $directory -file *.cab -recurse;
+        
+        foreach($cabFile in $cabFiles)
+        {
+            $cabDir = $directory + "\_" + $cabFile.Name
+
+            write-host "Expanding cab file" $cabFile.Name " to directory"  $cabDir;
+
+            mkdir $cabDir;
+            expand $cabFile.FullName $cabDir -F:*;
+            searchAndExpand -directory $cabDir;
+        }
+    }
 }
