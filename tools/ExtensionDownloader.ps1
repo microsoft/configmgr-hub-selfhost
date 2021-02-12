@@ -127,7 +127,7 @@ function Main
             write-host "Recursively searching for cab files.."
             searchAndExpand -directory $itemDir
 
-            
+            print-Summary;
         }
     }
     else {
