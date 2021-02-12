@@ -1,3 +1,9 @@
+# ===================================================================
+#
+# Creates a directory named after the cab file 
+# and expands the cab into that directdory. 
+#
+# ===================================================================
 function searchAndExpand {
     param($directory)
 
@@ -5,60 +11,123 @@ function searchAndExpand {
     {
         write-host "Searching directory" $directory "for cab files to expand.";
 
-        $cabFiles = Get-ChildItem -path $directory -file *.cab -recurse;
-        
-        foreach($cabFile in $cabFiles)
-        {
-            $cabDir = $directory + "\_" + $cabFile.Name
-
-            write-host "Expanding cab file" $cabFile.Name " to directory"  $cabDir;
-
-            mkdir $cabDir;
-            expand $cabFile.FullName $cabDir -F:*;
-            searchAndExpand -directory $cabDir;
+        (gci -path $directory *.cab -recurse) | foreach{
+            $expandedDirectory = expandCabFile -dir $directory -cab $_;
+            searchAndExpand -directory $expandedDirectory[0].FullName;
         }
     }
 }
 
-Write-host 'Extension downloader starting...'
-
-dir env:
-
-$buildRoot = $Env:BUILD_REPOSITORY_LOCALPATH
-
-if(!$buildRoot)
+# ===================================================================
+#
+# Creates a directory named after the cab file 
+# and expands the cab into that directdory. 
+#
+# ===================================================================
+function expandCabFile
 {
-    Set-Location -Path ..;
-    $buildRoot = (get-location);
+    param
+    (
+        $dir,
+        $cab
+    )
+
+    $cabDir = $dir + "\_" + $cab.Name
+    write-host "Expanding cab file:" $cab "to directory" $cabDir;
+
+    mkdir $cabDir;
+    expand $cab.FullName $cabDir -F:*;
+    return $cabDir;
 }
 
-write-host "Repository local path:" + $buildRoot;
-
-$root = $buildRoot + "\objects\consoleextension\";
-
-write-host "Root directory for extensions:" $root;
-$jsonFiles = gci -Path $root -file *.json
-
-write-host "Json files to enumerate:" $jsonFiles
-
-foreach($jsonFile in $jsonFiles)
+# ===================================================================
+#
+#   Detects if this submission is a console submission
+#   and if so downloads the extension for verification.
+#
+# ===================================================================
+function get-ChangedExtensions
 {
-    Write-Host "Processing console extension json file" $jsonFile;
+    param
+    (
+        $srcBranch,
+        $destBranch
+    )
+    
+    # return  the list of json files changed between the source and destination branches.
+    return git diff $srcBranch $destBranch --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
+}
 
-    $objectInfo = Get-Content $jsonFile.FullName  | ConvertFrom-Json;
-    $itemDir = $root + $objectInfo.itemId;
-    
-    write-host $objectInfo;
-    $file = $itemDir + "\" + $objectInfo.itemId + ".cab";
-    
-    mkdir $itemDir;
-    
-    if((Test-Path $file) -eq $False )
+# ===================================================================
+#
+#   Gets the build root directory based on the execution environment.
+#
+# ===================================================================
+function get-BuildRootDirectory
+{
+    if($null -NE $Env:AGENT_NAME)
     {
-        Write-Host "Downloading cab from" $objectInfo.downloadLocation;
-        Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $file;
+        # since this is running on a host in ADO pipeline
+        # output environment variables to make troubleshooting easier
+        Get-ChildItem env:
+
+        return $Env:BUILD_REPOSITORY_LOCALPATH;
     }
-    
-    write-host "Recursively searching for cab files.."
-    searchAndExpand -directory $itemDir
+    else
+    {
+        Set-Location -Path ..;
+        return (get-location).Path.ToString();
+    }
 }
+
+# ===================================================================
+#
+#   Main entry point.
+#
+# ===================================================================
+function Main
+{
+    $extensionJson = get-ChangedExtensions -srcBranch "remotes/origin/msilvey/pipeline" -destBranch "remotes/origin/master";
+
+   if($null -ne $extensionJson)
+    {
+        $extensionRootDirectory = (get-BuildRootDirectory); 
+
+        write-host "ConsoleExtension directory:" + $extensionRootDirectory;
+
+        foreach($json in $extensionJson)
+        {
+            $jsonFile = $extensionRootDirectory + "\" + $json;
+
+            Write-Host "Processing console extension json file" $jsonFile;
+
+            $objectInfo = Get-Content $jsonFile | ConvertFrom-Json;
+            
+            write-host $objectInfo;
+            $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
+            $cabFile = $itemDir + "\" + $objectInfo.itemId + ".cab"
+
+            mkdir $itemDir;
+    
+            if((Test-Path $cabFile) -eq $False )
+            {
+                Write-Host "Downloading cab from" $objectInfo.downloadLocation;
+                Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
+            }
+    
+            write-host "Recursively searching for cab files.."
+            searchAndExpand -directory $itemDir
+        }
+    }
+    else {
+        write-host "No extensions submitted to this branch.";
+    }
+}
+
+Write-host 'Extension downloader starting...'
+Write-Host "=================================================="
+
+Main;
+
+Write-Host "Extension downloader finished";
+Write-Host "=================================================="
