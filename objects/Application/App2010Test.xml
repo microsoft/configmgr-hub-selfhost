@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_FAA1136B-8C9D-41AC-98A5-926609F05C60" LogicalName="Application_1142d387-45ff-4d7e-b4af-8a460818d7e7" Version="1">
+  <Application AuthoringScopeId="ScopeId_D77EFB40-5937-475C-98F7-E79E797CF24F" LogicalName="Application_9091c913-eaae-4d87-9991-288e9b2e9a45" Version="1">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
-        <Title>Orca</Title>
+        <Title>App2010Test</Title>
         <Description />
         <Publisher />
         <Version />
       </Info>
     </DisplayInfo>
     <DeploymentTypes>
-      <DeploymentType AuthoringScopeId="ScopeId_FAA1136B-8C9D-41AC-98A5-926609F05C60" LogicalName="DeploymentType_3b8d6c12-47ed-4148-83d8-3ea3bb2199fa" Version="1" />
+      <DeploymentType AuthoringScopeId="ScopeId_D77EFB40-5937-475C-98F7-E79E797CF24F" LogicalName="DeploymentType_61c78ddb-b10f-4fe3-ba1e-266813ce4687" Version="1" />
     </DeploymentTypes>
-    <Title ResourceId="Res_185027951">Orca</Title>
-    <Description ResourceId="Res_195948264" />
-    <Publisher ResourceId="Res_177153098" />
-    <SoftwareVersion ResourceId="Res_1883318660" />
-    <CustomId ResourceId="Res_120493515" />
+    <Title ResourceId="Res_1744781424">App2010Test</Title>
+    <Description ResourceId="Res_355999303" />
+    <Publisher ResourceId="Res_654963394" />
+    <SoftwareVersion ResourceId="Res_1420066449" />
+    <CustomId ResourceId="Res_1876503231" />
     <Owners>
-      <User Qualifier="LogonName" Id="Meg" />
+      <User Qualifier="LogonName" Id="meg" />
     </Owners>
     <Contacts>
-      <User Qualifier="LogonName" Id="Meg" />
+      <User Qualifier="LogonName" Id="meg" />
     </Contacts>
   </Application>
-  <DeploymentType AuthoringScopeId="ScopeId_FAA1136B-8C9D-41AC-98A5-926609F05C60" LogicalName="DeploymentType_3b8d6c12-47ed-4148-83d8-3ea3bb2199fa" Version="1">
-    <Title ResourceId="Res_1582899995">Orca - Windows Installer (*.msi file)</Title>
+  <DeploymentType AuthoringScopeId="ScopeId_D77EFB40-5937-475C-98F7-E79E797CF24F" LogicalName="DeploymentType_61c78ddb-b10f-4fe3-ba1e-266813ce4687" Version="1">
+    <Title ResourceId="Res_1936980042">Orca - Windows Installer (*.msi file)</Title>
     <DeploymentTechnology>GLOBAL/MSIDeploymentTechnology</DeploymentTechnology>
     <Technology>MSI</Technology>
     <Hosting>Native</Hosting>
     <Installer Technology="MSI">
       <ExecutionContext>System</ExecutionContext>
       <Contents>
-        <Content ContentId="Content_00dea18c-aa22-4386-8778-36da72bb508d" Version="1">
+        <Content ContentId="Content_1c9cd1bb-90d6-48d7-a0be-4f41c6460580" Version="1">
           <File Name="AccessShare.bat" Size="1454" />
           <File Name="ccmclean.exe" Size="393216" />
           <File Name="CcmTools.msi" Size="1011712" />
@@ -42,7 +42,7 @@
           <File Name="PinToBar.vbs" Size="2181" />
           <File Name="policyclean.exe" Size="182784" />
           <File Name="policyspy.exe" Size="760832" />
-          <Location>\\R61338362\tools\CCMTools\</Location>
+          <Location>\\R61337794\CCMTools\</Location>
           <PeerCache>true</PeerCache>
           <OnFastNetwork>Download</OnFastNetwork>
           <OnSlowNetwork>DoNothing</OnSlowNetwork>
@@ -87,7 +87,7 @@
           </Arg>
         </Args>
         <Contents>
-          <Content ContentId="Content_00dea18c-aa22-4386-8778-36da72bb508d" Version="1" />
+          <Content ContentId="Content_1c9cd1bb-90d6-48d7-a0be-4f41c6460580" Version="1" />
         </Contents>
       </InstallAction>
       <UninstallAction>
@@ -120,7 +120,7 @@
           </Arg>
         </Args>
         <Contents>
-          <Content ContentId="Content_00dea18c-aa22-4386-8778-36da72bb508d" Version="1" />
+          <Content ContentId="Content_1c9cd1bb-90d6-48d7-a0be-4f41c6460580" Version="1" />
         </Contents>
       </UninstallAction>
       <CustomData>
@@ -128,7 +128,7 @@
         <ProductCode>{6F7CB29F-1319-4816-B345-0856916EB801}</ProductCode>
         <ProductVersion>1.50.3698.0000</ProductVersion>
         <InstallCommandLine>msiexec /i "Orca.Msi" /q</InstallCommandLine>
-        <InstallContent ContentId="Content_00dea18c-aa22-4386-8778-36da72bb508d" Version="1" />
+        <InstallContent ContentId="Content_1c9cd1bb-90d6-48d7-a0be-4f41c6460580" Version="1" />
         <UninstallSetting>SameAsInstall</UninstallSetting>
         <UninstallCommandLine>msiexec /x {6F7CB29F-1319-4816-B345-0856916EB801} /q</UninstallCommandLine>
         <ExitCodes>

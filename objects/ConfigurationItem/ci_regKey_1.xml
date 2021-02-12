@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_1e5536d7-53f1-4add-86ac-fba9d5c28ee2" Version="4">
+  <OperatingSystem AuthoringScopeId="ScopeId_B651A46C-C971-4E8A-A2C0-6FDFBCB937C3" LogicalName="LogicalName_e4b797b2-98ad-4b12-959c-dc8e21dff0f8" Version="6">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="ci_regKey_1" ResourceId="ID-54ab05b1-fda7-474f-8d4b-2958566ec279" />
       <Description Text="" />
@@ -66,6 +66,7 @@
           <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
           <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
           <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
           <RuleExpression RuleId="Windows/All_Embedded_Windows_XP" />
           <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8.1_Industry" />
           <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Industry" />
@@ -75,7 +76,6 @@
           <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Standard" />
           <RuleExpression RuleId="Windows/x64_Embedded_Windows_7" />
           <RuleExpression RuleId="Windows/x86_Embedded_Windows_7" />
-          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
         </Operands>
       </OperatingSystemExpression>
     </OperatingSystemDiscoveryRule>
