@@ -71,7 +71,7 @@ function get-BuildRootDirectory
 {
     if($null -NE $Env:AGENT_NAME)
     {
-        Write-host "running on agent machine ";
+        Write-host "Running on agent machine: true";
 
         $buildRoot = $Env:BUILD_REPOSITORY_LOCALPATH;
 
@@ -96,7 +96,7 @@ function Main
 {
     print-EnvironmentVariables;
 
-    $extensionJson = get-ChangedExtensions -srcBranch "remotes/origin/msilvey/pipeline" -destBranch "remotes/origin/master";
+    $extensionJson = get-ChangedExtensions -srcBranch $Env:BUILD_SOURCEBRANCH -destBranch "remotes/origin/master";
 
    if($null -ne $extensionJson)
     {
@@ -108,19 +108,22 @@ function Main
         {
             $jsonFile = $extensionRootDirectory + "\" + $json;
 
-            Write-Host "Processing console extension json file" $jsonFile;
+            Write-Host "Processing extension:" $jsonFile;
 
             $objectInfo = Get-Content $jsonFile | ConvertFrom-Json;
             
-            write-host $objectInfo;
+            write-host "\t:" $objectInfo.itemId;
+            write-host "\t:" $objectInfo.downloadLocation;
+            write-host "\t:" $objectInfo.sha;
+
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
             $cabFile = $itemDir + "\" + $objectInfo.itemId + ".cab"
 
-            mkdir $itemDir;
+            $r = mkdir $itemDir;
     
             if((Test-Path $cabFile) -eq $False )
             {
-                Write-Host "Downloading cab from" $objectInfo.downloadLocation;
+                Write-Host "Downloading cab:" + $objectInfo.downloadLocation + "to:" $itemDir;
                 Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
             }
     
@@ -143,11 +146,12 @@ function print-Summary
     Measure-object -Property length | 
     select-object count;
 
-    write-host "Expanded files count:" + $itemCount;
+    write-host "Expanded files count:" + $itemCount.Count;
 }
 
 function print-EnvironmentVariables
 {
+    write-host "Environment variables:";
     get-childitem env:
 }
 
