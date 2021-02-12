@@ -71,17 +71,13 @@ function get-ChangedExtensions
 # ===================================================================
 function get-BuildRootDirectory
 {
-    get-ChildItem env:
-
     if($null -NE $Env:AGENT_NAME)
     {
         Write-host "running on agent machine ";
 
-        # since this is running on a host in ADO pipeline
-        # output environment variables to make troubleshooting easier
-        Get-ChildItem env:
+        $buildRoot = $Env:BUILD_REPOSITORY_LOCALPATH;
 
-        return $Env:BUILD_REPOSITORY_LOCALPATH;
+        return $buildRoot.ToString();
     }
     else
     {
@@ -91,6 +87,8 @@ function get-BuildRootDirectory
     }
 }
 
+
+
 # ===================================================================
 #
 #   Main entry point.
@@ -98,6 +96,8 @@ function get-BuildRootDirectory
 # ===================================================================
 function Main
 {
+    get-EnvironmentVariables;
+
     $extensionJson = get-ChangedExtensions -srcBranch "remotes/origin/msilvey/pipeline" -destBranch "remotes/origin/master";
 
    if($null -ne $extensionJson)
@@ -133,6 +133,11 @@ function Main
     else {
         write-host "No extensions submitted to this branch.";
     }
+}
+
+function print-EnvironmentVariables
+{
+    write-host env:
 }
 
 Write-host 'Extension downloader starting...'
