@@ -96,7 +96,7 @@ function get-BuildRootDirectory
 # ===================================================================
 function Main
 {
-    get-EnvironmentVariables;
+    print-EnvironmentVariables;
 
     $extensionJson = get-ChangedExtensions -srcBranch "remotes/origin/msilvey/pipeline" -destBranch "remotes/origin/master";
 
