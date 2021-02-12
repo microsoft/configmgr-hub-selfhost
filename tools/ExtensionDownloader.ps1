@@ -54,8 +54,14 @@ function get-ChangedExtensions
         $destBranch
     )
     
+    write-host "Getting list of changed extensions";
+
     # return  the list of json files changed between the source and destination branches.
-    return git diff $srcBranch $destBranch --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
+    $changed = git diff $srcBranch $destBranch --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
+
+    write-host $changed
+
+    return $changed;
 }
 
 # ===================================================================
@@ -65,8 +71,12 @@ function get-ChangedExtensions
 # ===================================================================
 function get-BuildRootDirectory
 {
+    get-ChildItem env:
+
     if($null -NE $Env:AGENT_NAME)
     {
+        Write-host "running on agent machine ";
+
         # since this is running on a host in ADO pipeline
         # output environment variables to make troubleshooting easier
         Get-ChildItem env:
@@ -75,6 +85,7 @@ function get-BuildRootDirectory
     }
     else
     {
+        write-host "Test run, using local build environment.";
         Set-Location -Path ..;
         return (get-location).Path.ToString();
     }
