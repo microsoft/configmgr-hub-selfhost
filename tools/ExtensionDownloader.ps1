@@ -9,8 +9,6 @@ function searchAndExpand {
 
     if((Test-Path $directory) -eq $true)
     {
-        write-host "Searching directory" $directory "for cab files to expand.";
-
         (gci -path $directory *.cab -recurse) | foreach{
             $expandedDirectory = expandCabFile -dir $directory -cab $_;
             searchAndExpand -directory $expandedDirectory[0].FullName;
@@ -128,6 +126,8 @@ function Main
     
             write-host "Recursively searching for cab files.."
             searchAndExpand -directory $itemDir
+
+            
         }
     }
     else {
@@ -135,9 +135,20 @@ function Main
     }
 }
 
+function print-Summary
+{
+    param($directory)
+
+    $itemCount = gci -path $directory -recurse | 
+    Measure-object -Property length | 
+    select-object count;
+
+    write-host "Expanded files count:" + $itemCount;
+}
+
 function print-EnvironmentVariables
 {
-    write-host env:
+    get-childitem env:
 }
 
 Write-host 'Extension downloader starting...'
