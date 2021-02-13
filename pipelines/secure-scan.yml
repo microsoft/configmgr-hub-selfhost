@@ -48,8 +48,21 @@ steps:
 
   - task: PostAnalysis@1
     inputs:
+      AllTools: false
+      APIScan: false
+      BinSkim: false
+      CodesignValidation: true
       CodesignValidationBreakOn: 'WarningAbove'
-      PoliCheckBreakOn: 'Severity1'
+      CredScan: true
+      FortifySCA: false
+      FxCop: false
+      ModernCop: false
+      PoliCheck: true
+      PoliCheckBreakOn: 'Severity2Above'
+      RoslynAnalyzers: false
+      SDLNativeRules: false
+      Semmle: false
+      TSLint: false
       ToolLogsNotFoundAction: 'Error'
 
   - task: PublishBuildArtifacts@1
