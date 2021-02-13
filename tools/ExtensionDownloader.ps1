@@ -48,7 +48,7 @@ function get-ChangedExtensions
 {
     # Environment variable has the two commits in it 
     # Example: "Merge 6c518ff333489f994c5e45d564536000897f8f09 into 3f3f2bc641079f5ba8da312216acef3db..."
-    $segments = ($env:BUILD_SOURCEVERSIONMESSAGE).ToString()Split(' ');
+    $segments = ($env:BUILD_SOURCEVERSIONMESSAGE).ToString().Split(' ');
 
     $srcCommit = $segments[1];
     $destCommit = $segments[3].TrimEnd('.');
