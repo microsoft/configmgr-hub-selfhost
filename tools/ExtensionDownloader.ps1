@@ -46,16 +46,17 @@ function expandCabFile
 # ===================================================================
 function get-ChangedExtensions
 {
-    param
-    (
-        $srcBranch,
-        $destBranch
-    )
+    # Environment variable has the two commits in it 
+    # Example: "Merge 6c518ff333489f994c5e45d564536000897f8f09 into 3f3f2bc641079f5ba8da312216acef3db..."
+    $segments = ($env:BUILD_SOURCEVERSIONMESSAGE).ToString()Split(' ');
+
+    $srcCommit = $segments[1];
+    $destCommit = $segments[3].TrimEnd('.');
     
-    write-host "Getting list of changed extensions";
+    write-host "Comparing srcCommit:" + $srcCommit + "to destCommit:" + $destCommit;
 
     # return  the list of json files changed between the source and destination branches.
-    $changed = git diff $srcBranch $destBranch --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
+    $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
 
     write-host $changed
 
@@ -96,7 +97,7 @@ function Main
 {
     print-EnvironmentVariables;
 
-    $extensionJson = get-ChangedExtensions -srcBranch $Env:BUILD_SOURCEBRANCH -destBranch "remotes/origin/master";
+    $extensionJson = get-ChangedExtensions;
 
    if($null -ne $extensionJson)
     {
