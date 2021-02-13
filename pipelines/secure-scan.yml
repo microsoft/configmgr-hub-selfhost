@@ -38,7 +38,6 @@ steps:
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
       Targets: '**.dll;**.exe;**sys'
-      OutputDirectory: '$(Build.ArtifactStagingDirectory)'
 
   - task: PublishSecurityAnalysisLogs@2
     inputs:
@@ -49,17 +48,9 @@ steps:
 
   - task: PostAnalysis@1
     inputs:
-      AllTools: true
-      BinSkimBreakOn: 'Error'
       CodesignValidationBreakOn: 'WarningAbove'
-      FxCopBreakOn: 'ErrorAbove'
-      ModernCopBreakOn: 'Error'
       PoliCheckBreakOn: 'Severity1'
-      RoslynAnalyzersBreakOn: 'Error'
-      SemmleBreakOn: 'Error'
-      TSLintBreakOn: 'Error'
       ToolLogsNotFoundAction: 'Error'
-      CustomLogsFolder: '$(Build.ArtifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
     inputs:
