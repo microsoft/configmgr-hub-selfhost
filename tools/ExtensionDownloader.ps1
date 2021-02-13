@@ -53,12 +53,12 @@ function get-ChangedExtensions
     $srcCommit = $segments[1];
     $destCommit = $segments[3].TrimEnd('.');
     
-    write-host "Comparing srcCommit:" + $srcCommit + "to destCommit:" + $destCommit;
+    write-host "Comparing commits:" $srcCommit + "," + $destCommit;
 
     # return  the list of json files changed between the source and destination branches.
     $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
 
-    write-host $changed
+    write-host "Changed extension json:" + $changed
 
     return $changed;
 }
@@ -86,8 +86,6 @@ function get-BuildRootDirectory
     }
 }
 
-
-
 # ===================================================================
 #
 #   Main entry point.
@@ -103,19 +101,19 @@ function Main
     {
         $extensionRootDirectory = (get-BuildRootDirectory); 
 
-        write-host "ConsoleExtension directory:" + $extensionRootDirectory;
+        write-host "Repository root:" + $extensionRootDirectory;
 
         foreach($json in $extensionJson)
         {
             $jsonFile = $extensionRootDirectory + "\" + $json;
 
-            Write-Host "Processing extension:" $jsonFile;
+            Write-Host "Processing extension json:" $jsonFile;
 
             $objectInfo = Get-Content $jsonFile | ConvertFrom-Json;
             
-            write-host "\t:" $objectInfo.itemId;
-            write-host "\t:" $objectInfo.downloadLocation;
-            write-host "\t:" $objectInfo.sha;
+            write-host "itemId:" $objectInfo.itemId;
+            write-host "downloadLocation:" $objectInfo.downloadLocation;
+            write-host "Cab Sha:" $objectInfo.sha;
 
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
             $cabFile = $itemDir + "\" + $objectInfo.itemId + ".cab"
