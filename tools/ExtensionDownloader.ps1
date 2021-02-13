@@ -53,12 +53,12 @@ function get-ChangedExtensions
     $srcCommit = $segments[1];
     $destCommit = $segments[3].TrimEnd('.');
     
-    write-host "Comparing commits:" $srcCommit + "," + $destCommit;
+    write-host "Comparing commits:" $srcCommit  "," $destCommit;
 
     # return  the list of json files changed between the source and destination branches.
     $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
 
-    write-host "Changed extension json:" + $changed
+    write-host "Changed extension json:" $changed
 
     return $changed;
 }
@@ -101,7 +101,7 @@ function Main
     {
         $extensionRootDirectory = (get-BuildRootDirectory); 
 
-        write-host "Repository root:" + $extensionRootDirectory;
+        write-host "Repository root:" $extensionRootDirectory;
 
         foreach($json in $extensionJson)
         {
@@ -122,7 +122,7 @@ function Main
     
             if((Test-Path $cabFile) -eq $False )
             {
-                Write-Host "Downloading cab:" + $objectInfo.downloadLocation + "to:" $itemDir;
+                Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
                 Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
             }
     
@@ -145,7 +145,7 @@ function print-Summary
     Measure-object -Property length | 
     select-object count;
 
-    write-host "Expanded files count:" + $itemCount.Count;
+    write-host "Expanded files count:" $itemCount.Count;
 }
 
 function print-EnvironmentVariables
