@@ -60,7 +60,7 @@ steps:
       TSLintBreakOn: 'Error'
       ToolLogsNotFoundAction: 'Standard'
 
-  - task: PostAnalysis@1
+  - task: PostAnalysis@2
     inputs:
       AllTools: false
       APIScan: false
