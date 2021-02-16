@@ -38,7 +38,9 @@ steps:
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
       verboseOutput: true
-      Targets: '**.dll;**.exe;**sys'
+      Targets: '**.dll;**.exe;**sys;**.winmd;**.ps1;**.vbs;**wsf'
+      PolicyType: 'Custom'
+      PolicyFile: '$(Build.SourcesDirectory)\tools\CodeSign-Policy.xml'
 
   - task: PublishSecurityAnalysisLogs@3
     inputs:
