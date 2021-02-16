@@ -30,7 +30,7 @@ steps:
       TreatStaleSignatureAs: Warning
     continueOnError: true
 
-  - task: CredScan@2
+  - task: CredScan@3
     inputs:
       toolMajorVersion: 'V2'
 
@@ -40,26 +40,14 @@ steps:
       verboseOutput: true
       Targets: '**.dll;**.exe;**sys'
 
-  - task: PublishSecurityAnalysisLogs@2
+  - task: PublishSecurityAnalysisLogs@3
     inputs:
       ArtifactName: 'CodeAnalysisLogs'
       ArtifactType: 'Container'
       AllTools: true
       ToolLogsNotFoundAction: 'Standard'
 
-  - task: SdtReport@1
-    inputs:
-      AllTools: true
-      BinSkimBreakOn: 'Error'
-      CodesignValidationBreakOn: 'WarningAbove'
-      FxCopBreakOn: 'ErrorAbove'
-      ModernCopBreakOn: 'Error'
-      PoliCheckBreakOn: 'Severity1'
-      RoslynAnalyzersBreakOn: 'Error'
-      SemmleBreakOn: 'Error'
-      TSLintBreakOn: 'Error'
-      ToolLogsNotFoundAction: 'Standard'
-
+  
   - task: PostAnalysis@2
     inputs:
       AllTools: false
