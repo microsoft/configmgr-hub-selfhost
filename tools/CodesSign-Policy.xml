@@ -15,6 +15,9 @@
     <Rule>
       <Option>Required:Enforce Store Applications</Option>
     </Rule>
+    <Rule>
+      <Option>Enabled:UMCI</Option>
+    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs />
@@ -22,11 +25,19 @@
   <FileRules />
   <!--Signers-->
   <Signers>
-    <Signer ID="ID_SIGNER_S_24F" Name="Go Daddy Secure Certificate Authority - G2">
+    <Signer ID="ID_SIGNER_S_49D" Name="Go Daddy Secure Certificate Authority - G2">
       <CertRoot Type="TBS" Value="F9FF37F02E632CB7387025C07E57908A3D371B7C95D8CDD0390DE231ED943A12" />
       <CertPublisher Value="Recast Software, Inc." />
     </Signer>
-    <Signer ID="ID_SIGNER_S_267" Name="Microsoft Code Signing PCA 2011">
+    <Signer ID="ID_SIGNER_S_49E" Name="Go Daddy Secure Certificate Authority - G2">
+      <CertRoot Type="TBS" Value="F9FF37F02E632CB7387025C07E57908A3D371B7C95D8CDD0390DE231ED943A12" />
+      <CertPublisher Value="Recast Software, Inc." />
+    </Signer>
+    <Signer ID="ID_SIGNER_S_4CC" Name="Microsoft Code Signing PCA 2011">
+      <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
+      <CertPublisher Value="Microsoft Corporation" />
+    </Signer>
+    <Signer ID="ID_SIGNER_S_4D5" Name="Microsoft Code Signing PCA 2011">
       <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
       <CertPublisher Value="Microsoft Corporation" />
     </Signer>
@@ -36,17 +47,25 @@
     <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 02-16-2021">
       <ProductSigners>
         <AllowedSigners>
-          <AllowedSigner SignerId="ID_SIGNER_S_24F" />
-          <AllowedSigner SignerId="ID_SIGNER_S_267" />
+          <AllowedSigner SignerId="ID_SIGNER_S_49D" />
+          <AllowedSigner SignerId="ID_SIGNER_S_4CC" />
         </AllowedSigners>
       </ProductSigners>
     </SigningScenario>
     <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 02-16-2021">
-      <ProductSigners />
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_S_49E" />
+          <AllowedSigner SignerId="ID_SIGNER_S_4D5" />
+        </AllowedSigners>
+      </ProductSigners>
     </SigningScenario>
   </SigningScenarios>
   <UpdatePolicySigners />
-  <CiSigners />
+  <CiSigners>
+    <CiSigner SignerId="ID_SIGNER_S_49E" />
+    <CiSigner SignerId="ID_SIGNER_S_4D5" />
+  </CiSigners>
   <HvciOptions>0</HvciOptions>
   <PolicyTypeID>{A244370E-44C9-4C06-B551-F6016E563076}</PolicyTypeID>
 </SiPolicy>
