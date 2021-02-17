@@ -118,6 +118,8 @@ function Main
 
             [System.Environment]::SetEnvironmentVariable('ConfigMgr.CodeSignPolicyFile',$objectInfo.codecodeSignPolicyFile,[System.EnvironmentVariableTarget]::Machine)
 
+            print-EnvironmentVariables;
+
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
             $cabFile = $itemDir + "\" + $objectInfo.itemId + ".cab"
 
