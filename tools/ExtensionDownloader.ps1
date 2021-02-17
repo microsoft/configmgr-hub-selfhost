@@ -123,7 +123,7 @@ function Main
             
             print-objectJson -objectJson $objectInfo;
 
-            ${env:CONFIGMGR_CODESIGNPOLICYFILE} = Join-Path $(Build.SourcesDirectory) "\\objects\\ConsoleExtension\\" $objectInfo.codeSignPolicyFile;
+            ${env:CONFIGMGR_CODESIGNPOLICYFILE} = Join-Path ${env:Build_SourcesDirectory} "\\objects\\ConsoleExtension\\" $objectInfo.codeSignPolicyFile;
             
             print-EnvironmentVariables;
 
