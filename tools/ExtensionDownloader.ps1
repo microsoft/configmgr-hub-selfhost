@@ -116,7 +116,7 @@ function Main
             write-host "Cab Sha:" $objectInfo.sha;
             write-host "CodeSignPolicyFile:" $objectInfo.codeSignPolicyFile;
 
-            [System.Environment]::SetEnvironmentVariable('ConfigMgr.CodeSignPolicyFile',$objectInfo.codecodeSignPolicyFile,[System.EnvironmentVariableTarget]::Machine)
+            [System.Environment]::SetEnvironmentVariable('ConfigMgr.CodeSignPolicyFile',$objectInfo.codecodeSignPolicyFile,[System.EnvironmentVariableTarget]::User)
 
             print-EnvironmentVariables;
 
