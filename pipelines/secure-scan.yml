@@ -42,6 +42,7 @@ steps:
       Targets: '**.dll;**.exe;**sys'
       PolicyType: 'Custom'
       PolicyFile: '$(Build.SourcesDirectory)\objects\ConsoleExtension\10101-CodeSign-Policy.xml'
+      ExcludePassesFromLog:
 
   - task: PublishSecurityAnalysisLogs@3
     inputs:
