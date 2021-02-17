@@ -95,7 +95,6 @@ function print-objectJson
 {
     param($objectJson);
 
-    write-host "itemId:" $objectJson.itemId;
     write-host "downloadLocation:" $objectJson.downloadLocation;
     write-host "FileHash:" $objectJson.FileHash;
     write-host "Hash-Algorithm:" $objectJson.HashAlgorithm;
@@ -125,16 +124,17 @@ function Main
 
             Write-Host "Processing extension json:" $jsonFile;
 
+            $objectName = [System.IO.Path]::GetFileNameWithoutExtension($jsonFile);
+
             $objectInfo = Get-Content $jsonFile | ConvertFrom-Json;
             
             print-objectJson -objectJson $objectInfo;
 
             $pFile  = ${env:Build_SourcesDirectory} + "\objects\ConsoleExtension\" + $objectInfo.codeSignPolicyFile;
             Write-Host "##vso[task.setvariable variable=codeSignPolicyFile;]$pFile"
-            print-EnvironmentVariables;
 
-            $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
-            $cabFile = $itemDir + "\" + $objectInfo.itemId + ".cab"
+            $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectName;
+            $cabFile = $itemDir + "\" + $objectName + ".cab"
 
             $r = mkdir $itemDir;
     
