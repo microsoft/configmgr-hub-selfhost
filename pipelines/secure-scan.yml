@@ -39,7 +39,7 @@ steps:
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
       verboseOutput: true
-      Targets: '**.dll;**.exe;**sys;**.winmd;'
+      Targets: '**.dll;**.exe;**sys'
       PolicyType: 'Custom'
       PolicyFile: '$(ConfigMgr.CodeSignPolicyFile)'
 

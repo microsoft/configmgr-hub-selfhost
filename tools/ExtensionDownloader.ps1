@@ -91,7 +91,7 @@ function print-objectJson
     param($objectJson);
 
     write-host "itemId:" $objectJson.itemId;
-    write-host "downloadLocation:" $$objectJson.downloadLocation;
+    write-host "downloadLocation:" $objectJson.downloadLocation;
     write-host "Cab Sha:" $objectJson.sha;
     write-host "CodeSignPolicyFile:" $objectJson.codeSignPolicyFile;
 }
@@ -123,7 +123,7 @@ function Main
             
             print-objectJson -objectJson $objectInfo;
 
-            ${env:CONFIGMGR_CODESIGNPOLICYFILE} = ${env:Build_SourcesDirectory} + "\\objects\\ConsoleExtension\\" + $objectInfo.codeSignPolicyFile;
+            ${env:CONFIGMGR_CODESIGNPOLICYFILE} = ${env:Build_SourcesDirectory} + "\objects\ConsoleExtension\" + $objectInfo.codeSignPolicyFile;
             
             print-EnvironmentVariables;
 
