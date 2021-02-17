@@ -86,6 +86,11 @@ function get-BuildRootDirectory
     }
 }
 
+# ===================================================================
+#
+#   Prints the properties of the supplied json object.
+#
+# ===================================================================
 function print-objectJson
 {
     param($objectJson);
@@ -152,17 +157,22 @@ function Main
     }
 }
 
+# ===================================================================
+#
+#   Gets the has of the specified file and compares it to the expected hash
+#
+# ===================================================================
 function verifyFileHash
 {
     param($expectedHash, $fileToCheck, $algorith);
 
-    Write-Host "Verifying hash of cab file " $fileToCheck;
+    Write-Host "Verifying hash of file:" $fileToCheck;
 
     $actualHash =  Get-FileHash -Path $fileToCheck -Algorithm $algorith;
     
     write-host "Algorith:" $actualHash.Algorithm;
     write-host "Path:" $actualHash.Path;
-    write-host "ExpectedHash: [" $expectedHash "] ActualHash [" $actualHash.Hash "].";
+    write-host "ExpectedHash: ["$expectedHash"] ActualHash ["$actualHash.Hash"].";
 
     if ($actualHash.Hash -ne $expectedHash)
     {
@@ -170,6 +180,11 @@ function verifyFileHash
     }
 }
 
+# ===================================================================
+#
+#   prints a summary of the count of files in a directory.
+#
+# ===================================================================
 function print-Summary
 {
     param($directory)
@@ -181,6 +196,11 @@ function print-Summary
     write-host "Expanded files count:" $itemCount.Count;
 }
 
+# ===================================================================
+#
+#   writes the session environment variables to the output.
+#
+# ===================================================================
 function print-EnvironmentVariables
 {
     write-host "Environment variables:";
