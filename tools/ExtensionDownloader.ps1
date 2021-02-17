@@ -159,7 +159,7 @@ function Main
 
 # ===================================================================
 #
-#   Gets the has of the specified file and compares it to the expected hash
+#   Gets the hash of the specified file and compares it to the expected hash
 #
 # ===================================================================
 function verifyFileHash
@@ -170,7 +170,7 @@ function verifyFileHash
 
     $actualHash =  Get-FileHash -Path $fileToCheck -Algorithm $algorith;
     
-    write-host "Algorith:" $actualHash.Algorithm;
+    write-host "Algorithm:" $actualHash.Algorithm;
     write-host "Path:" $actualHash.Path;
     write-host "ExpectedHash: ["$expectedHash"] ActualHash ["$actualHash.Hash"].";
 
