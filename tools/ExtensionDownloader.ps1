@@ -86,6 +86,16 @@ function get-BuildRootDirectory
     }
 }
 
+function print-objectJson
+{
+    param($objectJson);
+
+    write-host "itemId:" $objectJson.itemId;
+    write-host "downloadLocation:" $$objectJson.downloadLocation;
+    write-host "Cab Sha:" $objectJson.sha;
+    write-host "CodeSignPolicyFile:" $objectJson.codeSignPolicyFile;
+}
+
 # ===================================================================
 #
 #   Main entry point.
@@ -111,13 +121,10 @@ function Main
 
             $objectInfo = Get-Content $jsonFile | ConvertFrom-Json;
             
-            write-host "itemId:" $objectInfo.itemId;
-            write-host "downloadLocation:" $objectInfo.downloadLocation;
-            write-host "Cab Sha:" $objectInfo.sha;
-            write-host "CodeSignPolicyFile:" $objectInfo.codeSignPolicyFile;
+            print-objectJson -objectJson $objectInfo;
 
-            [System.Environment]::SetEnvironmentVariable('ConfigMgr.CodeSignPolicyFile',$objectInfo.codecodeSignPolicyFile,[System.EnvironmentVariableTarget]::User)
-
+            ${env:CONFIGMGR_CODESIGNPOLICYFILE} = $objectInfo.codeSignPolicyFile;
+            
             print-EnvironmentVariables;
 
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
