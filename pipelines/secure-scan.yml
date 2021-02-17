@@ -9,7 +9,7 @@ pool:
 
 steps:
   - task: PowerShell@2
-    displayName: "Expand Console Extension Cab's'"
+    displayName: "Download & Expand Console Extensions"
     inputs:
       filePath: '$(Build.SourcesDirectory)\tools\Extensiondownloader.ps1'
       failOnStderr: true
