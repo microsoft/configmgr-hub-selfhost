@@ -156,13 +156,13 @@ function verifyFileHash
 {
     param($expectedHash, $fileToCheck, $algorith);
 
-    Write-Host "Verifying hash of cab file " + $fileToCheck;
+    Write-Host "Verifying hash of cab file " $fileToCheck;
 
     $actualHash =  Get-FileHash -Path $fileToCheck -Algorithm $algorith;
     
-    write-host "Algorith:" + $actualHash.Algorithm;
-    write-host "Path:" + $actualHash.Path;
-    write-host "ExpectedHash: [" + $expectedHash + "] ActualHash [" + $actualHash.Hash + "].";
+    write-host "Algorith:" $actualHash.Algorithm;
+    write-host "Path:" $actualHash.Path;
+    write-host "ExpectedHash: [" $expectedHash "] ActualHash [" $actualHash.Hash "].";
 
     if ($actualHash.Hash -ne $expectedHash)
     {
