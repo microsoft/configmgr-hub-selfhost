@@ -42,7 +42,7 @@ steps:
       Targets: '**.dll;**.exe;**sys'
       PolicyType: 'Custom'
       PolicyFile: '$(Build.SourcesDirectory)\objects\ConsoleExtension\10101-CodeSign-Policy.xml'
-      ExcludePassesFromLog:
+      ExcludePassesFromLog: false
 
   - task: PublishSecurityAnalysisLogs@3
     inputs:
@@ -50,12 +50,6 @@ steps:
       ArtifactType: 'Container'
       AllTools: true
       ToolLogsNotFoundAction: 'Standard'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
 
   - task: PostAnalysis@2
     inputs:
