@@ -129,8 +129,8 @@ function Main
             
             print-objectJson -objectJson $objectInfo;
 
-            ${env:CODESIGNPOLICYFILE} = ${env:Build_SourcesDirectory} + "\objects\ConsoleExtension\" + $objectInfo.codeSignPolicyFile;
-            
+            $pFile  = ${env:Build_SourcesDirectory} + "\objects\ConsoleExtension\" + $objectInfo.codeSignPolicyFile;
+            Write-Host "##vso[task.setvariable variable=codeSignPolicyFile;]$pFile"
             print-EnvironmentVariables;
 
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
