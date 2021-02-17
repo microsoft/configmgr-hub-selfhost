@@ -41,7 +41,7 @@ steps:
       verboseOutput: true
       Targets: '**.dll;**.exe;**sys;**.winmd;'
       PolicyType: 'Custom'
-      PolicyFile: '$(Build.SourcesDirectory)\tools\CodeSign-Policy.xml'
+      PolicyFile: '$(ConfigMgr.CodeSignPolicyFile)'
 
   - task: PublishSecurityAnalysisLogs@3
     inputs:

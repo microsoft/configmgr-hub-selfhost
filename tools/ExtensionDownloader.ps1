@@ -114,6 +114,9 @@ function Main
             write-host "itemId:" $objectInfo.itemId;
             write-host "downloadLocation:" $objectInfo.downloadLocation;
             write-host "Cab Sha:" $objectInfo.sha;
+            write-host "CodecodeSignPolicyFile:" $objectInfo.codecodeSignPolicyFile;
+
+            [System.Environment]::SetEnvironmentVariable('ConfigMgr.CodeSignPolicyFile',$objectInfo.codecodeSignPolicyFile,[System.EnvironmentVariableTarget]::Machine)
 
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectInfo.itemId;
             $cabFile = $itemDir + "\" + $objectInfo.itemId + ".cab"
