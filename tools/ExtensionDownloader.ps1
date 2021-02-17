@@ -144,7 +144,7 @@ function Main
                 Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
             }
 
-            verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorith $objectInfo.HashAlgorithm -ErrorAction Stop
+            verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorithm $objectInfo.HashAlgorithm -ErrorAction Stop
     
             write-host "Recursively searching for cab files.."
             searchAndExpand -directory $itemDir
@@ -164,7 +164,7 @@ function Main
 # ===================================================================
 function verifyFileHash
 {
-    param($expectedHash, $fileToCheck, $algorith);
+    param($expectedHash, $fileToCheck, $algorithm);
 
     Write-Host "Verifying hash of file:" $fileToCheck;
 
