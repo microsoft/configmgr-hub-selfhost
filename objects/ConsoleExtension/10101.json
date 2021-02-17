@@ -1,6 +1,7 @@
 {
   "itemId": "10101",
   "downloadLocation": "https://releases.recastsoftware.com/releases/downloadcab/750",
-  "sha": "",
+  "FileHash": "2",
+  "HashAlgorithm": "SHA256",
   "codeSignPolicyFile": "10101-CodeSign-Policy.xml"
 }

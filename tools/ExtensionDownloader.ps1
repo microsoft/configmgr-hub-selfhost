@@ -92,7 +92,8 @@ function print-objectJson
 
     write-host "itemId:" $objectJson.itemId;
     write-host "downloadLocation:" $objectJson.downloadLocation;
-    write-host "Cab Sha:" $objectJson.sha;
+    write-host "FileHash:" $objectJson.FileHash;
+    write-host "Hash-Algorithm:" $objectJson.HashAlgorithm;
     write-host "CodeSignPolicyFile:" $objectJson.codeSignPolicyFile;
 }
 
@@ -137,6 +138,8 @@ function Main
                 Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
                 Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
             }
+
+            verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorith $objectInfo.HashAlgorithm -ErrorAction Stop
     
             write-host "Recursively searching for cab files.."
             searchAndExpand -directory $itemDir
@@ -146,6 +149,24 @@ function Main
     }
     else {
         write-host "No extensions submitted to this branch.";
+    }
+}
+
+function verifyFileHash
+{
+    param($expectedHash, $fileToCheck, $algorith);
+
+    Write-Host "Verifying hash of cab file " + $fileToCheck;
+
+    $actualHash =  Get-FileHash -Path $fileToCheck -Algorithm $algorith;
+    
+    write-host "Algorith:" + $actualHash.Algorithm;
+    write-host "Path:" + $actualHash.Path;
+    write-host "ExpectedHash: [" + $expectedHash + "] ActualHash [" + $actualHash.Hash + "].";
+
+    if ($actualHash.Hash -ne $expectedHash)
+    {
+        Write-Error $message;
     }
 }
 
