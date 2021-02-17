@@ -168,7 +168,7 @@ function verifyFileHash
 
     Write-Host "Verifying hash of file:" $fileToCheck;
 
-    $actualHash =  Get-FileHash -Path $fileToCheck -Algorithm $algorith;
+    $actualHash =  Get-FileHash -Path $fileToCheck -Algorithm $algorithm;
     
     write-host "Algorithm:" $actualHash.Algorithm;
     write-host "Path:" $actualHash.Path;
