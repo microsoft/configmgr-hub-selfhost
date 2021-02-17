@@ -129,7 +129,7 @@ function Main
             
             print-objectJson -objectJson $objectInfo;
 
-            ${env:CONFIGMGR_CODESIGNPOLICYFILE} = ${env:Build_SourcesDirectory} + "\objects\ConsoleExtension\" + $objectInfo.codeSignPolicyFile;
+            ${env:CODESIGNPOLICYFILE} = ${env:Build_SourcesDirectory} + "\objects\ConsoleExtension\" + $objectInfo.codeSignPolicyFile;
             
             print-EnvironmentVariables;
 

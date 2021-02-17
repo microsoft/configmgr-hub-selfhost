@@ -7,6 +7,9 @@ trigger:
 pool:
   vmImage: 'windows-2019'
 
+variables:
+  codeSignPolicyFile: ''
+
 steps:
   - task: PowerShell@2
     displayName: "Download & Expand Console Extensions"
@@ -41,7 +44,7 @@ steps:
       verboseOutput: true
       Targets: '**.dll;**.exe;**sys'
       PolicyType: 'Custom'
-      PolicyFile: '$(ConfigMgr.CodeSignPolicyFile)'
+      PolicyFile: '$(codeSignPolicyFile)'
       ExcludePassesFromLog: false
 
   - task: PublishSecurityAnalysisLogs@3
