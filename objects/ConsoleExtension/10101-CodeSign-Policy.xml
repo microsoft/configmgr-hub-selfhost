@@ -27,11 +27,11 @@
   <Signers>
     <Signer ID="ID_SIGNER_S_49D" Name="Go Daddy Secure Certificate Authority - G2">
       <CertRoot Type="TBS" Value="F9FF37F02E632CB7387025C07E57908A3D371B7C95D8CDD0390DE231ED943A12" />
-      <CertPublisher Value="Recast Software, Inc." />
+      <!--<CertPublisher Value="Recast Software, Inc." />-->
     </Signer>
     <Signer ID="ID_SIGNER_S_49E" Name="Go Daddy Secure Certificate Authority - G2">
       <CertRoot Type="TBS" Value="F9FF37F02E632CB7387025C07E57908A3D371B7C95D8CDD0390DE231ED943A12" />
-      <CertPublisher Value="Recast Software, Inc." />
+      <!--<CertPublisher Value="Recast Software, Inc." />-->
     </Signer>
     <Signer ID="ID_SIGNER_S_4CC" Name="Microsoft Code Signing PCA 2011">
       <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
