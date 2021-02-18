@@ -9,7 +9,7 @@ pool:
 
 variables:
   codeSignPolicyFile: ''
-  codeSignPolicyType: ''
+  codeSignPolicyType: 'Azure Security Pack'
 
 steps:
   - task: PowerShell@2
