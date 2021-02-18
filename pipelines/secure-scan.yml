@@ -1,6 +1,8 @@
 # Pipeline for running SDL scans
 # https://aka.ms/yaml
 
+trigger: none
+
 pr:
 - master
 
