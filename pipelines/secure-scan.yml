@@ -45,7 +45,7 @@ steps:
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
       verboseOutput: true
-      Targets: '**.dll;**.exe;**sys;**.ps1'
+      Targets: '**.dll;**.exe;**sys'
       PolicyType: 'Custom'
       PolicyFile: '$(codeSignPolicyFile)'
       ExcludePassesFromLog: false
