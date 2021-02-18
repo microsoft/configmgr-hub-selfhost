@@ -1,7 +1,7 @@
 # Pipeline for running SDL scans
 # https://aka.ms/yaml
 
-trigger:
+pr:
 - master
 
 pool:
