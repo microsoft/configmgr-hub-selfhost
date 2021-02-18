@@ -1,13 +1,11 @@
-name: 'Run SDL Tools' 
+name: 'Validate Submission' 
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  sdl-scan:
+  run-pipeline:
     runs-on: ubuntu-latest
     steps:
     - uses: Azure/pipelines@v1
