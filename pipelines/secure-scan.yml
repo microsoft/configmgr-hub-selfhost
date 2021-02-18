@@ -43,7 +43,7 @@ steps:
       toolMajorVersion: 'V2'
 
   - task: CodeSign@1
-    enabled: '$(codeSignEnabled)'
+    condition: and(succeeded(), eq(variables['codeSignEnabled'], 'true'))
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
       verboseOutput: true
