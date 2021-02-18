@@ -9,7 +9,7 @@ pool:
 
 variables:
   codeSignPolicyFile: ''
-  codeSignPolicyType: 'Azure Security Pack'
+  codeSignEnabled: false
 
 steps:
   - task: PowerShell@2
@@ -43,11 +43,12 @@ steps:
       toolMajorVersion: 'V2'
 
   - task: CodeSign@1
+    enabled: $(codeSignEnabled)
     inputs:
       Path: '$(Build.SourcesDirectory)\objects'
       verboseOutput: true
       Targets: '**.dll;**.exe;**sys'
-      PolicyType: '$(codeSignPolicyType)'
+      PolicyType: 'Custom'
       PolicyFile: '$(codeSignPolicyFile)'
       ExcludePassesFromLog: false
 
