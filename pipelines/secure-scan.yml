@@ -9,6 +9,7 @@ pool:
 
 variables:
   codeSignPolicyFile: ''
+  codeSignPolicyType: ''
 
 steps:
   - task: PowerShell@2
@@ -46,7 +47,7 @@ steps:
       Path: '$(Build.SourcesDirectory)\objects'
       verboseOutput: true
       Targets: '**.dll;**.exe;**sys'
-      PolicyType: 'Custom'
+      PolicyType: '$(codeSignPolicyType'
       PolicyFile: '$(codeSignPolicyFile)'
       ExcludePassesFromLog: false
 
