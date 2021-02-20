@@ -43,10 +43,10 @@ steps:
   - task: RoslynAnalyzers@2
     inputs:
       userProvideBuildInfo: 'auto'
-  
+ 
   - task: Guardian@1
     inputs:
-    break: true
+     break: true
 
   - task: CredScan@3
     inputs:
