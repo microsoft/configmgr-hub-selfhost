@@ -2,5 +2,6 @@
   "downloadLocation": "https://releases.recastsoftware.com/releases/downloadcab/750",
   "FileHash": "152d85b8e63c4f22e583883b51ccb80a8098fe0362cf1f6101fa896d0647810a",
   "HashAlgorithm": "SHA256",
-  "codeSignPolicyFile": "10101-CodeSign-Policy.xml"
+  "codeSignPolicyFile": "10101-CodeSign-Policy.xml",
+  "test":  "true"
 }

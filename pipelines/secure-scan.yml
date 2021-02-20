@@ -40,6 +40,14 @@ steps:
       TreatStaleSignatureAs: Warning
     continueOnError: true
 
+  - task: RoslynAnalyzers@2
+    inputs:
+      userProvideBuildInfo: 'auto'
+  
+  - task: Guardian@1
+    inputs:
+    break: true
+
   - task: CredScan@3
     inputs:
       toolMajorVersion: 'V2'
