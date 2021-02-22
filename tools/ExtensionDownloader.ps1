@@ -41,7 +41,7 @@ function expandCabFile
 # ===================================================================
 #
 #   Detects if this submission is a console submission
-#   and if so downloads the extension for verification.
+#   and if so gets a list of full paths to files for the extension for verification.
 #
 # ===================================================================
 function get-ChangedExtensions
@@ -55,7 +55,7 @@ function get-ChangedExtensions
     
     write-host "Comparing commits:" $srcCommit  "," $destCommit;
 
-    # return  the list of json files changed between the source and destination branches.
+    # return the list of json files changed between the source and destination branches.
     $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
 
     write-host "Changed extension json:" $changed
@@ -134,15 +134,13 @@ function Main
             Write-Host "##vso[task.setvariable variable=codeSignPolicyFile;]$pFile"
             Write-Host "##vso[task.setvariable variable=codeSignEnabled]true"
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectName;
-            $cabFile = $itemDir + "\" + $objectName + ".cab"
+            $cabFile = $itemDir + "\" + $objectName
 
             $r = mkdir $itemDir;
     
-            if((Test-Path $cabFile) -eq $False )
-            {
-                Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
-                Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
-            }
+            # Always download to ensure we are verifying the correct latest file
+            Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
+            Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
 
             verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorithm $objectInfo.HashAlgorithm -ErrorAction Stop
     
@@ -203,8 +201,9 @@ function print-Summary
 # ===================================================================
 function print-EnvironmentVariables
 {
-    write-host "Environment variables:";
-    get-childitem env:
+    # Enable if needed for debugging
+    #write-host "Environment variables:";
+    #get-childitem env:
 }
 
 Write-host 'Extension downloader starting...'
