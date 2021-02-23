@@ -141,7 +141,7 @@ function Main
             # Always download to ensure we are verifying the correct latest file
             if ((Test-Path $cabFile) -eq $True)
             {
-                Write-Error "File: " $itemDir + " already exists. This is unexpected.";
+                Write-Error "File:" $cabFile "already exists. This is unexpected.";
                 return;
             }
             
