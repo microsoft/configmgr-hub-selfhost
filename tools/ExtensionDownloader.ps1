@@ -134,11 +134,17 @@ function Main
             Write-Host "##vso[task.setvariable variable=codeSignPolicyFile;]$pFile"
             Write-Host "##vso[task.setvariable variable=codeSignEnabled]true"
             $itemDir = $extensionRootDirectory + "\objects\consoleextension\" + $objectName;
-            $cabFile = $itemDir + "\" + $objectName
+            $cabFile = $itemDir + "\" + $objectName + ".cab"
 
             $r = mkdir $itemDir;
     
             # Always download to ensure we are verifying the correct latest file
+            if ((Test-Path $cabFile) -eq $True)
+            {
+                Write-Error "File: " $itemDir + " already exists. This is unexpected.";
+                return;
+            }
+            
             Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
             Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
 
@@ -201,9 +207,8 @@ function print-Summary
 # ===================================================================
 function print-EnvironmentVariables
 {
-    # Enable if needed for debugging
-    #write-host "Environment variables:";
-    #get-childitem env:
+    write-host "Environment variables:";
+    get-childitem env:
 }
 
 Write-host 'Extension downloader starting...'
