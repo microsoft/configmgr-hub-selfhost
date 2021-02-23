@@ -41,7 +41,7 @@ function expandCabFile
 # ===================================================================
 #
 #   Detects if this submission is a console submission
-#   and if so downloads the extension for verification.
+#   and if so gets a list of full paths to files for the extension for verification.
 #
 # ===================================================================
 function get-ChangedExtensions
@@ -55,7 +55,7 @@ function get-ChangedExtensions
     
     write-host "Comparing commits:" $srcCommit  "," $destCommit;
 
-    # return  the list of json files changed between the source and destination branches.
+    # return the list of json files changed between the source and destination branches.
     $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like "objects/ConsoleExtension/*.json"};
 
     write-host "Changed extension json:" $changed
@@ -138,11 +138,15 @@ function Main
 
             $r = mkdir $itemDir;
     
-            if((Test-Path $cabFile) -eq $False )
+            # Always download to ensure we are verifying the correct latest file
+            if ((Test-Path $cabFile) -eq $True)
             {
-                Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
-                Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
+                Write-Error "File:" $cabFile "already exists. This is unexpected.";
+                return;
             }
+            
+            Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
+            Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
 
             verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorithm $objectInfo.HashAlgorithm -ErrorAction Stop
     
