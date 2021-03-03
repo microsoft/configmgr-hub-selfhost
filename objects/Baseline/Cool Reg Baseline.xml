@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_72015F40-262C-4C2D-9A48-AC2EB3BF1658" LogicalName="Baseline_748dd58f-db61-4298-bf7f-09e02b40b122" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="Cool Reg Baseline" ResourceId="ID-4cc454c7-4ba0-41c3-a834-c87a8d4edac6" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_72015F40-262C-4C2D-9A48-AC2EB3BF1658" LogicalName="OperatingSystem_7af218dc-d65b-4ab3-9df9-1b43840bb5f4" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
