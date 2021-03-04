@@ -24,6 +24,15 @@ steps:
   - powershell: 'get-childitem env:'
     displayName: "Print variables"
 
+  - task: DownloadPackage@1
+    inputs:
+      packageType: 'nuget'
+      feed: '920d9546-58c4-42e5-b626-aeff84ceadb7/92dd544c-c0cf-4768-9ee3-f9246501c978'
+      view: '8e11e325-f60c-494c-a4d3-c2d3a1fbb94b'
+      definition: 'Microsoft.ConfigurationManager.ConsoleExtension-release'
+      version: 'latest'
+      downloadPath: '$(System.ArtifactsDirectory)'
+
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
     displayName: 'Run PoliCheck'
     inputs:
