@@ -25,6 +25,7 @@ steps:
     displayName: "Print variables"
 
   - task: DownloadPackage@1
+    displayName: "Download validation library"
     inputs:
       packageType: 'nuget'
       feed: '920d9546-58c4-42e5-b626-aeff84ceadb7/92dd544c-c0cf-4768-9ee3-f9246501c978'
