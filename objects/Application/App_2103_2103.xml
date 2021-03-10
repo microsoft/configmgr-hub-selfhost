@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_BAE7A5C3-39D5-4F84-9FB6-8FF17159008C" LogicalName="Application_8a3b2f24-8b20-445d-81fe-e0ad1a073626" Version="4">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>App_2103_2103</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_1271491669">App_2103_2103</Title>
+    <Description ResourceId="Res_528139673">Updated: 03102021, 10:36 AM PST</Description>
+    <Publisher ResourceId="Res_753779033" />
+    <SoftwareVersion ResourceId="Res_2055823978" />
+    <CustomId ResourceId="Res_1809494748" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
