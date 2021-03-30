@@ -18,7 +18,7 @@ steps:
     displayName: "Download & Expand Console Extensions"
     inputs:
       filePath: '$(Build.SourcesDirectory)\tools\Extensiondownloader.ps1'
-      failOnStderr: true
+      failOnStderr: false
       workingDirectory: '$(Build.SourcesDirectory)\objects'
 
   - powershell: 'get-childitem env:'
