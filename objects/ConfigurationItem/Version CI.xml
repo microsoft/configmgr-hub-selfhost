@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <OperatingSystem AuthoringScopeId="ScopeId_8E9D2F40-5BB8-463F-9E68-ED8514376B7D" LogicalName="OperatingSystem_cc3e8b13-5b82-4749-9b27-fcd3becfcd74" Version="1">
+  <OperatingSystem AuthoringScopeId="ScopeId_845E6126-BC91-4116-8BF7-F001C11AB4C1" LogicalName="OperatingSystem_cc3e8b13-5b82-4749-9b27-fcd3becfcd74" Version="2">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="Version CI" ResourceId="ID-973ebbf2-ca67-4c62-a2d5-41796f1aa8d9" />
-      <Description Text="" />
+      <Description Text="Updated in 2103 Latest session" ResourceId="ID-08673d35-89c5-4d04-8ab3-2b9462d9f7ed" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
     </Parts>
     <Settings>
-      <RootComplexSetting />
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_d71179ff-b485-4982-b910-113fc38a1726" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Addedin Latest 2103" ResourceId="ID-049a70fc-71da-4445-b5b5-22e182d3933a" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>HARDWARE\DESCRIPTION\System</Key>
+            <ValueName>BootArchitecture</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
     </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_95e766be-ae4a-4e30-8119-0b86481b5715" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="BootArchitecture must exist" ResourceId="ID-47089c06-d85e-4e55-ae43-271d800da280" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_845E6126-BC91-4116-8BF7-F001C11AB4C1" LogicalName="OperatingSystem_cc3e8b13-5b82-4749-9b27-fcd3becfcd74" Version="2" DataType="Int64" SettingLogicalName="RegSetting_d71179ff-b485-4982-b910-113fc38a1726" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
     <OperatingSystemDiscoveryInfo BuildVersion="456456" MajorVersion="1231231" MinorVersion="45645645" ServicePackMajorVersion="456456" ServicePackMinorVersion="87987" />
   </OperatingSystem>
 </DesiredConfigurationDigest>
