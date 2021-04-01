@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_6EEFF154-A9E1-4E38-8411-07A86BEDCB5B" LogicalName="Application_032c1d85-b14a-4e96-a7e8-0e8a7bb4e2c0" Version="3">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>WebApp test for update to contribution</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_6EEFF154-A9E1-4E38-8411-07A86BEDCB5B" LogicalName="DeploymentType_56481bfd-1a35-40ac-9965-2609455114d8" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_725199861">WebApp test for update to contribution</Title>
+    <Description ResourceId="Res_83272108">on-prem update on 8:58</Description>
+    <Publisher ResourceId="Res_251564546" />
+    <SoftwareVersion ResourceId="Res_1571301568" />
+    <CustomId ResourceId="Res_618500358" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_6EEFF154-A9E1-4E38-8411-07A86BEDCB5B" LogicalName="DeploymentType_56481bfd-1a35-40ac-9965-2609455114d8" Version="1">
+    <Title ResourceId="Res_1790568710">https://www.bing.com - Web Application</Title>
+    <DeploymentTechnology>GLOBAL/WebAppDeploymentTechnology</DeploymentTechnology>
+    <Technology>WebApp</Technology>
+    <Hosting>WebApp</Hosting>
+    <Installer Technology="WebApp">
+      <ExecutionContext>User</ExecutionContext>
+      <DetectAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">https://www.bing.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_6EEFF154-A9E1-4E38-8411-07A86BEDCB5B/Application_032c1d85-b14a-4e96-a7e8-0e8a7bb4e2c0</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">https://www.bing.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_6EEFF154-A9E1-4E38-8411-07A86BEDCB5B/Application_032c1d85-b14a-4e96-a7e8-0e8a7bb4e2c0</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">https://www.bing.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_6EEFF154-A9E1-4E38-8411-07A86BEDCB5B/Application_032c1d85-b14a-4e96-a7e8-0e8a7bb4e2c0</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <TargetUrl>https://www.bing.com</TargetUrl>
+        <LocalAppId>ScopeId_6EEFF154-A9E1-4E38-8411-07A86BEDCB5B/Application_032c1d85-b14a-4e96-a7e8-0e8a7bb4e2c0</LocalAppId>
+        <LocalAppVersion>1</LocalAppVersion>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
