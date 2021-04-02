@@ -25,7 +25,7 @@ function Main
         {
             $expandedCabLocation = [System.IO.Path]::GetFileNameWithoutExtension($file);
             $validator.VerifyExtensionCabSigniture($file);
-            $validator.VerifyExtensionCabContent($consoleExsDirectory + "\" + "expandedCabLocation")
+            $validator.VerifyExtensionCabContent(-join($consoleExsDirectory, "\", expandedCabLocation));
         }
         Catch
         {
