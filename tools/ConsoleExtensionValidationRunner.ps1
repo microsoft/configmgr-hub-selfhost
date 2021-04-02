@@ -30,7 +30,8 @@ function Main
         Catch
         {
             $ErrorMessage = $_.Exception.Message;
-            Write-Error "Validation failed with " + $ErrorMessage;
+            
+            Write-Error $ErrorMessage;
         }
     }
 }
