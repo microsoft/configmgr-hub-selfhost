@@ -23,9 +23,10 @@ function Main
     {
         Try
         {
-            $expandedCabLocation = [System.IO.Path]::GetFileNameWithoutExtension($file);
+            $expandedCabFolder = [System.IO.Path]::GetFileNameWithoutExtension($file);
+            Write-Host -join($consoleExsDirectory, "\", $expandedCabFolder);
             $validator.VerifyExtensionCabSigniture($file);
-            $validator.VerifyExtensionCabContent(-join($consoleExsDirectory, "\", $expandedCabLocation));
+            $validator.VerifyExtensionCabContent(-join($consoleExsDirectory, "\", $expandedCabFolder));
         }
         Catch
         {
@@ -37,7 +38,7 @@ function Main
 }
 
 
-Write-host 'Running console extension validation...'
+Write-Host 'Running console extension validation...'
 Write-Host "=================================================="
 
 Main;
