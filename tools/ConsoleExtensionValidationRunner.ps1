@@ -10,7 +10,7 @@ function Main
     $consoleExValidatorLocation = $artifactsLocation + "\lib\net40\Microsoft.ConfigurationManager.ConsoleExtensionCommon.dll";
     $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
     $consoleExsDirectory = $itemsRootDirectory + "\" + "objects\consoleextension";
-    $cabFilesToValidated = Get-ChildItem $consoleExsDirectory;
+    $cabFilesToValidated = Get-ChildItem $consoleExsDirectory -filter "*.cab";
 
 
     #Initialize objects
@@ -24,7 +24,6 @@ function Main
         Try
         {
             $expandedCabFolder = [System.IO.Path]::GetFileNameWithoutExtension($file);
-            Write-Host -join($consoleExsDirectory, "\", $expandedCabFolder);
             $validator.VerifyExtensionCabSigniture($file);
             $validator.VerifyExtensionCabContent(-join($consoleExsDirectory, "\", $expandedCabFolder));
         }
