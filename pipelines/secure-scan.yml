@@ -25,6 +25,7 @@ steps:
     displayName: "Print variables"
 
   - task: DownloadPackage@1
+    displayName: "Download console extension validation library"
     inputs:
       packageType: 'nuget'
       feed: '/9b6eeac8-9d95-4be6-b625-aad8659f5c65'
@@ -33,8 +34,13 @@ steps:
       version: '5.2103.1097.1000'
       downloadPath: '$(System.ArtifactsDirectory)'
 
-  - powershell: 'Get-ChildItem -Path D:\a\1\a'
-    displayName: "Print variables"
+  - task: PowerShell@2
+    displayName: "Run console extension validator"
+    inputs:
+      filePath: '$(Build.SourcesDirectory)\tools\ConsoleExtensionValidationRunner.ps1'
+      failOnStderr: true
+      workingDirectory: '$(Build.SourcesDirectory)\objects'
+
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
     displayName: 'Run PoliCheck'
     inputs:
