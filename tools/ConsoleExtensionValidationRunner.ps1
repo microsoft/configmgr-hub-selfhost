@@ -42,7 +42,7 @@ function Main
     if ($null -ne $extensionJson)
     {
         $extensionName = [System.IO.Path]::GetFileNameWithoutExtension($extensionJson);
-        $extensionCabPath = $consoleExsDirectory + "\" + $extensionName "\" + $extensionName + ".cab"
+        $extensionCabPath = $consoleExsDirectory + "\" + $extensionName + "\" + $extensionName + ".cab";
         
         #Initialize objects
         [Reflection.Assembly]::LoadFile($consoleExValidatorLocation)
