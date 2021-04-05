@@ -43,6 +43,9 @@ function Main
     {
         $extensionName = [System.IO.Path]::GetFileNameWithoutExtension($extensionJson);
         $extensionCabPath = $consoleExsDirectory + "\" + $extensionName + "\" + $extensionName + ".cab";
+        $expandedCabFolder = $consoleExsDirectory + "\" + $extensionName + "\_" + $extensionName + ".cab";
+        Write-Host "Targetted Cab file: " $extensionCabPath;
+        Write-Host "Expanded Cab location: " $expandedCabFolder;
         
         #Initialize objects
         [Reflection.Assembly]::LoadFile($consoleExValidatorLocation)
@@ -52,11 +55,10 @@ function Main
         #Start validation
         Try
         {
-            $expandedCabFolder = [System.IO.Path]::GetFileNameWithoutExtension($extensionCabPath);
             Write-Host 'Verifying the signiture of the cab file...'
-            $validator.VerifyExtensionCabSigniture($file);
+            $validator.VerifyExtensionCabSigniture($extensionCabPath);
             Write-Host 'Verifying the contents of the cab file...'
-            $validator.VerifyExtensionCabContent(-join($consoleExsDirectory, "\", $expandedCabFolder));
+            $validator.VerifyExtensionCabContent($expandedCabFolder);
         }
         Catch
         {
