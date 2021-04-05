@@ -52,7 +52,7 @@ function Main
         $objectFactory = new-object Microsoft.ConfigurationManager.ConsoleExtension.SystemFunctions.SystemObjectFactory
         $validator = new-object -TypeName Microsoft.ConfigurationManager.ConsoleExtension.ConsoleExtensionValidator -ArgumentList $objectFactory
 
-        #Start validation
+        #Starts validation
         Try
         {
             Write-Host 'Verifying the signiture of the cab file...'
