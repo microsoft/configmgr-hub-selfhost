@@ -59,6 +59,7 @@ function Main
             $validator.VerifyExtensionCabSigniture($extensionCabPath);
             Write-Host 'Verifying the contents of the cab file...'
             $validator.VerifyExtensionCabContent($expandedCabFolder);
+            Write-Host 'All validation succeeded'
         }
         Catch
         {
