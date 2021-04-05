@@ -14,16 +14,6 @@ variables:
   codeSignEnabled: false
 
 steps:
-  - task: PowerShell@2
-    displayName: "Download & Expand Console Extensions"
-    inputs:
-      filePath: '$(Build.SourcesDirectory)\tools\Extensiondownloader.ps1'
-      failOnStderr: true
-      workingDirectory: '$(Build.SourcesDirectory)\objects'
-
-  - powershell: 'get-childitem env:'
-    displayName: "Print variables"
-
   - task: DownloadPackage@1
     displayName: "Download console extension validation library"
     inputs:
@@ -35,11 +25,14 @@ steps:
       downloadPath: '$(System.ArtifactsDirectory)'
 
   - task: PowerShell@2
-    displayName: "Run console extension validator"
+    displayName: "Download, Expand, and Validate Console Extensions"
     inputs:
-      filePath: '$(Build.SourcesDirectory)\tools\ConsoleExtensionValidationRunner.ps1'
+      filePath: '$(Build.SourcesDirectory)\tools\Extensiondownloader.ps1'
       failOnStderr: true
       workingDirectory: '$(Build.SourcesDirectory)\objects'
+
+  - powershell: 'get-childitem env:'
+    displayName: "Print variables"
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
     displayName: 'Run PoliCheck'
