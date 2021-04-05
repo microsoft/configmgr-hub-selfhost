@@ -11,7 +11,9 @@ function Main
     $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
     $consoleExsDirectory = $itemsRootDirectory + "\" + "objects\consoleextension";
     $cabFilesToValidated = Get-ChildItem $consoleExsDirectory -filter "*.cab";
-
+    Write-Host 'Using validator from ' $consoleExValidatorLocation;
+    Write-Host 'Cab files that have been downloaded:'
+    Write-Host $cabFilesToValidated
 
     #Initialize objects
     [Reflection.Assembly]::LoadFile($consoleExValidatorLocation)
@@ -24,7 +26,9 @@ function Main
         Try
         {
             $expandedCabFolder = [System.IO.Path]::GetFileNameWithoutExtension($file);
+            Write-Host 'Verifying the signiture of the cab file...'
             $validator.VerifyExtensionCabSigniture($file);
+            Write-Host 'Verifying the contents of the cab file...'
             $validator.VerifyExtensionCabContent(-join($consoleExsDirectory, "\", $expandedCabFolder));
         }
         Catch
