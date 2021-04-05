@@ -10,10 +10,10 @@ function Main
     $consoleExValidatorLocation = $artifactsLocation + "\lib\net40\Microsoft.ConfigurationManager.ConsoleExtensionCommon.dll";
     $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
     $consoleExsDirectory = $itemsRootDirectory + "\" + "objects\consoleextension";
-    $cabFilesToValidated = Get-ChildItem $consoleExsDirectory -filter "*.cab";
+    $cabJsonsToValidated = Get-ChildItem $consoleExsDirectory -filter "*.json";
     Write-Host 'Using validator from ' $consoleExValidatorLocation;
-    Write-Host 'Cab files that have been downloaded:'
-    Write-Host $cabFilesToValidated
+    Write-Host 'Cab Jsons that have been downloaded:'
+    Write-Host $cabJsonsToValidated
 
     #Initialize objects
     [Reflection.Assembly]::LoadFile($consoleExValidatorLocation)
