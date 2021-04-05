@@ -1,5 +1,55 @@
 # ===================================================================
 #
+#   Run validation library
+#
+# ===================================================================
+
+function RunValidation
+{
+    $artifactsLocation = $Env:SYSTEM_ARTIFACTSDIRECTORY;
+    $consoleExValidatorLocation = $artifactsLocation + "\lib\net40\Microsoft.ConfigurationManager.ConsoleExtensionCommon.dll";
+    $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
+    $consoleExsDirectory = $itemsRootDirectory + "\" + "objects\consoleextension";
+    $extensionJson = get-ChangedExtensions;
+    
+    Write-Host 'Using validator from ' $consoleExValidatorLocation;
+    
+    if ($null -ne $extensionJson)
+    {
+        $extensionName = [System.IO.Path]::GetFileNameWithoutExtension($extensionJson);
+        $extensionCabPath = $consoleExsDirectory + "\" + $extensionName + "\" + $extensionName + ".cab";
+        $expandedCabFolder = $consoleExsDirectory + "\" + $extensionName + "\_" + $extensionName + ".cab";
+        Write-Host "Targetted Cab file: " $extensionCabPath;
+        Write-Host "Expanded Cab location: " $expandedCabFolder;
+        
+        #Initialize objects
+        [Reflection.Assembly]::LoadFile($consoleExValidatorLocation)
+        $objectFactory = new-object Microsoft.ConfigurationManager.ConsoleExtension.SystemFunctions.SystemObjectFactory
+        $validator = new-object -TypeName Microsoft.ConfigurationManager.ConsoleExtension.ConsoleExtensionValidator -ArgumentList $objectFactory
+
+        #Starts validation
+        Try
+        {
+            Write-Host 'Verifying the signiture of the cab file...'
+            $validator.VerifyExtensionCabSigniture($extensionCabPath);
+            Write-Host 'Verifying the contents of the cab file...'
+            $validator.VerifyExtensionCabContent($expandedCabFolder);
+            Write-Host 'All validation succeeded'
+        }
+        Catch
+        {
+            $ErrorMessage = $_.Exception.Message;
+            Write-Error $ErrorMessage;
+        }
+    }
+    else
+    {
+        Write-Host "Did not find any changed console extension.";
+    }
+}
+
+# ===================================================================
+#
 # Creates a directory named after the cab file 
 # and expands the cab into that directdory. 
 #
@@ -106,7 +156,7 @@ function print-objectJson
 #   Main entry point.
 #
 # ===================================================================
-function Main
+function DownloadAndExpand
 {
     print-EnvironmentVariables;
 
@@ -214,7 +264,15 @@ function print-EnvironmentVariables
 Write-host 'Extension downloader starting...'
 Write-Host "=================================================="
 
-Main;
+DownloadAndExpand;
 
 Write-Host "Extension downloader finished";
+Write-Host "=================================================="
+
+Write-Host 'Running console extension validation...'
+Write-Host "=================================================="
+
+RunValidation;
+
+Write-Host "Console extension validation finished.";
 Write-Host "=================================================="
