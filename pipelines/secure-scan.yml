@@ -22,7 +22,7 @@ steps:
       view: 'dc24c3c3-a05b-4e24-80f2-8c90bf700a5f'
       definition: 'bb29b373-f8cb-4ab6-800a-89007c55cfe7'
       version: '5.2103.1097.1000'
-      downloadPath: '$(System.ArtifactsDirectory)'
+      downloadPath: '$(Build.SourcesDirectory)'
 
   - task: PowerShell@2
     displayName: "Download, Expand, and Validate Console Extensions"
