@@ -22,7 +22,7 @@ steps:
       view: 'dc24c3c3-a05b-4e24-80f2-8c90bf700a5f'
       definition: 'bb29b373-f8cb-4ab6-800a-89007c55cfe7'
       version: '5.2103.1097.1000'
-      downloadPath: '$(Build.SourcesDirectory)'
+      downloadPath: '$(System.ArtifactsDirectory)'
 
   - task: PowerShell@2
     displayName: "Download, Expand, and Validate Console Extensions"
@@ -38,7 +38,7 @@ steps:
     displayName: 'Run ESRP Malware Scan'
     inputs:
       ConnectedServiceName: 'ESRP Malware Scanning service connection'
-      FolderPath: '$(build.artifactstagingdirectory)'
+      FolderPath: '$(Build.SourcesDirectory)'
       Pattern: '*.*'
       Region: 'PuertoRico'
       SessionTimeout: '30'
