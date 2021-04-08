@@ -1,0 +1,7 @@
+# OWNERS File for configmgr-hub-selfhost
+# Each line is a file pattern followed by one or more owners. You can also use email addresses if you prefer.
+
+# Changing any of the following files should require approval by the Community hub team:
+CODEOWNERS @microsoft/configmgr-hub
+/tools/ExtensionDownloader.ps1 @microsoft/configmgr-hub
+/pipelines/secure-scan.yml @microsoft/configmgr-hub
