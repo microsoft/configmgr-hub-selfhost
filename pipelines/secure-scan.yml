@@ -41,7 +41,7 @@ steps:
       FolderPath: '$(Build.SourcesDirectory)\objects'
       Pattern: '*.*'
       Region: 'PuertoRico'
-      SessionTimeout: '30'
+      SessionTimeout: '60'
       MaxConcurrency: '50'
       MaxRetryAttempts: '5'
 
