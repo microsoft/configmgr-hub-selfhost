@@ -38,7 +38,7 @@ steps:
     displayName: 'Run ESRP Malware Scan'
     inputs:
       ConnectedServiceName: 'ESRP Malware Scanning service connection'
-      FolderPath: '$(Build.SourcesDirectory)'
+      FolderPath: '$(Build.SourcesDirectory)\objects'
       Pattern: '*.*'
       Region: 'PuertoRico'
       SessionTimeout: '30'
