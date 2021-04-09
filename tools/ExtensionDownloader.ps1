@@ -30,11 +30,11 @@ function RunValidation
         #Starts validation
         Try
         {
-            Write-Host 'Verifying the signiture of the cab file...'
-            $validator.VerifyExtensionCabSigniture($extensionCabPath);
-            Write-Host 'Verifying the contents of the cab file...'
-            $validator.VerifyExtensionCabContent($expandedCabFolder);
-            Write-Host 'All validation succeeded'
+            #Write-Host 'Verifying the signiture of the cab file...'
+            #$validator.VerifyExtensionCabSigniture($extensionCabPath);
+            #Write-Host 'Verifying the contents of the cab file...'
+            #$validator.VerifyExtensionCabContent($expandedCabFolder);
+            #Write-Host 'All validation succeeded'
         }
         Catch
         {
