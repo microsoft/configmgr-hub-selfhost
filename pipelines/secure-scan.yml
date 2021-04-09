@@ -36,9 +36,10 @@ steps:
 
   - task: EsrpMalwareScanning@1
     displayName: 'Run ESRP Malware Scan'
+    condition: and(succeeded(), eq(variables['codeSignEnabled'], 'true'))
     inputs:
       ConnectedServiceName: 'ESRP Malware Scanning service connection'
-      FolderPath: '$(Build.SourcesDirectory)\objects'
+      FolderPath: '$(Build.SourcesDirectory)\objects\ConsoleExtensions'
       Pattern: '*.*'
       Region: 'PuertoRico'
       SessionTimeout: '60'
