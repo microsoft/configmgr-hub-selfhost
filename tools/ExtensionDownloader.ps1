@@ -201,12 +201,12 @@ function DownloadAndExpand
             Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
             Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
 
-            verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorithm $objectInfo.HashAlgorithm -ErrorAction Stop
+            #verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorithm $objectInfo.HashAlgorithm -ErrorAction Stop
 
             setupESRPScanningPrereqs -fileToCopy $cabFile
 
             write-host "Recursively searching for cab files.."
-            searchAndExpand -directory $itemDir
+            #searchAndExpand -directory $itemDir
 
             print-Summary;
         }
