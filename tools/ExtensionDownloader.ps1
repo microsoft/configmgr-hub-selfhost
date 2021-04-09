@@ -167,7 +167,7 @@ function DownloadAndExpand
         Write-Host "##vso[task.setvariable variable=codeSignEnabled]true"
         
         $repoRootFolder = (get-BuildRootDirectory);
-        $consoleExtensionFolder = $reporepoRootFolder + "\objects\ConsoleExtension\"
+        $consoleExtensionFolder = $repoRootFolder + "\objects\ConsoleExtension\"
 
         write-host "Repository root:" $repoRootFolder;
 
