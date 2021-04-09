@@ -1,6 +1,6 @@
 {
   "downloadLocation": "https://raw.githubusercontent.com/microsoft/configmgr-hub-selfhost/kmyrup-ESRP-negative/objects/ConsoleExtension/fakemalware.txt",
-  "FileHash": "c35c85addd331d51f5cfceeebac884803f27ce118990e08ba395f48dbf5fef46",
+  "FileHash": "131F95C51CC819465FA1797F6CCACF9D494AAAFF46FA3EAC73AE63FFBDFD8267",
   "HashAlgorithm": "SHA256",
   "codeSignPolicyFile": "Right Click Twos-CodeSign-Policy.xml"
 }
