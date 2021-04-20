@@ -189,6 +189,13 @@ function DownloadAndExpand
             $itemDir = $consoleExtensionFolder + $objectName;
             $cabFile = $itemDir + "\" + $objectName + ".cab"
 
+            # Ensure the folder has not been pre-created
+            if (Test-Path $itemDir)
+            {
+                Write-Error "Folder:" $itemDir "already exists. This is unexpected.";
+                return;
+            }
+
             $r = mkdir $itemDir;
     
             # Always download to ensure we are verifying the correct latest file
