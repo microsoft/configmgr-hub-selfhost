@@ -21,13 +21,13 @@ steps:
       feed: '/9b6eeac8-9d95-4be6-b625-aad8659f5c65'
       view: 'dc24c3c3-a05b-4e24-80f2-8c90bf700a5f'
       definition: 'bb29b373-f8cb-4ab6-800a-89007c55cfe7'
-      version: '5.2103.1097.1000'
+      version: '5.2107.1018.1000'
       downloadPath: '$(System.ArtifactsDirectory)'
 
   - task: PowerShell@2
     displayName: "Download, Expand, and Validate Console Extensions"
     inputs:
-      filePath: '$(Build.SourcesDirectory)\tools\Extensiondownloader.ps1'
+      filePath: '$(System.ArtifactsDirectory)\tools\Extensiondownloader.ps1'
       failOnStderr: true
       workingDirectory: '$(Build.SourcesDirectory)\objects'
 
