@@ -1,4 +1,5 @@
 # Pipeline for running SDL scans
+
 # https://aka.ms/yaml
 
 trigger: none
@@ -24,6 +25,12 @@ steps:
       version: '5.2107.1022.1000'
       downloadPath: '$(System.ArtifactsDirectory)'
 
+  - task: PSScriptAnalyzer@1
+    inputs:
+      Path: '$(Build.SourcesDirectory)\objects\Script'
+      Settings: 'required'
+      Recurse: true
+
   - task: PowerShell@2
     displayName: "Download, Expand, and Validate Console Extensions"
     inputs:
@@ -34,6 +41,8 @@ steps:
   - powershell: 'get-childitem env:'
     displayName: "Print variables"
 
+  - powershell: 'icacls $(Build.SourcesDirectory)'
+    displayName: "Check ACLs"
   - task: EsrpMalwareScanning@1
     displayName: 'Run ESRP Malware Scan'
     condition: and(succeeded(), eq(variables['codeSignEnabled'], 'true'))
