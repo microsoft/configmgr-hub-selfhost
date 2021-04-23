@@ -43,6 +43,7 @@ steps:
 
   - powershell: 'icacls $(Build.SourcesDirectory)'
     displayName: "Check ACLs"
+
   - task: EsrpMalwareScanning@1
     displayName: 'Run ESRP Malware Scan'
     condition: and(succeeded(), eq(variables['codeSignEnabled'], 'true'))
