@@ -1,0 +1,6 @@
+{
+  "downloadLocation": "https://releases.recastsoftware.com/releases/downloadcab/749",
+  "FileHash": "c35c85addd331d51f5cfceeebac884803f27ce118990e08ba395f48dbf5fef46",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "2105 Extension-CodeSign-Policy.xml"
+}
