@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <Application AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" Version="1" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="AppCIWithSetting_5_17_2021_3_56_20_PM" ResourceId="ID-60368a2f-36b4-466f-8f27-61a53ade2afb" />
+      <Description Text="AppCIWithSettings_Desc" />
+    </Annotation>
+    <Parts>
+      <RegistryKey LogicalName="LN_RegKey_Setting_CCM" Hive="HKEY_LOCAL_MACHINE" Is64Bit="false" IsPerUser="false">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="RegKey_Setting_CCM" ResourceId="ID-bc8285d0-eb79-4f20-8448-1f831473f647" />
+          <Description Text="regkey_desc" />
+        </Annotation>
+        <Key>SOFTWARE\Microsoft\CCM</Key>
+      </RegistryKey>
+      <File LogicalName="LN_FileSetting_Notepad" Depth="OneLevel" Is64Bit="true" IsPerUser="false">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="File_Setting_Notepad" ResourceId="ID-d8828b4c-05e2-49bd-bffc-cc570410db2a" />
+          <Description Text="File_Setting_Desc" />
+        </Annotation>
+        <Path>%windir%\system32</Path>
+        <Filter>notepad.exe</Filter>
+      </File>
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="LN_Registry_Setting_RegisteredOrganaziation" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Registry_Setting_RegisteredOrganization" ResourceId="ID-47bfd6a8-10d9-447e-ab53-1edd3579369e" />
+            <Description Text="setting_desc" />
+          </Annotation>
+          <RegistryDiscoverySource Depth="Base" Hive="HKEY_LOCAL_MACHINE" Is64Bit="true" IsPerUser="false">
+            <Key>SOFTWARE\Microsoft\DCMTest</Key>
+            <ValueName>StringTest</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="LN_Script_Setting_Double" DataType="Double">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Script_Setting_Double" ResourceId="ID-feea2231-99e7-47e7-9aba-aadd10bcafbe" />
+            <Description Text="script_desc" />
+          </Annotation>
+          <ScriptDiscoverySource IsPerUser="false">
+            <DiscoveryScriptBody ScriptType="JScript">WScript.Echo(10.01);</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="LN_WMI_Setting_Win32_OS" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WMI_Setting_Win32_OS" ResourceId="ID-e939915d-425b-49eb-a950-fbb096daee0a" />
+            <Description Text="wmi_setting_desc" />
+          </Annotation>
+          <WqlQueryDiscoverySource>
+            <Namespace>root\cimv2</Namespace>
+            <Class>Win32_OperatingSystem</Class>
+            <Property>CreationClassName</Property>
+            <Where>CreationClassName = 'Win32_OperatingSystem'</Where>
+          </WqlQueryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules />
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="JScript">
+      <Script>WScript.echo("088eda47-b1c8-434a-8e84-8f707c8d1a76");</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
