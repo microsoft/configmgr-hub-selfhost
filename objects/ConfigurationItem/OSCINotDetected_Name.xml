@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <OperatingSystem AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="LogicalName_OSCINotDetected_5_17_2021_3_56_20_PM" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="OSCINotDetected_Name" ResourceId="ID-ad97de2d-3e17-4e0e-9966-3f1ea6b56e90" />
+      <Description Text="osci_desc" />
+    </Annotation>
+    <Parts />
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules />
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/x64_Windows_Vista_Original_Release" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
