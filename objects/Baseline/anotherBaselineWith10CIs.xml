@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="Baseline_a434ce65-886e-40f3-b5c7-32229937b740" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="anotherBaselineWith10CIs" ResourceId="ID-8ed15ccb-4827-4340-ba8c-7b2a63bf87d0" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems>
+      <ApplicationReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="LogicalName_AppCINotApplicable_5_17_2021_3_56_20_PM" />
+      <ApplicationReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" />
+      <ApplicationReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithRules_5_17_2021_3_56_20_PM" />
+    </RequiredItems>
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="OperatingSystem_8fd10b70-f08d-47f8-be5e-02c4cb9da13e" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="OperatingSystem_9ee8175c-c115-4f18-880d-c7f9e20e6ece" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="OperatingSystem_e2d463ff-1c8b-4c1d-9b53-9a6f84fd064e" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="OperatingSystem_bccc5eac-13fc-495c-bd31-6d06af7663bf" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="OperatingSystem_d902d309-04f6-4770-9f6a-7ede5663310b" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="OperatingSystem_375c63b2-b394-4e43-a749-c4ebf1b09671" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="LogicalName_OSCINotDetected_5_17_2021_3_56_20_PM" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
