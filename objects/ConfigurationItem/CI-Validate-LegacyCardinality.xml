@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_ff4ff71e-1397-4331-9244-f2bcb4da968a" Version="5" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-LegacyCardinality" ResourceId="ID-afc00ff5-48eb-4c7e-ad9b-399d9d2842b5" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo&#xA;Use of LegacyCardinality is not always necessary. Read the documentation first: https://docs.microsoft.com/en-us/troubleshoot/mem/configmgr/sql-query-times-out-or-console-slow-performance" ResourceId="ID-17763d64-7e32-4a1a-8857-b6e2bb065472" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_f48417ea-140a-4fae-9862-06ed5129ca07" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Validate LegacyCardinality" ResourceId="ID-6026de1d-25e2-4748-bf22-891487340d76" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Microsoft\SMS\Providers</Key>
+            <ValueName>UseLegacyCardinality</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_367c2f46-de45-4c08-b926-2dfec95f4741" Severity="None" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="UseLegacyCardinality Equals 1" ResourceId="ID-fca08161-1ac1-4bdb-943a-223c9c54bf73" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_ff4ff71e-1397-4331-9244-f2bcb4da968a" Version="5" DataType="Int64" SettingLogicalName="RegSetting_f48417ea-140a-4fae-9862-06ed5129ca07" SettingSourceType="Registry" Method="Value" Changeable="true" />
+            <ConstantValue Value="1" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script># Evaluate only if smsprovider is present on machine and has the option for LegacyCardinality
+if (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\SMS\Providers' -Name 'UseLegacyCardinality' -ErrorAction SilentlyContinue)
+{
+    Write-Output 'Detected'
+}</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
