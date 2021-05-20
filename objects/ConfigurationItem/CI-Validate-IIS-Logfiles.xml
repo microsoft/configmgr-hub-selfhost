@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_3e6284c5-724b-4004-a45e-77911b0054ad" Version="7" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-IIS-Logfiles" ResourceId="ID-c2373834-7ecd-4288-a16c-6492b784428d" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo&#xA;This item will check for IIS logs older than seven days. Remediation possible." ResourceId="ID-dbef5c13-559d-4000-afa0-6425bcb4a8f9" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_f42eae86-66ba-467e-b7aa-23769f681dd9" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Validate old IIS logfiles" ResourceId="ID-90637edc-1646-4b7e-9d65-87e0b5ce7a22" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># script to delete old IIS logfiles
+# If "$remediate = $false" the files are just counted
+[bool]$remediate = $false
+#Maximum age in days of files to be deleted  
+[int]$logfileMaxAgeInDays = 7
+
+Import-Module WebAdministration  
+
+$countOfOldFiles = 0
+foreach($website in $(Get-Website))  
+{  
+    # path might look like: "C:\inetpub\logs\LogFiles\W3SVC1"
+    $logFolder = "{0}\W3SVC{1}" -f $website.logFile.directory, $website.id
+    $logFolder = $logFolder -replace "%SystemDrive%",$env:SystemDrive
+
+    $logFiles = Get-ChildItem -Path $logFolder -Filter "*.log"
+
+    foreach ($file in $logFiles)
+    {
+        if ($file.LastWriteTime -lt (Get-Date).AddDays(-$logfileMaxAgeInDays))
+        {
+            if ($remediate)
+            { 
+                # remediation active, file will be removed 
+                Remove-Item $file.FullName -Force
+            }
+            else
+            {
+                $countOfOldFiles++
+            }
+        }
+    }
+}  
+
+if (-NOT ($remediate))
+{
+    Write-Output $countOfOldFiles
+}
+</DiscoveryScriptBody>
+            <RemediationScriptBody ScriptType="PowerShell"># script to delete old IIS logfiles
+# If "$remediate = $false" the files are just counted
+[bool]$remediate = $true
+#Maximum age in days of files to be deleted  
+[int]$logfileMaxAgeInDays = 7
+
+Import-Module WebAdministration  
+
+$countOfOldFiles = 0
+foreach($website in $(Get-Website))  
+{  
+    # path might look like: "C:\inetpub\logs\LogFiles\W3SVC1"
+    $logFolder = "{0}\W3SVC{1}" -f $website.logFile.directory, $website.id
+    $logFolder = $logFolder -replace "%SystemDrive%",$env:SystemDrive
+
+    $logFiles = Get-ChildItem -Path $logFolder -Filter "*.log"
+
+    foreach ($file in $logFiles)
+    {
+        if ($file.LastWriteTime -lt (Get-Date).AddDays(-$logfileMaxAgeInDays))
+        {
+            if ($remediate)
+            { 
+                # remediation active, file will be removed 
+                Remove-Item $file.FullName -Force
+            }
+            else
+            {
+                $countOfOldFiles++
+            }
+        }
+    }
+}  
+
+if (-NOT ($remediate))
+{
+    Write-Output $countOfOldFiles
+}
+</RemediationScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_aa335969-be56-47d0-b808-7a67e23c8baf" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Count of old IIS logfiles" ResourceId="ID-f05b7d2b-cf95-4f31-94fe-bf63bca3f480" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_3e6284c5-724b-4004-a45e-77911b0054ad" Version="7" DataType="Int64" SettingLogicalName="ScriptSetting_f42eae86-66ba-467e-b7aa-23769f681dd9" SettingSourceType="Script" Method="Value" Changeable="true" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script>Get-Service -Name W3SVC -ErrorAction SilentlyContinue</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
