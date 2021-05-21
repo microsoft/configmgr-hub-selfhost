@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_6B623FB9-07AD-4806-B31D-669A920DD2F6" LogicalName="Application_e7f0c361-0a75-4f73-804c-f6ecadb67261" Version="6" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-DP-Pxe-Settings" ResourceId="ID-afc00ff5-48eb-4c7e-ad9b-399d9d2842b5" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo Item to validate RamDiskTFTPWindowSize and RamDiskTFTPBlockSize. Read more at: https://docs.microsoft.com/en-us/mem/configmgr/osd/get-started/prepare-site-system-roles-for-operating-system-deployments" ResourceId="ID-17763d64-7e32-4a1a-8857-b6e2bb065472" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_fb4e387b-2216-48ca-b33e-26e781a3630a" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Validate RamDiskTFTPWindowSize" ResourceId="ID-ef6c6891-9cc6-4625-8a17-fa072a2ca2e0" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Microsoft\SMS\DP</Key>
+            <ValueName>RamDiskTFTPWindowSize</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="RegSetting_5f067dda-8f5d-431e-b3ec-c64a9b3e4269" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Validate RamDiskTFTPBlockSize" ResourceId="ID-e2da453b-b8a8-465c-bd6c-bd073ac85049" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Microsoft\SMS\DP</Key>
+            <ValueName>RamDiskTFTPBlockSize</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_50d6618b-ac0c-4219-905f-6c4e603479de" Severity="Critical" NonCompliantWhenSettingIsNotFound="true">
+        <Annotation>
+          <DisplayName Text="RamDiskTFTPWindowSize" ResourceId="ID-146ba50d-b786-4e8a-9060-48522658387f" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6B623FB9-07AD-4806-B31D-669A920DD2F6" LogicalName="Application_e7f0c361-0a75-4f73-804c-f6ecadb67261" Version="6" DataType="Int64" SettingLogicalName="RegSetting_fb4e387b-2216-48ca-b33e-26e781a3630a" SettingSourceType="Registry" Method="Value" Changeable="true" />
+            <ConstantValue Value="1" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_bf653f16-0b16-40d3-b9fa-76ac91cfdf3f" Severity="Critical" NonCompliantWhenSettingIsNotFound="true">
+        <Annotation>
+          <DisplayName Text="RamDiskTFTPBlockSize" ResourceId="ID-eeed4f41-3da8-40bd-8d0a-0199996810a3" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6B623FB9-07AD-4806-B31D-669A920DD2F6" LogicalName="Application_e7f0c361-0a75-4f73-804c-f6ecadb67261" Version="6" DataType="Int64" SettingLogicalName="RegSetting_5f067dda-8f5d-431e-b3ec-c64a9b3e4269" SettingSourceType="Registry" Method="Value" Changeable="true" />
+            <ConstantValue Value="4096" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script># Evaluate only if PXE is enabled on DP
+$pxeEnabled = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\SMS\DP' -Name 'IsPxe' -ErrorAction SilentlyContinue
+if ($pxeEnabled)
+{
+    if ($pxeEnabled.IsPXE -eq 1)
+    {
+        Write-Output 'Detected'
+    }
+}</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
