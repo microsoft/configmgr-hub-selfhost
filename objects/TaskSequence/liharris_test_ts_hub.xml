@@ -9,4 +9,41 @@
       <variable name="SuccessCodes" property="SuccessCodes" hidden="true">0 3010</variable>
     </defaultVarList>
   </step>
+  <step type="SMS_TaskSequence_ApplyWindowsSettingsAction" name="Apply Windows Settings" description="" runIn="WinPE" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>osdwinsettings.exe /config</action>
+    <defaultVarList>
+      <variable name="OSDComputerName" property="ComputerName">%_SMSTSMachineName%</variable>
+      <variable name="OSDWindowsSettingsInputLocale" property="InputLocale"></variable>
+      <variable name="OSDProductKey" property="ProductKey"></variable>
+      <variable name="OSDRandomAdminPassword" property="RandomAdminPassword">true</variable>
+      <variable name="OSDRegisteredOrgName" property="RegisteredOrgName">rr</variable>
+      <variable name="OSDRegisteredUserName" property="RegisteredUserName">444</variable>
+      <variable name="OSDServerLicenseConnectionLimit" property="ServerLicenseConnectionLimit">5</variable>
+      <variable name="OSDWindowsSettingsSystemLocale" property="SystemLocale"></variable>
+      <variable name="OSDTimeZone" property="TimeZone">Pacific Standard Time</variable>
+      <variable name="OSDWindowsSettingsUILanguage" property="UILanguage"></variable>
+      <variable name="OSDWindowsSettingsUILanguageFallback" property="UILanguageFallback"></variable>
+      <variable name="OSDWindowsSettingsUserLocale" property="UserLocale"></variable>
+    </defaultVarList>
+  </step>
+  <step type="SMS_TaskSequence_JoinDomainWorkgroupAction" name="Join Domain or Workgroup" description="" runIn="FullOS" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>osdjoin.exe /type:%OSDJoinType%</action>
+    <defaultVarList>
+      <variable name="OSDJoinDomainName" property="DomainName">yyyy</variable>
+      <variable name="OSDJoinPassword" property="DomainPassword"></variable>
+      <variable name="OSDJoinAccount" property="DomainUsername">1\2</variable>
+      <variable name="OSDJoinSkipReboot" property="SkipReboot">false</variable>
+      <variable name="OSDJoinType" property="Type">0</variable>
+    </defaultVarList>
+  </step>
+  <step type="SMS_TaskSequence_JoinDomainWorkgroupAction" name="Join Domain or Workgroup" description="" runIn="FullOS" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>osdjoin.exe /type:%OSDJoinType%</action>
+    <defaultVarList>
+      <variable name="OSDJoinDomainName" property="DomainName">yyyy</variable>
+      <variable name="OSDJoinPassword" property="DomainPassword"></variable>
+      <variable name="OSDJoinAccount" property="DomainUsername">1\2</variable>
+      <variable name="OSDJoinSkipReboot" property="SkipReboot">false</variable>
+      <variable name="OSDJoinType" property="Type">0</variable>
+    </defaultVarList>
+  </step>
 </sequence>
