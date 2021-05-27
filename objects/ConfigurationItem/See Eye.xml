@@ -4,7 +4,7 @@
   <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_bc83b078-abb0-4a31-b09b-e8fa1068d8c4" Version="2">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="See Eye" ResourceId="ID-9381009f-db83-4d9a-ab01-b250e7c3fb33" />
-      <Description Text="A CI - with a fancy update!" ResourceId="ID-3d33b4db-3b9b-44ff-b894-22b018eaa808" />
+      <Description Text="My local change" ResourceId="ID-3d33b4db-3b9b-44ff-b894-22b018eaa808" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
