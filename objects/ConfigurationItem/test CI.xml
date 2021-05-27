@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_2379E010-93C3-45FD-ACC8-66672137C137" LogicalName="Application_97a9c6df-7b62-49d8-b17a-537bd2b7e258" Version="1" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="test CI" ResourceId="ID-f0d73146-6816-4974-bebf-9c25bd847330" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="JScript">
+      <Script>WScript.echo("088eda47-b1c8-434a-8e84-8f707c8d1a76");</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
