@@ -11,6 +11,7 @@ foreach( $activity in $activityLog.GetUsageInLastXHours(24))
     {
         continue
     }
+    $foo = "bar"
 
     $appVersion = ""
     try
