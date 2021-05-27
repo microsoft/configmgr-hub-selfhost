@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_4f88e400-0577-4253-a8fb-e9a2b668611f" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="DH_CI_5" ResourceId="ID-d00019e4-61a1-4697-8875-52c5a481cd2e" />
+      <Description Text="DH5" ResourceId="ID-4a620109-1b21-4532-a44a-3525e9d0cfe4" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
