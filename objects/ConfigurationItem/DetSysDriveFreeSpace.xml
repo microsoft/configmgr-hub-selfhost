@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_825e4756-4ac6-47d9-96d1-32b95e50015e" Version="2">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="DetSysDriveFreeSpace" ResourceId="ID-6f26cf7a-3368-40b9-9b70-0ca6e83cabfc" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_eb977f39-ee4d-4749-8d6d-b500faeef440" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="DetSysDriveFreeSpace" ResourceId="ID-6bdb7c05-fb5a-4ab0-b8a5-9fef3dafa73c" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">#Requires -RunAsAdministrator
+
+#=============================================================================================================================
+#
+# Script Name:     DetSysDriveFreeSpace.ps1
+# Creation Date:   08/04/2019
+# Author:          Eric C. Mattoon (ermatt)
+#
+#   Version:       01.00.0000
+#   Version Date:  08/04/2019
+# 
+# Description:     Purpose of this script is to detect whether the System Drive has &lt; 20GB Free Space
+#                     
+#                       1) Change to the current user context
+#                       2) Return the count of expired certificates issued by "CN=Microsoft VPN root CA gen 1"
+#
+# Notes:           &lt;&gt;                  
+#
+#=============================================================================================================================
+
+# For testing, Clear the console
+Clear-Host
+
+# Define Variables
+
+
+
+    try
+    {
+        $drive_free = Get-CimInstance Win32_LogicalDisk | Where DeviceID -eq (Get-CimInstance Win32_OperatingSystem).SystemDrive.ToString()        
+        Return [int]($drive_free.FreeSpace/1GB)
+        exit 0
+    }
+    catch{
+        $errMsg = $_.Exception.Message
+        Write-Error $errMsg
+        exit 1
+    }
+
+# ENCODEDSCRIPT # Begin Configuration Manager encoded script block # 77u/I1JlcXVpcmVzIC1SdW5Bc0FkbWluaXN0cmF0b3INCg0KIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQojDQojIFNjcmlwdCBOYW1lOiAgICAgRGV0U3lzRHJpdmVGcmVlU3BhY2UucHMxDQojIENyZWF0aW9uIERhdGU6ICAgMDgvMDQvMjAxOQ0KIyBBdXRob3I6ICAgICAgICAgIEVyaWMgQy4gTWF0dG9vbiAoZXJtYXR0KQ0KIw0KIyAgIFZlcnNpb246ICAgICAgIDAxLjAwLjAwMDANCiMgICBWZXJzaW9uIERhdGU6ICAwOC8wNC8yMDE5DQojIA0KIyBEZXNjcmlwdGlvbjogICAgIFB1cnBvc2Ugb2YgdGhpcyBzY3JpcHQgaXMgdG8gZGV0ZWN0IHdoZXRoZXIgdGhlIFN5c3RlbSBEcml2ZSBoYXMgPCAyMEdCIEZyZWUgU3BhY2UNCiMgICAgICAgICAgICAgICAgICAgICANCiMgICAgICAgICAgICAgICAgICAgICAgIDEpIENoYW5nZSB0byB0aGUgY3VycmVudCB1c2VyIGNvbnRleHQNCiMgICAgICAgICAgICAgICAgICAgICAgIDIpIFJldHVybiB0aGUgY291bnQgb2YgZXhwaXJlZCBjZXJ0aWZpY2F0ZXMgaXNzdWVkIGJ5ICJDTj1NaWNyb3NvZnQgVlBOIHJvb3QgQ0EgZ2VuIDEiDQojDQojIE5vdGVzOiAgICAgICAgICAgPD4gICAgICAgICAgICAgICAgICANCiMNCiM9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQojIEZvciB0ZXN0aW5nLCBDbGVhciB0aGUgY29uc29sZQ0KQ2xlYXItSG9zdA0KDQojIERlZmluZSBWYXJpYWJsZXMNCg0KDQoNCiAgICB0cnkNCiAgICB7DQogICAgICAgICRkcml2ZV9mcmVlID0gR2V0LUNpbUluc3RhbmNlIFdpbjMyX0xvZ2ljYWxEaXNrIHwgV2hlcmUgRGV2aWNlSUQgLWVxIChHZXQtQ2ltSW5zdGFuY2UgV2luMzJfT3BlcmF0aW5nU3lzdGVtKS5TeXN0ZW1Ecml2ZS5Ub1N0cmluZygpICAgICAgICANCiAgICAgICAgUmV0dXJuIFtpbnRdKCRkcml2ZV9mcmVlLkZyZWVTcGFjZS8xR0IpDQogICAgICAgIGV4aXQgMA0KICAgIH0NCiAgICBjYXRjaHsNCiAgICAgICAgJGVyck1zZyA9ICRfLkV4Y2VwdGlvbi5NZXNzYWdlDQogICAgICAgIFdyaXRlLUVycm9yICRlcnJNc2cNCiAgICAgICAgZXhpdCAxDQogICAgfQ== # ENCODEDSCRIPT# End Configuration Manager encoded script block
+
+</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_dd85c8ce-39d4-4c9f-b48e-dbe1c3f9151f" Severity="None" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="DetectDiskSpace20GBorLess" ResourceId="ID-3663aa04-e067-4830-9eac-c92cdfdd9af5" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>GreaterThan</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_825e4756-4ac6-47d9-96d1-32b95e50015e" Version="2" DataType="Int64" SettingLogicalName="ScriptSetting_eb977f39-ee4d-4749-8d6d-b500faeef440" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="20" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_CORE" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1_Core" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2_Core" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+          <RuleExpression RuleId="Windows/All_Embedded_Windows_XP" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/x64_Embedded_Windows_7" />
+          <RuleExpression RuleId="Windows/x86_Embedded_Windows_7" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
