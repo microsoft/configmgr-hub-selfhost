@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_ad13aa63-2a7a-4853-8433-a5e56008e26c" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>sampletestapp1.com</Title>
+        <Description />
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_5796dc8f-ef9a-4143-b1f4-63e537f5a032" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_1649501384">sampletestapp1.com</Title>
+    <Description ResourceId="Res_642603299" />
+    <Publisher ResourceId="Res_48440018" />
+    <SoftwareVersion ResourceId="Res_1841211505" />
+    <CustomId ResourceId="Res_159411811" />
+    <Owners>
+      <User Qualifier="LogonName" Id="siyamala" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="siyamala" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_5796dc8f-ef9a-4143-b1f4-63e537f5a032" Version="1">
+    <Title ResourceId="Res_1097114696">http://sampletestapp1.com - Web Application</Title>
+    <DeploymentTechnology>GLOBAL/WebAppDeploymentTechnology</DeploymentTechnology>
+    <Technology>WebApp</Technology>
+    <Hosting>WebApp</Hosting>
+    <Installer Technology="WebApp">
+      <ExecutionContext>User</ExecutionContext>
+      <DetectAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">http://sampletestapp1.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_ad13aa63-2a7a-4853-8433-a5e56008e26c</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">http://sampletestapp1.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_ad13aa63-2a7a-4853-8433-a5e56008e26c</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">http://sampletestapp1.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_ad13aa63-2a7a-4853-8433-a5e56008e26c</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <TargetUrl>http://sampletestapp1.com</TargetUrl>
+        <LocalAppId>ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_ad13aa63-2a7a-4853-8433-a5e56008e26c</LocalAppId>
+        <LocalAppVersion>1</LocalAppVersion>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
