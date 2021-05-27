@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <Application AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="LogicalName_AppCINotApplicable_5_17_2021_3_56_20_PM" Version="1" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="AppCINotApplicable_Name" ResourceId="ID-f017adb5-0e7b-4089-aa90-081339a565ee" />
+      <Description Text="AppCINotApplicable_desc" />
+    </Annotation>
+    <Parts />
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules />
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <MsiDiscoveryInfo ProductCode="{eca3672b-6366-4a55-b69c-9a0a8b48565c}" Version="1.1.1.1" IsPerUser="false" />
+  </Application>
+</DesiredConfigurationDigest>
