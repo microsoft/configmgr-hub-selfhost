@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_E853E6DF-53AC-497D-8884-E8D312AA7430" LogicalName="Application_ecb9af99-baf8-4753-9fae-9426b4f93096" Version="3">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>BlankApp</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_1093816712">AppTest2103</Title>
+    <Description ResourceId="Res_1510544669">Push Update</Description>
+    <Publisher ResourceId="Res_629013440" />
+    <SoftwareVersion ResourceId="Res_1117321421" />
+    <CustomId ResourceId="Res_1953560707" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
