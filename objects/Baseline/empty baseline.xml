@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <Baseline AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Baseline_deee4a72-124b-4110-98ca-8f6bf58bfa6f" Version="1" ConfigurationFlags="65">
+  <Baseline AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="Baseline_deee4a72-124b-4110-98ca-8f6bf58bfa6f" Version="2" ConfigurationFlags="65">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="empty baseline" ResourceId="ID-a072b2b3-b216-40e8-a734-13935b179505" />
       <Description Text="" />
@@ -9,7 +9,9 @@
     <RequiredItems />
     <ProhibitedItems />
     <OptionalItems />
-    <OperatingSystems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="OperatingSystem_8c910639-64ad-45bb-ac7f-913f3a483456" />
+    </OperatingSystems>
     <SoftwareUpdates />
     <Baselines />
     <OtherConfigurationItems />
