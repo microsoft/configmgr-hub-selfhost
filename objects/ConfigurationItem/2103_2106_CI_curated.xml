@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <OperatingSystem AuthoringScopeId="ScopeId_CC69155D-EE29-4079-A2A6-76186993F74D" LogicalName="OperatingSystem_ee97465b-a0b8-4a45-86cf-5330b773f4ba" Version="1">
+  <OperatingSystem AuthoringScopeId="ScopeId_CC69155D-EE29-4079-A2A6-76186993F74D" LogicalName="OperatingSystem_ee97465b-a0b8-4a45-86cf-5330b773f4ba" Version="2">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="2103_2106_CI_curated" ResourceId="ID-48a7c849-b511-4036-aa66-6e353fa7c4a3" />
-      <Description Text="CI for curated content" ResourceId="ID-23f9948a-3e0a-4bdc-b20c-aa00870f7f6a" />
+      <Description Text="CI for curated content _ push update" ResourceId="ID-23f9948a-3e0a-4bdc-b20c-aa00870f7f6a" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
