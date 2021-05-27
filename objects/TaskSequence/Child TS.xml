@@ -1,0 +1,68 @@
+<sequence version="3.10">
+  <referenceList>
+    <reference package="OPC001B3" />
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_072e2648-86a8-463a-ad96-3b3546921b87" />
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_776ead7b-2965-42c1-b8a1-641e7f53b33e" />
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d3e40bd3-cc01-4fce-a47b-dfb8506cee95" />
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d50e4bcf-578a-4df5-8503-bae37b936d05" />
+    <reference application="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_1c78fb10-2875-43f1-9be9-21245d7ed1fa" />
+    <reference application="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_4f1121c8-c942-4db3-8a04-b3a05feed11b" />
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a399056e-749d-46be-9b2f-902b6450c602" />
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a875a967-e0f4-467f-b738-5c77124fcf82" />
+  </referenceList>
+  <step type="SMS_TaskSequence_RunCommandLineAction" name="Run Command Line" description="" runIn="WinPEandFullOS" successCodeList="0 3010" retryCount="0" runFromNet="false">
+    <action>smsswd.exe /run:OPC001B3 cmd</action>
+    <defaultVarList>
+      <variable name="CommandLine" property="CommandLine" hidden="true">cmd</variable>
+      <variable name="SMSTSDisableWow64Redirection" property="DisableWow64Redirection">false</variable>
+      <variable name="PackageID" property="PackageID" hidden="true">OPC001B3</variable>
+      <variable name="_SMSTSRunCommandLineAsUser" property="RunAsUser">false</variable>
+      <variable name="SuccessCodes" property="SuccessCodes" hidden="true">0 3010</variable>
+    </defaultVarList>
+  </step>
+  <step type="SMS_TaskSequence_InstallApplicationAction" name="Install Application" description="" runIn="FullOS" successCodeList="0" retryCount="2" runFromNet="false">
+    <action>smsappinstall.exe /app:ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_4f1121c8-c942-4db3-8a04-b3a05feed11b,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d3e40bd3-cc01-4fce-a47b-dfb8506cee95,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d50e4bcf-578a-4df5-8503-bae37b936d05,ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_1c78fb10-2875-43f1-9be9-21245d7ed1fa,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_072e2648-86a8-463a-ad96-3b3546921b87,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_776ead7b-2965-42c1-b8a1-641e7f53b33e /basevar: /continueOnError:False</action>
+    <defaultVarList>
+      <variable name="OSDApp" property="AppInfo" hidden="true">6</variable>
+      <variable name="OSDApp0Description" property="AppInfo0Description">Valid</variable>
+      <variable name="OSDApp0DisplayName" property="AppInfo0DisplayName">Microsoft SQL Server 2012 Native Client</variable>
+      <variable name="OSDApp0Name" property="AppInfo0Name">ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_4f1121c8-c942-4db3-8a04-b3a05feed11b</variable>
+      <variable name="OSDApp1Description" property="AppInfo1Description">Valid</variable>
+      <variable name="OSDApp1DisplayName" property="AppInfo1DisplayName">Microsoft Workplace Join for Windows</variable>
+      <variable name="OSDApp1Name" property="AppInfo1Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d3e40bd3-cc01-4fce-a47b-dfb8506cee95</variable>
+      <variable name="OSDApp2Description" property="AppInfo2Description">Valid</variable>
+      <variable name="OSDApp2DisplayName" property="AppInfo2DisplayName">Test MSI #3</variable>
+      <variable name="OSDApp2Name" property="AppInfo2Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d50e4bcf-578a-4df5-8503-bae37b936d05</variable>
+      <variable name="OSDApp3Description" property="AppInfo3Description">Valid</variable>
+      <variable name="OSDApp3DisplayName" property="AppInfo3DisplayName">Test MSI #40</variable>
+      <variable name="OSDApp3Name" property="AppInfo3Name">ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_1c78fb10-2875-43f1-9be9-21245d7ed1fa</variable>
+      <variable name="OSDApp4Description" property="AppInfo4Description">Valid</variable>
+      <variable name="OSDApp4DisplayName" property="AppInfo4DisplayName">Test MSI #49</variable>
+      <variable name="OSDApp4Name" property="AppInfo4Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_072e2648-86a8-463a-ad96-3b3546921b87</variable>
+      <variable name="OSDApp5Description" property="AppInfo5Description">Valid</variable>
+      <variable name="OSDApp5DisplayName" property="AppInfo5DisplayName">Test MSI #50</variable>
+      <variable name="OSDApp5Name" property="AppInfo5Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_776ead7b-2965-42c1-b8a1-641e7f53b33e</variable>
+      <variable name="ApplicationName" property="ApplicationName" hidden="true">ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_4f1121c8-c942-4db3-8a04-b3a05feed11b,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d3e40bd3-cc01-4fce-a47b-dfb8506cee95,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_d50e4bcf-578a-4df5-8503-bae37b936d05,ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_1c78fb10-2875-43f1-9be9-21245d7ed1fa,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_072e2648-86a8-463a-ad96-3b3546921b87,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_776ead7b-2965-42c1-b8a1-641e7f53b33e</variable>
+      <variable name="OSDAppClearCache" property="ClearCache">false</variable>
+      <variable name="ContinueOnInstallError" property="ContinueOnInstallError" hidden="true">false</variable>
+      <variable name="OSDAppCount" property="NumApps">6</variable>
+      <variable name="RetryCount" property="RetryCount" hidden="true">2</variable>
+    </defaultVarList>
+  </step>
+  <step type="SMS_TaskSequence_InstallApplicationAction" name="Install Application" description="" runIn="FullOS" successCodeList="0" retryCount="2" runFromNet="false">
+    <action>smsappinstall.exe /app:ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a399056e-749d-46be-9b2f-902b6450c602,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a875a967-e0f4-467f-b738-5c77124fcf82 /basevar: /continueOnError:False</action>
+    <defaultVarList>
+      <variable name="OSDApp" property="AppInfo" hidden="true">2</variable>
+      <variable name="OSDApp0Description" property="AppInfo0Description">Valid</variable>
+      <variable name="OSDApp0DisplayName" property="AppInfo0DisplayName">Test MSI #30</variable>
+      <variable name="OSDApp0Name" property="AppInfo0Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a399056e-749d-46be-9b2f-902b6450c602</variable>
+      <variable name="OSDApp1Description" property="AppInfo1Description">Valid</variable>
+      <variable name="OSDApp1DisplayName" property="AppInfo1DisplayName">Office 365</variable>
+      <variable name="OSDApp1Name" property="AppInfo1Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a875a967-e0f4-467f-b738-5c77124fcf82</variable>
+      <variable name="ApplicationName" property="ApplicationName" hidden="true">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a399056e-749d-46be-9b2f-902b6450c602,ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_a875a967-e0f4-467f-b738-5c77124fcf82</variable>
+      <variable name="ContinueOnInstallError" property="ContinueOnInstallError" hidden="true">false</variable>
+      <variable name="OSDAppCount" property="NumApps">2</variable>
+      <variable name="RetryCount" property="RetryCount" hidden="true">2</variable>
+    </defaultVarList>
+  </step>
+</sequence>
