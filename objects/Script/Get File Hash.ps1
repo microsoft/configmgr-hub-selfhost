@@ -1,3 +1,3 @@
-﻿Param( [string] $Newpath1 )
+﻿Param( [string] $path )
 
-return (get-filehash $Newpath1).Hash
+return (get-filehash $path).Hash
