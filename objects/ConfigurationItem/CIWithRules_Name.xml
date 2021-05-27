@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <Application AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithRules_5_17_2021_3_56_20_PM" Version="1" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CIWithRules_Name" ResourceId="ID-4d254645-9fd0-4455-b507-c27f5aac0821" />
+      <Description Text="CIWithRules_Desc" />
+    </Annotation>
+    <Parts />
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_FileSizeValueRule_5_17_2021_3_56_20_PM" Severity="None">
+        <Annotation>
+          <DisplayName Text="ValueRuleOverFileSize" ResourceId="ID-8fe7eed9-bfd2-422f-a014-fa97d3b7b643" />
+          <Description Text="rule_desc" />
+        </Annotation>
+        <Expression>
+          <Operator>GreaterThan</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" SettingLogicalName="LN_FileSetting_Notepad" DataType="Int64" Changeable="false" Method="Value" PropertyPath="Size" SettingSourceType="File" />
+            <ConstantValue Value="100" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_RegKeyExistentialRule_5_17_2021_3_56_20_PM" Severity="None">
+        <Annotation>
+          <DisplayName Text="ExistentialRuleOverRegKey" ResourceId="ID-1f86c65d-e2ff-475f-a1b2-667763228de3" />
+          <Description Text="rule_desc" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" SettingLogicalName="LN_RegKey_Setting_CCM" DataType="Int64" Changeable="false" Method="Count" SettingSourceType="RegistryKey" />
+            <ConstantValue Value="1" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_CompliantValueRuleOverScript_5_17_2021_3_56_20_PM" Severity="None">
+        <Annotation>
+          <DisplayName Text="CompliantValueRuleOverScript" ResourceId="ID-47347bad-16a7-443e-8a9a-60a7b835a5ee" />
+          <Description Text="rule_desc" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" SettingLogicalName="LN_Script_Setting_Double" DataType="Double" Changeable="false" Method="Value" SettingSourceType="Script" />
+            <ConstantValue Value="-10.01" DataType="Double" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_NonCompliantValueRuleOverScript_5_17_2021_3_56_20_PM" Severity="Warning">
+        <Annotation>
+          <DisplayName Text="NonCompliantValueRuleOverScript" ResourceId="ID-1697ad2f-2fc3-4e28-9772-d066874d2919" />
+          <Description Text="rule_desc" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" SettingLogicalName="LN_Script_Setting_Double" DataType="Double" Changeable="false" Method="Value" SettingSourceType="Script" />
+            <ConstantValue Value="10.01" DataType="Double" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_WMIValueRule_5_17_2021_3_56_20_PM" Severity="None">
+        <Annotation>
+          <DisplayName Text="ValueRuleOverWMISetting" ResourceId="ID-b3b1243a-e7fc-41b7-82f2-ec30aa48ca29" />
+          <Description Text="rule_desc" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" SettingLogicalName="LN_WMI_Setting_Win32_OS" DataType="String" Changeable="false" Method="Value" SettingSourceType="WqlQuery" />
+            <ConstantValue Value="Win32_OperatingSystem" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_RegValueRemediateRule_5_17_2021_3_56_20_PM" Severity="None">
+        <Annotation>
+          <DisplayName Text="RemediateValueRuleOverStrRegistry" ResourceId="ID-7513bcf7-986b-4dc9-9617-f02bdbfd5203" />
+          <Description Text="rule_desc" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6DFE7EE0-C375-4206-A92B-066E813B43A9" LogicalName="AppCIWithSettings_5_17_2021_3_56_20_PM" SettingLogicalName="LN_Registry_Setting_RegisteredOrganaziation" DataType="String" Changeable="true" Method="Value" SettingSourceType="Registry" />
+            <ConstantValue Value="StringValueTest_Compliant" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="JScript">
+      <Script>WScript.echo("088eda47-b1c8-434a-8e84-8f707c8d1a76");</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
