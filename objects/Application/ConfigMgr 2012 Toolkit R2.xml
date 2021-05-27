@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_DF75E4D1-8EF8-43D9-8C1B-FC3331C3ECDB" LogicalName="Application_3f4ca8fd-851a-44da-b9ce-a609bf320660" Version="2">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>ConfigMgr 2012 Toolkit R2</Title>
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_2132064928">ConfigMgr 2012 Toolkit R2</Title>
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
