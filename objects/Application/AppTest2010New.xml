@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_3C64002B-171E-4FFC-B3F7-6336234C5ACB" LogicalName="Application_47fa5194-ef49-4709-9103-8bc58f648156" Version="3">
+    <SourceId AuthoringScopeId="ScopeId_0D420F25-E078-4651-B531-9346919930D6" LogicalName="Application_d2b0e3db-8e1a-4993-b374-e2bd70932b6f" />
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>BlankApp</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_680883747">AppTest2010New</Title>
+    <Description ResourceId="Res_1733238813">AppTest2010New-PushUpdate</Description>
+    <Publisher ResourceId="Res_1574486444" />
+    <SoftwareVersion ResourceId="Res_1793744668" />
+    <CustomId ResourceId="Res_694771647" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
