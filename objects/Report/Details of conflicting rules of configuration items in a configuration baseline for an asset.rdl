@@ -1,0 +1,2112 @@
+﻿<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"><rdl:Language xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">=User!Language</rdl:Language>
+  <Description>Displays conflict details of configuration items in a baseline.</Description>
+  <DataSources>
+    <DataSource Name="AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_">
+      <DataSourceReference>default_reference</DataSourceReference>
+      <rd:DataSourceID>737e7b3d-854e-45ab-adde-232eb2cacbc0</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet0">
+      <Fields>
+        <Field Name="MachineName">
+          <DataField>MachineName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ConfigurationItemName">
+          <DataField>ConfigurationItemName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="CIContentVersion">
+          <DataField>CIVersion</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="MaxNoncomplianceCriticality">
+          <DataField>MaxNoncomplianceCriticality</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="Suppressed">
+          <DataField>Suppressed</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="SeverityOverride">
+          <DataField>SeverityOverride</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="OldSeverity">
+          <DataField>OldSeverity</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="SettingName">
+          <DataField>SettingName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="SettingDescription">
+          <DataField>SettingDescription</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="ConstraintName">
+          <DataField>ConstraintName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="ConstraintDescription">
+          <DataField>ConstraintDescription</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="ValidationRule">
+          <DataField>ValidationRule</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="InstanceData">
+          <DataField>InstanceData</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="CurrentValue">
+          <DataField>CurrentValue</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="LastComplianceMessageTime">
+          <DataField>LastComplianceMessageTime</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="CI_UniqueID">
+          <DataField>CI_UniqueID</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="ConstraintLogicalName">
+          <DataField>ConstraintLogicalName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="SettingLogicalName">
+          <DataField>SettingLogicalName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="FullName">
+          <DataField>FullName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="UserName">
+          <DataField>UserName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="ContributionRuleCount">
+          <DataField>ContributionRuleCount</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="RuleType">
+          <DataField>RuleType</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="SettingSourceType">
+          <DataField>SettingSourceType</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+          declare @allassignments table
+          (
+          AssignmentID int,
+          CollectionID  nvarchar(512),
+          CollecionName nvarchar(512),
+          CI_ID       int,
+          DisplayName nvarchar(512),
+          CIType_ID   int,
+          CI_UniqueID nvarchar(512),
+          CIVersion   int
+          )
+
+          declare @AllCIs table
+          (
+          BL_CI_ID      int,
+          CI_ID         int,
+          ModelID       int,
+          CIVersion     int,
+          ModelName     nvarchar(512),
+          CI_UniqueID   nvarchar(512),
+          CIType_ID     int,
+          RelationType  int,
+          DisplayName   nvarchar(512)
+          )
+
+          declare @lcid as int set @lcid = dbo.fn_LShortNameToLCID(@locale)
+
+          declare @UserIDs  table (UserID int)
+          insert into @UserIDs(UserID) select UserID from v_Users  where FullName = @UserName
+          declare @MachineID as int
+          set @MachineID = (select ResourceID from v_R_System_Valid  where Netbios_Name0 = @computer)
+
+          insert into @allassignments (AssignmentID,CollectionID,CollecionName,CI_ID, DisplayName,CIType_ID,CI_UniqueID,CIVersion)
+          select assign.AssignmentID,coll.CollectionID as CollectionID,coll.name as CollecionName,bls.CI_ID, dbo.fn_GetLocalizedCIName(@lcid,bls.CI_ID),bls.CIType_ID,bls.CI_UniqueID,bls.CIVersion
+          from v_CIAssignment  assign
+          inner join fn_rbac_Collection(@UserSIDs)  coll on coll.CollectionID=assign.CollectionID
+          inner join v_CIAssignmentToCI  targ on targ.AssignmentID=assign.AssignmentID
+          inner join v_CIRelation_All  rel on rel.CI_ID=targ.CI_ID
+          inner join fn_rbac_SMSConfigurationItems(@UserSIDs)  bls on bls.CI_ID=rel.ReferencedCI_ID
+          where CIType_ID in (2,50) and bls.IsTombstoned=0
+          and (assign.AssignmentID = @assignmentID or @assignmentID='' or @assignmentID is NULL)
+          and assign.AssignmentType in (0,8)
+          and (coll.CollectionID=@collid or @collid='')
+          and (dbo.fn_GetLocalizedCIName(@lcid,bls.CI_ID) = @BLname or @BLname = '')
+
+          Insert into @AllCIs
+          select distinct rel.CI_ID,rel.ReferencedCI_ID,ciref.ModelId,ciref.CIVersion,ciref.ModelName,ciref.CI_UniqueID,ciref.CIType_ID,rel.RelationType,dbo.fn_GetLocalizedCIName(@lcid,ciref.CI_ID)
+          Policy from
+          @allassignments bl
+          inner join  v_CIRelation_All  rel on rel.CI_ID=bl.CI_ID
+          inner join fn_rbac_ConfigurationItems(@UserSIDs)  ciref on ciref.CI_ID=rel.ReferencedCI_ID
+          where
+          ((rel.RelationType in (0, 1, 2, 3, 4)) OR (rel.RelationType = 7 and ciref.CIType_ID=50))
+          and ciref.CIType_ID&lt;&gt;2 and ciref.CIType_ID &lt;&gt; 11--no baselines or global cis
+          and ciref.IsTombstoned=0
+          and (dbo.fn_GetLocalizedCIName(@lcid,ciref.CI_ID) = @CIname or @CIname='' or @CIName is null)
+          and (ciref.CIVersion = @CIVersion or @CIVersion='' or @CIVersion is null)
+
+
+
+
+
+
+
+        declare @RulesAndSetting table
+        (
+        Rule_ID int,
+        Rule_CI_ID int,
+        Setting_ID int,
+        Setting_CI_ID int,
+        RuleLogicalName nvarchar(512),
+        SettingLogicalName nvarchar(512),
+        RuleName nvarchar(max),
+        RuleDescription nvarchar(max),
+        SettingName nvarchar(max),
+        SettingDescription nvarchar(max),
+        SettingSourceType int,
+        RuleCriteria nvarchar(max),
+        Severity int
+        )
+
+        declare @countRule as int
+        set @countRule = 0
+        
+        declare @valueRule as int
+        set @valueRule = 1
+
+        insert into @RulesAndSetting(Rule_ID,Rule_CI_ID,Setting_ID,Setting_CI_ID,RuleLogicalName,SettingLogicalName,RuleName,RuleDescription,SettingName,SettingDescription,SettingSourceType,RuleCriteria,Severity)
+          select distinct
+        rules.Rule_ID,
+        rules.CI_ID,
+        settings.Setting_ID,
+        settings.CI_ID,
+        rules.Rule_UniqueID,
+        settings.Setting_UniqueID,
+        dbo.fn_GetLocalizedProperty(@lcid,rules.RuleNameRID,rules.CI_ID) as RuleName, 
+        dbo.fn_GetLocalizedProperty(@lcid,rules.RuleDescriptionRID,rules.CI_ID) as RuleDescription, 
+        dbo.fn_GetLocalizedProperty(@lcid,settings.SettingNameRID,settings.CI_ID) as SettingName, 
+        dbo.fn_GetLocalizedProperty(@lcid,settings.SettingDescriptionRID,settings.CI_ID) as SettingDescription,
+        settings.SourceType,
+        rules.Criteria,
+        rules.Severity
+        from @AllCIs cis 
+        inner join v_CIRulesAll  allrules on allrules.CI_ID=cis.CI_ID
+        inner join v_CIRules  rules on rules.Rule_ID=allrules.Rule_ID
+        inner join v_CISettings  settings on settings.Setting_ID=allrules.Setting_ID
+     
+          DECLARE @Assignments Assignment_Type INSERT INTO @Assignments select AssignmentID from @allassignments
+
+          select
+          TargetCompliance.Netbios_Name0 as MachineName,
+          TargetCompliance.FullName,
+          TargetCompliance.DisplayName as ConfigurationItemName,
+          rules.Severity MaxNoncomplianceCriticality,
+          rules.SettingName,
+          rules.SettingLogicalName,
+          rules.SettingSourceType as SettingType,
+          rules.SettingDescription,
+          rules.RuleName as ConstraintName,
+          rules.RuleLogicalName as ConstraintLogicalName,
+          rules.RuleDescription as ConstraintDescription,
+          case when TargetCompliance.IsRuleValue=1 then @valueRule else @countRule end as RuleType,
+          rules.RuleCriteria as ValidationRule,
+          rules.SettingLogicalName,
+          rules.RuleLogicalName as ConstraintLogicalName,
+          TargetCompliance.ContributionRulesCount as ContributionRuleCount,
+          dbo.fn_GetLastAssignmentEvaluationTime(@Assignments,TargetCompliance.ResourceID,TargetCompliance.UserID) as LastComplianceMessageTime,
+          TargetCompliance.CI_UniqueID,
+          TargetCompliance.CIVersion,
+          rules.SettingSourceType
+          from 
+          (
+              select sys.Netbios_Name0,sys.ResourceID,users.UserID,users.FullName,AllCIs.CI_UniqueID,AllCIs.DisplayName,detail.IsRuleValue,detail.ContributionRulesCount,detail.RuleID,detail.SettingID,AllCIs.CIVersion
+              from (select distinct CI_ID from @allassignments) allbl
+          inner join @AllCIs AllCIs on allbl.CI_ID=AllCIs.BL_CI_ID
+              cross join (select distinct resources.UserName from v_dcmdeploymentresourcesuser  resources join fn_rbac_Collection(@UserSIDs) coll on coll.CollectionID = resources.CollectionID join @allassignments allbl on allbl.AssignmentID=resources.AssignmentID and resources.UserName=@UserName) resources
+              inner join v_Users  users on users.FullName=resources.UserName and users.UserID in (select UserID from @UserIDs)
+              inner join v_CIComplianceStatusConflictsDetail  detail on detail.ModelID=AllCIs.ModelID and detail.CIVersion=AllCIs.CIVersion and detail.UserID=users.UserID and detail.ResourceID=@MachineID and detail.UserID in (select UserID from @UserIDs)
+              inner join v_R_System_Valid  sys on sys.ResourceID=detail.ResourceID and sys.ResourceID=@MachineID
+          ) TargetCompliance
+          inner join @RulesAndSetting rules on rules.Rule_ID=TargetCompliance.RuleID and rules.Setting_ID=TargetCompliance.SettingID
+          
+          
+          UNION
+
+          select
+          TargetCompliance.Netbios_Name0 as MachineName,
+          TargetCompliance.FullName,
+          TargetCompliance.DisplayName as ConfigurationItemName,
+          rules.Severity MaxNoncomplianceCriticality,
+          rules.SettingName,
+          rules.SettingLogicalName,
+          rules.SettingSourceType as SettingType,
+          rules.SettingDescription,
+          rules.RuleName as ConstraintName,
+          rules.RuleLogicalName as ConstraintLogicalName,
+          rules.RuleDescription as ConstraintDescription,
+          case when TargetCompliance.IsRuleValue=1 then @valueRule else @countRule end as RuleType,
+          rules.RuleCriteria as ValidationRule,
+          rules.SettingLogicalName,
+          rules.RuleLogicalName as ConstraintLogicalName,
+          TargetCompliance.ContributionRulesCount as ContributionRuleCount,
+          dbo.fn_GetLastAssignmentEvaluationTime(@Assignments,TargetCompliance.ResourceID,TargetCompliance.UserID) as LastComplianceMessageTime,
+          TargetCompliance.CI_UniqueID,
+          TargetCompliance.CIVersion,
+          rules.SettingSourceType
+          from 
+          (   --Machine assignment
+              select sys.Netbios_Name0,sys.ResourceID,users.UserID,users.FullName,AllCIs.CI_UniqueID,AllCIs.DisplayName,detail.IsRuleValue,detail.ContributionRulesCount,detail.RuleID,detail.SettingID,AllCIs.CIVersion
+              from (select distinct CI_ID from @allassignments) allbl
+          inner join @AllCIs AllCIs on allbl.CI_ID=AllCIs.BL_CI_ID
+              cross join (select distinct cm.ResourceID from v_ClientCollectionMembers  cm join fn_rbac_Collection(@UserSIDs) coll on coll.CollectionID = cm.CollectionID join @allassignments allbl on allbl.CollectionID=cm.CollectionID and cm.ResourceID=@MachineID) cm
+              inner join v_CIComplianceStatusConflictsDetail  detail on detail.ModelID=AllCIs.ModelID and detail.CIVersion=AllCIs.CIVersion and detail.ResourceID=cm.ResourceID and detail.UserID in (select UserID from @UserIDs) and detail.ResourceID=@MachineID
+              inner join v_R_System_Valid  sys on sys.ResourceID=detail.ResourceID and sys.ResourceID=@MachineID
+              inner join v_Users  users on users.UserID=detail.UserID and users.UserID in (select UserID from @UserIDs)
+          ) TargetCompliance
+          inner join @RulesAndSetting rules on rules.Rule_ID=TargetCompliance.RuleID and rules.Setting_ID=TargetCompliance.SettingID
+          
+          </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@locale">
+            <Value>=Parameters!locale.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@BLname">
+            <Value>=Parameters!BLname.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@CIName">
+            <Value>=Parameters!CIName.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@CIversion">
+            <Value>=Parameters!CIversion.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Computer">
+            <Value>=Parameters!Computer.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@UserName">
+            <Value>=Parameters!UserName.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@collid">
+            <Value>=Parameters!collid.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@assignmentID">
+            <Value>=Parameters!assignmentID.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="Parameter_DataSet_DisplayName">
+      <Fields>
+        <Field Name="BaselineDisplayName">
+          <DataField>BaselineDisplayName</DataField>
+        </Field>
+        <Field Name="BaselineName">
+          <DataField>BaselineName</DataField>
+        </Field>
+        <Field Name="Baseline_UniqueID">
+          <DataField>Baseline_UniqueID</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+          ="
+          declare @lcid as int set @lcid = dbo.fn_LShortNameToLCID(@locale)
+          if (@filterwildcard = '')
+          begin
+          select * from
+          (
+              select distinct
+              N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as BaselineDisplayName, 
+              '' as BaselineName, 
+              N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as Baseline_UniqueID
+              UNION ALL
+              select distinct
+              dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as BaselineDisplayName,dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as BaselineName,  CI_UniqueID  as Baseline_UniqueID
+              from fn_rbac_ConfigurationItems(@UserSIDs)  ci
+              where ci.CIType_ID=2
+          ) temp
+          order by BaselineDisplayName
+          end
+          else
+          begin
+          select * from
+          (
+              select distinct
+              N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as BaselineDisplayName,
+              '' as BaselineName, 
+              N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as Baseline_UniqueID
+              UNION ALL
+              select distinct
+              dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as BaselineDisplayName,dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as BaselineName,  CI_UniqueID as Baseline_UniqueID
+              from fn_rbac_ConfigurationItems(@UserSIDs)  ci
+              where ci.CIType_ID=2      and dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) like @filterwildcard
+          ) temp
+          order by BaselineDisplayName
+          end
+          "
+        </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="filterwildcard">
+            <Value />
+          </QueryParameter>
+          <QueryParameter Name="@locale">
+            <Value>=Parameters!locale.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+      </Query>
+    </DataSet>
+    <DataSet Name="Parameter_DataSet_CI_DisplayName">
+      <Fields>
+        <Field Name="CIDisplayName">
+          <DataField>CIDisplayName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="CIName">
+          <DataField>CIName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="ModelName">
+          <DataField>ModelName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+          ="
+          declare @lcid as int set @lcid = dbo.fn_LShortNameToLCID(@locale)
+          if (@filterwildcard = '')
+          begin
+          select * from
+          (
+              select N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as CIDisplayName, '' as CIName
+              UNION ALL
+              select distinct dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIDisplayName, dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIName
+              from fn_rbac_ConfigurationItems(@UserSIDs)  ci
+              inner join v_CIRelation_All  rel on rel.ReferencedCI_ID=ci.CI_ID and rel.RelationType &lt;&gt; 7 and rel.RelationType&lt;&gt;5 and rel.RelationType&lt;&gt;50 and rel.RelationType&lt;&gt;8 and rel.RelationType&lt;&gt;80
+              inner join fn_rbac_ConfigurationItems(@UserSIDs)  bl on bl.CI_ID=rel.CI_ID and bl.CIType_ID=2
+              where ci.CIType_ID not in (2,11,14) and (dbo.fn_GetLocalizedCIName(@lcid,bl.CI_ID) = @BLname or @BLname = '')
+              UNION ALL
+              select distinct dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIDisplayName, dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIName
+              from fn_rbac_ConfigurationItems(@UserSIDs)  ci where ci.CIType_ID = 50 and @BLname = ''               
+          ) temp
+          order by CIDisplayName
+          end
+          else
+          begin
+          select * from
+          (
+              select N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as CIDisplayName, '' as CIName
+              UNION ALL
+              select distinct dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIDisplayName, dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIName
+              from fn_rbac_ConfigurationItems(@UserSIDs)  ci
+              inner join v_CIRelation_All  rel on rel.ReferencedCI_ID=ci.CI_ID and rel.RelationType &lt;&gt; 7 and rel.RelationType&lt;&gt;5 and rel.RelationType&lt;&gt;50 and rel.RelationType&lt;&gt;8 and rel.RelationType&lt;&gt;80
+              inner join fn_rbac_ConfigurationItems(@UserSIDs)  bl on bl.CI_ID=rel.CI_ID and bl.CIType_ID=2
+              where ci.CIType_ID not in (2,11,14) and (dbo.fn_GetLocalizedCIName(@lcid,bl.CI_ID) = @BLname or @BLname = '') and dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) like @filterwildcard
+              UNION ALL
+              select distinct dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIDisplayName, dbo.fn_GetLocalizedCIName(@lcid,ci.CI_ID) as CIName
+              from fn_rbac_ConfigurationItems(@UserSIDs)  ci where ci.CIType_ID = 50 and @BLname = ''               
+          ) temp
+          order by CIDisplayName
+          end
+          "
+        </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="filterwildcard">
+            <Value />
+          </QueryParameter>
+          <QueryParameter Name="@locale">
+            <Value>=Parameters!locale.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@BLname">
+            <Value>=Parameters!BLname.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="Parameter_DataSet_Machine">
+      <Fields>
+        <Field Name="MachineDisplay">
+          <DataField>MachineDisplay</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="Machine">
+          <DataField>Machine</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+          declare @coll as varchar(max)
+          if (@collid='' or @collid is NULL) set @coll = ''
+          else                               set @coll = @collid
+          if (@filterwildcard = '')
+          select * from
+          (
+              select distinct SYS.Netbios_Name0 as MachineDisplay, SYS.Netbios_Name0 as Machine from  v_FullCollectionMembership_Valid  cm
+              join fn_rbac_Collection(@UserSIDs) coll on coll.CollectionID = cm.CollectionID
+              inner join v_R_System_Valid  sys on sys.ResourceID=cm.ResourceID
+              where ((cm.CollectionID=@coll) or (@coll = ''))
+          ) temp
+          order by MachineDisplay
+          else
+          select * from
+          (
+              select distinct SYS.Netbios_Name0 as MachineDisplay, SYS.Netbios_Name0 as Machine from  v_FullCollectionMembership_Valid  cm
+              join fn_rbac_Collection(@UserSIDs) coll on coll.CollectionID = cm.CollectionID
+              inner join v_R_System_Valid  sys on sys.ResourceID=cm.ResourceID
+              where ((cm.CollectionID=@coll) or (@coll = ''))
+              and SYS.Netbios_Name0 like @filterwildcard
+          ) temp
+          order by MachineDisplay
+        </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="filterwildcard">
+            <Value>=Parameters!DeviceFilter.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@collid">
+            <Value>=Parameters!collid.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="Parameter_DataSet_User">
+      <Fields>
+        <Field Name="FullDisplayName">
+          <DataField>FullDisplayName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="FullName">
+          <DataField>FullName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+          ="
+          declare @CI_ID  table (CI_ID int, ModelID int, CIVersion int)
+          insert into @CI_ID (CI_ID,ModelID,CIVersion)
+          select cis.CI_ID,ModelID, CIVersion from fn_rbac_SMSConfigurationItems(@UserSIDs)  cis
+          inner join v_LocalizedCIProperties  cilp on cilp.CI_ID = cis.CI_ID
+          where (cilp.DisplayName = @CIName or @CIName = '' or @CIName is NULL)
+
+
+          if (@filterwildcard = '')
+          begin
+          select * from
+          (
+              select distinct usrs.FullName as FullDisplayName, usrs.FullName
+              from fn_rbac_Users(@UserSIDs) usrs
+              inner join v_SMSCICurrentComplianceStatus  cics on cics.UserID=usrs.UserID
+              inner join @CI_ID cis on cis.ModelID=cics.ModelID and cis.CIVersion=cics.CIVersion
+              inner join v_R_System_Valid  sys on sys.ResourceID=cics.ItemKey
+              where
+              (sys.Netbios_Name0 = @Computer or @Computer = '' or @Computer is NULL)
+          ) temp
+          order by FullDisplayName
+          end
+          else
+          begin
+          select * from
+          (
+              select distinct usrs.FullName as FullDisplayName, usrs.FullName
+              from fn_rbac_Users(@UserSIDs) usrs
+              inner join v_SMSCICurrentComplianceStatus  cics on cics.UserID=usrs.UserID
+              inner join @CI_ID cis on cis.ModelID=cics.ModelID and cis.CIVersion=cics.CIVersion
+              inner join v_R_System_Valid  sys on sys.ResourceID=cics.ItemKey
+              where
+              (sys.Netbios_Name0 = @Computer or @Computer = '' or @Computer is NULL)
+              and usrs.FullName like @filterwildcard
+          ) temp
+          order by FullDisplayName
+          end
+          "
+        </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="filterwildcard">
+            <Value>=Parameters!UserFilter.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@collid">
+            <Value>=Parameters!collid.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@CIName">
+            <Value>=Parameters!CIName.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@Computer">
+            <Value>=Parameters!Computer.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="Parameter_CollectionDataSet">
+      <Fields>
+        <Field Name="CollectionID">
+          <DataField>CollectionID</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="UnlocCollectionName">
+          <DataField>Name</DataField>
+        </Field>
+        <Field Name="Name">
+          <Value>=SrsResources.Localization.GetDBString(Fields!UnlocCollectionName.Value, User!Language)</Value>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+        ="
+              begin
+              if (@filterwildcard = '')
+              select N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as Name, '' as CollectionID
+              UNION ALL 
+              SELECT DISTINCT  Name, CollectionID FROM fn_rbac_Collection(@UserSIDs)  ORDER BY Name
+              else
+              select N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as Name, '' as CollectionID
+              UNION ALL   
+              SELECT DISTINCT  Name, CollectionID FROM fn_rbac_Collection(@UserSIDs) 
+              WHERE CollectionID like @filterwildcard
+              ORDER BY Name
+              end
+        "
+      </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="filterwildcard">
+            <Value />
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="DataSet_CIVesion">
+      <Fields>
+        <Field Name="CIDisplayVersion">
+          <DataField>CIDisplayVersion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CIVersion">
+          <DataField>CIVersion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+          ="
+          select * from
+          (
+              select N'" &amp;SrsResources.Localization.GetString("AllValues", User!Language)&amp; "' as CIDisplayVersion, '' as CIVersion
+              UNION ALL
+              select distinct CONVERT(varchar(max),CIVersion) as CIDisplayVersion, CONVERT(varchar(max),CIVersion) as CIVersion from fn_rbac_ConfigurationItems(@UserSIDs)  cis 
+              join v_LocalizedCIProperties  cilp on cilp.CI_ID = cis.CI_ID
+              where (cilp.DisplayName = @CIName or @CIName ='' or @CIName is NULL)
+              and cis.CIType_ID&lt;&gt;2
+          ) temp
+          order by CAST(CIVersion as int)
+          "
+        </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@CIName">
+            <Value>=Parameters!CIName.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="Default_Dataset">
+      <Fields>
+        <Field Name="DefaultValue">
+          <DataField>DefaultValue</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>select  '' as DefaultValue</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="AssignmentID_Dataset">
+      <Fields>
+        <Field Name="AssignmentID">
+          <DataField>AssignmentID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <CommandText>
+        select '' as AssignmentID
+        UNION ALL
+        select CONVERT(NVARCHAR(MAX),assign.AssignmentID) from 
+        (
+            select distinct assign.AssignmentID from 
+            v_CIAssignment  assign
+            join fn_rbac_Collection(@UserSIDs)  coll on coll.CollectionID = assign.CollectionID
+            join v_CIAssignmentToCI  asstoci on assign.AssignmentID=asstoci.AssignmentID
+            join v_CIRelation_All  rel on rel.CI_ID=asstoci.CI_ID
+            join fn_rbac_ConfigurationItems(@UserSIDs) cis on cis.CI_ID = rel.ReferencedCI_ID
+            join v_LocalizedCIProperties  loc on loc.CI_ID=rel.ReferencedCI_ID
+            where (loc.DisplayName=@BLName OR @BLName='')
+        ) assign
+        </CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@UserSIDs">
+            <Value>=Parameters!UserSIDs.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@BLName">
+            <Value>=Parameters!BLname.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+    <DataSet Name="DataSetAdminID">
+      <Query>
+        <DataSourceName>AutoGen__5C6358F2_4BB6_4a1b_A16E_8D96795D8602_</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@UserTokenSIDs">
+            <Value>=Parameters!UserTokenSIDs.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>select dbo.fn_rbac_GetAdminIDsfromUserSIDs(@UserTokenSIDs) as UserSIDs</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="UserSIDs">
+          <DataField>UserSIDs</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <Body>
+    <ReportItems>
+      <Tablix Name="Table0">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>1.43in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.87in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.49in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.22in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.65in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.13in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.59in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.83in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>3.31in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>2.57in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>3.22in</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>0.32812in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox1">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!SettingName.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("SettingName", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox1</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox4">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!SettingDescription.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("SettingDescription", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox4</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox3">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("SettingType", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox3</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox6">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!ConstraintName.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("ConstraintName", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox6</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox9">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!ConstraintDescription.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("ConstraintDescription", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox9</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox12">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=SrsResources.Localization.GetString("CIRuleType_" + CStr(Fields!RuleType.Value), User!Language)</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("RuleType", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox12</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox11">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!ValidationRule.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("ValidationRule", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox11</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox8">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!ContributionRuleCount.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("ContributionRulesCount", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox8</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!ConfigurationItemName.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("ConfigurationItemName", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox7">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!CIContentVersion.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("ConfigurationItemVersion", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox7</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox21">
+                      <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!LastComplianceMessageTime.Value</SortExpression>
+                      </UserSort>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("LastComplianceMessageTime", User!Language)</Value>
+                              <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:FontFamily>Segoe UI</rdl:FontFamily><rdl:FontSize>9pt</rdl:FontSize><rdl:FontWeight>Bold</rdl:FontWeight><rdl:Color>Black</rdl:Color></rdl:Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox21</rd:DefaultName>
+                      <rdl:Style xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"><rdl:Border><rdl:Color>#557eb9</rdl:Color><rdl:Style>None</rdl:Style></rdl:Border><rdl:TopBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:TopBorder><rdl:BottomBorder><rdl:Style>Solid</rdl:Style><rdl:Width>1.5pt</rdl:Width></rdl:BottomBorder><rdl:LeftBorder><rdl:Style>None</rdl:Style></rdl:LeftBorder><rdl:RightBorder><rdl:Style>None</rdl:Style></rdl:RightBorder><rdl:BackgroundColor>White</rdl:BackgroundColor><rdl:VerticalAlign>Bottom</rdl:VerticalAlign><rdl:PaddingLeft>5pt</rdl:PaddingLeft><rdl:PaddingRight>5pt</rdl:PaddingRight><rdl:PaddingTop>5pt</rdl:PaddingTop><rdl:PaddingBottom>5pt</rdl:PaddingBottom></rdl:Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.32812in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="SettingName">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!SettingName.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>SettingName</rd:DefaultName>
+                      <Style>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="SettingDescription">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!SettingDescription.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>SettingDescription</rd:DefaultName>
+                      <Style>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="SettingSourceType">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("CISettingType_" + CStr(Fields!SettingSourceType.Value), User!Language)</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>SettingSourceType</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="ConstraintName">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!ConstraintName.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>ConstraintName</rd:DefaultName>
+                      <Style>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="ConstraintDescription">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!ConstraintDescription.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>ConstraintDescription</rd:DefaultName>
+                      <Style>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="RuleType">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SrsResources.Localization.GetString("CIRuleType_" + CStr(Fields!RuleType.Value), User!Language)</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>RuleType</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="ValidationRule">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!ValidationRule.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>ValidationRule</rd:DefaultName>
+                      <Style>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="ContributionRuleCount">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!ContributionRuleCount.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>Underline</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>ContributionRuleCount</rd:DefaultName>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>List of rules conflicting with a specified rule for an asset</ReportName>
+                              <Parameters>
+                                <Parameter Name="CIName">
+                                  <Value>=Fields!ConfigurationItemName.Value</Value>
+                                </Parameter>
+                                <Parameter Name="CIversion">
+                                  <Value>=Fields!CIContentVersion.Value</Value>
+                                </Parameter>
+                                <Parameter Name="SettingName">
+                                  <Value>=Fields!SettingName.Value</Value>
+                                </Parameter>
+                                <Parameter Name="RuleName">
+                                  <Value>=Fields!ConstraintName.Value</Value>
+                                </Parameter>
+                                <Parameter Name="Computer">
+                                  <Value>=Fields!MachineName.Value</Value>
+                                </Parameter>
+                                <Parameter Name="UserName">
+                                  <Value>=Fields!FullName.Value</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="ConfigurationItemName">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!ConfigurationItemName.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>ConfigurationItemName</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="CIContentVersion">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!CIContentVersion.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>CIContentVersion</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="LastComplianceMessageTime">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!LastComplianceMessageTime.Value</Value>
+                              <Style>
+                                <FontFamily>Tahoma</FontFamily>
+                                <FontWeight>Normal</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>LastComplianceMessageTime</rd:DefaultName>
+                      <Style>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Silver</Color>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "Transparent", "Gainsboro")</BackgroundColor>
+                        <VerticalAlign>Top</VerticalAlign>
+                        <PaddingLeft>5pt</PaddingLeft>
+                        <PaddingRight>5pt</PaddingRight>
+                        <PaddingTop>5pt</PaddingTop>
+                        <PaddingBottom>5pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember>
+              <KeepWithGroup>After</KeepWithGroup>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
+              <KeepTogether>true</KeepTogether>
+            </TablixMember>
+            <TablixMember>
+              <Group Name="Table0_Details_Group">
+                <DataElementName>Detail</DataElementName>
+              </Group>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+              <DataElementName>Detail_Collection</DataElementName>
+              <DataElementOutput>Output</DataElementOutput>
+              <KeepTogether>true</KeepTogether>
+            </TablixMember>
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>DataSet0</DataSetName>
+        <rdl:Top xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">0.33in
+    </rdl:Top>
+        <rdl:Left xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">0in</rdl:Left>
+        <Height>0.65624in</Height>
+        <Width>16.91666in</Width>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+          <TopBorder>
+            <Style>None</Style>
+          </TopBorder>
+          <BottomBorder>
+            <Style>None</Style>
+          </BottomBorder>
+          <LeftBorder>
+            <Style>None</Style>
+          </LeftBorder>
+          <RightBorder>
+            <Style>None</Style>
+          </RightBorder>
+          <FontFamily>Tahoma</FontFamily>
+          <FontSize>8pt</FontSize>
+          <FontWeight>Normal</FontWeight>
+          <TextDecoration>None</TextDecoration>
+          <TextAlign>General</TextAlign>
+          <VerticalAlign>Top</VerticalAlign>
+        </Style>
+      </Tablix>
+    
+    <rdl:Rectangle Name="ReportDescriptionRectangle" xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
+      <rdl:ReportItems>
+        <rdl:Tablix Name="ReportDescriptionTablix">
+          
+          <rdl:DataSetName>DataSet0</rdl:DataSetName>
+          <rdl:TablixBody>
+            <rdl:TablixColumns>
+              <rdl:TablixColumn>
+                <rdl:Width>1.25in</rdl:Width>
+              </rdl:TablixColumn>
+              <rdl:TablixColumn>
+                <rdl:Width>19.809999465942383in</rdl:Width>
+              </rdl:TablixColumn>
+            </rdl:TablixColumns>
+            <rdl:TablixRows>
+              <rdl:TablixRow>
+                <rdl:Height>0.4in</rdl:Height>
+                <rdl:TablixCells>
+                  <rdl:TablixCell>
+                    <rdl:CellContents>
+                      <rdl:Textbox Name="DescriptionLabelTextbox">
+                        <rdl:CanGrow>true</rdl:CanGrow>
+                        <rdl:KeepTogether>true</rdl:KeepTogether>
+                        <rdl:Paragraphs>
+                          <rdl:Paragraph>
+                            <rdl:TextRuns>
+                              <rdl:TextRun>
+                                <rdl:Value>=SrsResources.Localization.GetString("Description", User!Language)</rdl:Value>
+                                <rdl:Style>
+                                  <rdl:FontFamily>Segoe UI</rdl:FontFamily>
+                                  <rdl:FontWeight>Bold</rdl:FontWeight>
+                                  <rdl:FontSize>9pt</rdl:FontSize>
+                                  <rdl:Color>Black</rdl:Color>
+                                </rdl:Style>
+                              </rdl:TextRun>
+                            </rdl:TextRuns>
+                            <rdl:Style />
+                          </rdl:Paragraph>
+                        </rdl:Paragraphs>
+                        <rd:DefaultName>Textbox16</rd:DefaultName>
+                        <rdl:Style>
+                          <rdl:Border>
+                            <rdl:Color>LightGrey</rdl:Color>
+                            <rdl:Style>Solid</rdl:Style>
+                          </rdl:Border>
+                          <rdl:BackgroundColor>Gainsboro</rdl:BackgroundColor>
+                          <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                          <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                          <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                          <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                        </rdl:Style>
+                      </rdl:Textbox>
+                    </rdl:CellContents>
+                  </rdl:TablixCell>
+                  <rdl:TablixCell>
+                    <rdl:CellContents>
+                      <rdl:Textbox Name="DescriptionTextbox">
+                        <rdl:CanGrow>true</rdl:CanGrow>
+                        <rdl:KeepTogether>true</rdl:KeepTogether>
+                        <rdl:Paragraphs>
+                          <rdl:Paragraph>
+                            <rdl:TextRuns>
+                              <rdl:TextRun>
+                                <rdl:Value>=SrsResources.Localization.GetString("Report402_Description", User!Language)</rdl:Value>
+                                <rdl:Style>
+                                  <rdl:FontFamily>Segoe UI</rdl:FontFamily>
+                                  <rdl:FontSize>9pt</rdl:FontSize>
+                                  <rdl:FontWeight>Normal</rdl:FontWeight>
+                                  <rdl:Color>Black</rdl:Color>
+                                </rdl:Style>
+                              </rdl:TextRun>
+                            </rdl:TextRuns>
+                            <rdl:Style />
+                          </rdl:Paragraph>
+                        </rdl:Paragraphs>
+                        <rd:DefaultName>Textbox18</rd:DefaultName>
+                        <rdl:Visibility>
+                          <rdl:Hidden>true</rdl:Hidden>
+                          <rdl:ToggleItem>DescriptionLabelTextbox</rdl:ToggleItem>
+                        </rdl:Visibility>
+                        <rdl:Style>
+                          <rdl:Border>
+                            <rdl:Color>LightGrey</rdl:Color>
+                            <rdl:Style>Solid</rdl:Style>
+                          </rdl:Border>
+                          <rdl:BackgroundColor>Gainsboro</rdl:BackgroundColor>
+                          <rdl:PaddingLeft>5pt</rdl:PaddingLeft>
+                          <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                          <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                          <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                        </rdl:Style>
+                      </rdl:Textbox>
+                    </rdl:CellContents>
+                  </rdl:TablixCell>
+                </rdl:TablixCells>
+              </rdl:TablixRow>
+            </rdl:TablixRows>
+          </rdl:TablixBody>
+          <rdl:TablixColumnHierarchy>
+            <rdl:TablixMembers>
+              <rdl:TablixMember />
+              <rdl:TablixMember />
+            </rdl:TablixMembers>
+          </rdl:TablixColumnHierarchy>
+          <rdl:TablixRowHierarchy>
+            <rdl:TablixMembers>
+              <rdl:TablixMember />
+            </rdl:TablixMembers>
+          </rdl:TablixRowHierarchy>
+          <rdl:Top>0.0in</rdl:Top>
+          <rdl:Height>0.2in</rdl:Height>
+          <rdl:Style>
+            <rdl:Border>
+              <rdl:Style>None</rdl:Style>
+            </rdl:Border>
+          </rdl:Style>
+        </rdl:Tablix>
+      </rdl:ReportItems>
+      <rdl:KeepTogether>true</rdl:KeepTogether>
+      <rdl:Left>0in</rdl:Left>
+      <rdl:Height>0.21181in</rdl:Height>
+      <rdl:Top>0.0in</rdl:Top>
+      <rdl:Width>21.309999465942383in</rdl:Width>
+      <rdl:ZIndex>1</rdl:ZIndex>
+      <rdl:Style>
+        <rdl:Border>
+          <rdl:Style>None</rdl:Style>
+        </rdl:Border>
+        <rdl:BackgroundColor>Gainsboro</rdl:BackgroundColor>
+      </rdl:Style>
+    </rdl:Rectangle>
+    <rdl:Line Name="ReportDescriptionLine" xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
+      <rdl:Top>0.25in</rdl:Top>
+      <rdl:Left>0in</rdl:Left>
+      <rdl:Height>0in</rdl:Height>
+      <rdl:Width>21.309999465942383in</rdl:Width>
+      <rdl:ZIndex>2</rdl:ZIndex>
+      <rdl:Style>
+        <rdl:Border>
+          <rdl:Style>Double</rdl:Style>
+          <rdl:Width>1.5pt</rdl:Width>
+        </rdl:Border>
+        <rdl:TopBorder>
+          <rdl:Style>Double</rdl:Style>
+          <rdl:Width>1.5pt</rdl:Width>
+        </rdl:TopBorder>
+        <rdl:BottomBorder>
+          <rdl:Style>Double</rdl:Style>
+          <rdl:Width>1.5pt</rdl:Width>
+        </rdl:BottomBorder>
+        <rdl:LeftBorder>
+          <rdl:Style>Double</rdl:Style>
+          <rdl:Width>1.5pt</rdl:Width>
+        </rdl:LeftBorder>
+        <rdl:RightBorder>
+          <rdl:Style>Double</rdl:Style>
+          <rdl:Width>1.5pt</rdl:Width>
+        </rdl:RightBorder>
+      </rdl:Style>
+    </rdl:Line>
+</ReportItems>
+    <Height>1.75in</Height>
+    <Style />
+  </Body>
+  <ReportParameters>
+    <ReportParameter Name="UserTokenSIDs">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=SrsResources.UserIdentity.GetUserSIDs(User!UserID)</Value>
+        </Values>
+      </DefaultValue>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="UserSIDs">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>DataSetAdminID</DataSetName>
+          <ValueField>UserSIDs</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="locale">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=User!Language</Value>
+        </Values>
+      </DefaultValue>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="BLname">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Default_Dataset</DataSetName>
+          <ValueField>DefaultValue</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Configuration Baseline Name</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Parameter_DataSet_DisplayName</DataSetName>
+          <ValueField>BaselineName</ValueField>
+          <LabelField>BaselineDisplayName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="CIName">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Default_Dataset</DataSetName>
+          <ValueField>DefaultValue</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Configuration Item Name</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Parameter_DataSet_CI_DisplayName</DataSetName>
+          <ValueField>CIName</ValueField>
+          <LabelField>CIDisplayName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="CIversion">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Default_Dataset</DataSetName>
+          <ValueField>DefaultValue</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Configuration Item Revision</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>DataSet_CIVesion</DataSetName>
+          <ValueField>CIVersion</ValueField>
+          <LabelField>CIDisplayVersion</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="collid">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Default_Dataset</DataSetName>
+          <ValueField>DefaultValue</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Collection</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Parameter_CollectionDataSet</DataSetName>
+          <ValueField>CollectionID</ValueField>
+          <LabelField>Name</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="DeviceFilter">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Device filter</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Computer">
+      <DataType>String</DataType>
+      <Prompt>Device Name</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Parameter_DataSet_Machine</DataSetName>
+          <ValueField>Machine</ValueField>
+          <LabelField>MachineDisplay</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="UserFilter">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value />
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>User filter</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserName">
+      <DataType>String</DataType>
+      <Prompt>User Name</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Parameter_DataSet_User</DataSetName>
+          <ValueField>FullName</ValueField>
+          <LabelField>FullDisplayName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="assignmentID">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Default_Dataset</DataSetName>
+          <ValueField>DefaultValue</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
+      <Prompt>Report402_parameter_assignmentID</Prompt>
+      <Hidden>true</Hidden>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>AssignmentID_Dataset</DataSetName>
+          <ValueField>AssignmentID</ValueField>
+          <LabelField>AssignmentID</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
+  <Width>21.5in</Width>
+  
+   <rdl:Page xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
+    <rdl:PageHeader>
+      <rdl:Height>1.1in</rdl:Height>
+      <rdl:PrintOnFirstPage>true</rdl:PrintOnFirstPage>
+      <rdl:PrintOnLastPage>true</rdl:PrintOnLastPage>
+      <rdl:ReportItems>
+        <rdl:Rectangle Name="BackgroundColorRectangle">
+          <rdl:ReportItems>
+            <rdl:Image Name="RightHeaderImage">
+              <rdl:Source>External</rdl:Source>
+              <rdl:Value>/ConfigMgr_OPC/Report Resources/Report_Header_Right.png</rdl:Value>
+              <rdl:Top>0.0in</rdl:Top>
+              <rdl:Left>18.96999955177307in</rdl:Left>
+              <rdl:Height>0.75in</rdl:Height>
+              <rdl:Width>2.3399999141693115in</rdl:Width>
+              <rdl:Style>
+                <rdl:Border>
+                  <rdl:Style>None</rdl:Style>
+                </rdl:Border>
+              </rdl:Style>
+            </rdl:Image>
+            <rdl:Image Name="CenterHeaderImage">
+              <rdl:Source>External</rdl:Source>
+              <rdl:Sizing>Fit</rdl:Sizing>
+              <rdl:Value>/ConfigMgr_OPC/Report Resources/Report_Header_Center.png</rdl:Value>
+              <rdl:Top>0.0in</rdl:Top>
+              <rdl:Left>0.20999999344348907in</rdl:Left>
+              <rdl:Height>0.75in</rdl:Height>
+              <rdl:Width>18.760000228881836in</rdl:Width>
+              <rdl:Style>
+                <rdl:Border>
+                  <rdl:Style>None</rdl:Style>
+                </rdl:Border>
+              </rdl:Style>
+            </rdl:Image>
+            <rdl:Image Name="LeftHeaderImage">
+              <rdl:Source>External</rdl:Source>
+              <rdl:Value>/ConfigMgr_OPC/Report Resources/Report_Header_Left.png</rdl:Value>
+              <rdl:Top>0.0in</rdl:Top>
+              <rdl:Left>0.0in</rdl:Left>
+              <rdl:Height>0.75in</rdl:Height>
+              <rdl:Width>0.20999999344348907in</rdl:Width>
+              <rdl:ZIndex>1</rdl:ZIndex>
+              <rdl:Style>
+                <rdl:Border>
+                  <rdl:Style>None</rdl:Style>
+                </rdl:Border>
+              </rdl:Style>
+            </rdl:Image>
+          </rdl:ReportItems>
+          <rdl:KeepTogether>true</rdl:KeepTogether>
+          <rdl:Top>0.0in</rdl:Top>
+          <rdl:Left>0in</rdl:Left>
+          <rdl:Height>0.75in</rdl:Height>
+          <rdl:Width>21.309999465942383in</rdl:Width>
+          <rdl:Style>
+            <rdl:Border>
+              <rdl:Style>None</rdl:Style>
+            </rdl:Border>
+            <rdl:BackgroundColor>#e2e9f2</rdl:BackgroundColor>
+          </rdl:Style>
+        </rdl:Rectangle>
+        <rdl:Textbox Name="ReportTitleTextbox">
+          <rdl:CanGrow>true</rdl:CanGrow>
+          <rdl:KeepTogether>true</rdl:KeepTogether>
+          <rdl:Paragraphs>
+            <rdl:Paragraph>
+              <rdl:TextRuns>
+                <rdl:TextRun>
+                  <rdl:Value>=SrsResources.Localization.GetString("Report402_Name", User!Language) + "  "</rdl:Value>
+                  <rdl:Style>
+                    <rdl:FontFamily>Segoe UI</rdl:FontFamily>
+                    <rdl:FontSize>17pt</rdl:FontSize>
+                    <rdl:FontWeight>Bold</rdl:FontWeight>
+                    <rdl:Color>Black</rdl:Color>
+                  </rdl:Style>
+                </rdl:TextRun>
+              </rdl:TextRuns>
+              <rdl:Style />
+            </rdl:Paragraph>
+          </rdl:Paragraphs>
+          <rd:DefaultName>Textbox54</rd:DefaultName>
+          
+          <rdl:Top>0.75in</rdl:Top>
+          <rdl:Left>0in</rdl:Left>
+          <rdl:Height>0.35in</rdl:Height>
+          <rdl:Width>21.309999465942383in</rdl:Width>
+          <rdl:ZIndex>1</rdl:ZIndex>
+          <rdl:Style>
+            <rdl:Border>
+              <rdl:Style>None</rdl:Style>
+            </rdl:Border>
+            <rdl:BackgroundColor>Gainsboro</rdl:BackgroundColor>
+            <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+            <rdl:PaddingRight>2pt</rdl:PaddingRight>
+            <rdl:PaddingTop>2pt</rdl:PaddingTop>
+            <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+          </rdl:Style>
+        </rdl:Textbox>
+      </rdl:ReportItems>
+      <rdl:Style>
+        <rdl:Border>
+          <rdl:Style>None</rdl:Style>
+        </rdl:Border>
+      </rdl:Style>
+    </rdl:PageHeader>
+    <rdl:PageFooter>
+      <rdl:Height>0.45in</rdl:Height>
+      <rdl:PrintOnFirstPage>true</rdl:PrintOnFirstPage>
+      <rdl:PrintOnLastPage>true</rdl:PrintOnLastPage>
+      <rdl:Style>
+        <rdl:Border>
+          <rdl:Style>None</rdl:Style>
+        </rdl:Border>
+      </rdl:Style>
+    </rdl:PageFooter>
+    <rdl:PageHeight>27.94cm</rdl:PageHeight>
+    <rdl:PageWidth>21.59cm</rdl:PageWidth>
+    <rdl:LeftMargin>2.54cm</rdl:LeftMargin>
+    <rdl:RightMargin>2.54cm</rdl:RightMargin>
+    <rdl:TopMargin>2.54cm</rdl:TopMargin>
+    <rdl:BottomMargin>2.54cm</rdl:BottomMargin>
+    <rdl:Style />
+  </rdl:Page>
+  
+  
+    <rdl:CodeModules xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
+      <rdl:CodeModule>SrsResources, culture=neutral</rdl:CodeModule>
+    </rdl:CodeModules>
+  
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportID>7157c4d6-90ea-42ff-a3e2-c1510878cf3a</rd:ReportID>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportServerUrl>http://localhost/reportserver</rd:ReportServerUrl>
+</Report>
