@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_e226ee75-0b57-4bcc-993a-a8404e3da819" Version="5" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-Configuration.mof" ResourceId="ID-496a1e14-dc0e-469b-a186-94c2e03f796b" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo&#xA;This item will validate the hash of the configuration.mof file to be able to detect any changes to it. &#xA;Run &quot;Get-FileHash -Path &quot;path to mof&quot; -Algorithm SHA256&quot;&#xA;To get the current hash for the compliance check" ResourceId="ID-17f1595b-6705-4c30-a701-e5b7fefc752e" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_4188810f-0c95-4aec-92bf-296aa86917aa" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Validate configuration.mof" ResourceId="ID-857324b1-2707-4e18-baf7-f6d1623c6d32" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the configuration.mof and detect any changes to it by comparing hash values
+# validation script
+if ($env:SMS_LOG_PATH)
+{
+
+    $configPath = "{0}{1}" -f (Split-Path -Path $env:SMS_LOG_PATH -Parent), "\inboxes\clifiles.src\hinv\configuration.mof"
+    if (Test-Path "$configPath")
+    {
+        $fileHash = Get-FileHash -Path "$configPath" -Algorithm SHA256
+        Write-Output $fileHash.Hash
+    }
+    else
+    {
+        Write-Output "Path not found: `"$configPath`""
+    }
+}
+else
+{
+    # path variable not set, looks like we are not on a site server
+}
+</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_e92ebacb-228d-4189-a936-46ca069e96e6" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Configuration.mof file hash" ResourceId="ID-b5db1460-e067-4a64-b079-bb13ee1c8740" />
+          <Description Text="Run the following script to get the current configuration.mof hash value:&#xA;$configPath = &quot;{0}{1}&quot; -f (Split-Path -Path $env:SMS_LOG_PATH -Parent), &quot;\inboxes\clifiles.src\hinv\configuration.mof&quot;&#xA;$fileHash = Get-FileHash -Path &quot;$configPath&quot; -Algorithm SHA256&#xA;Write-Output $fileHash.Hash" ResourceId="ID-9cf013c1-bbcc-427d-8c2e-1e035bcbe24a" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_e226ee75-0b57-4bcc-993a-a8404e3da819" Version="5" DataType="String" SettingLogicalName="ScriptSetting_4188810f-0c95-4aec-92bf-296aa86917aa" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="C7B1CF21EECA8705E7EDCB66035ED21BB87851A9A795F4B71E255B0A87509F76" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script># little script to validate the configuration.mof and detect any changes to it by comparing hash values
+# detection script
+if ($env:SMS_LOG_PATH)
+{
+
+    $configPath = "{0}{1}" -f (Split-Path -Path $env:SMS_LOG_PATH -Parent), "\inboxes\clifiles.src\hinv\configuration.mof"
+    if (Test-Path "$configPath")
+    {
+        Write-Output "Found path: `"$configPath`""
+    }
+    else
+    {
+        Write-Error "Path not found: `"$configPath`""
+    }
+}
+else
+{
+    # path variable not set, looks like we are not on a site server
+}</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
