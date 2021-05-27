@@ -1,0 +1,2270 @@
+﻿<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:cl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="SCCM_DB">
+      <DataSourceReference>default_reference</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>cd2a6b79-c6ce-475a-89da-77acd47082e9</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="AvailableCollections">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <CommandText>
+          select CollectionID, Name from v_BLM_AvailableCollections
+        </CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="CollectionID">
+          <DataField>CollectionID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="InventoryViewExistence">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <CommandText>
+      DECLARE @query nvarchar(70)
+          SET @query = N'SELECT COUNT(EncodedComputerName0) AS Status FROM V_GS_MBAM_POLICY'
+      BEGIN TRY
+        EXEC(@query)
+      END TRY
+      BEGIN CATCH
+        SELECT 0 AS Status
+      END CATCH
+    </CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ComplianceDetails">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@collectionIdParameter">
+            <Value>=Parameters!collectionIdParameter.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>
+          DECLARE @CICompliant int 
+          DECLARE @CINotCompliant int 
+          
+          -- Set CI compliant value 
+          SET @CICompliant = 1
+          
+          -- Set CI non compliant value 
+          SET @CINotCompliant = 2
+
+          SELECT 
+            compliance.ComplianceStatus AS ComplianceStatus,
+            compliance.ItemType AS [ItemType],
+            ComputerSys.Manufacturer0 + N' ' + ComputerSys.Model0 [Hardware],
+            CASE 
+              WHEN MBAMPolicy.MBAMPolicyEnforced0 IS NULL THEN -1 -- (when outer join returns null : N/A)
+              WHEN CompStat.ComplianceState = @CINotCompliant and MBAMPolicy.MBAMPolicyEnforced0 = 3 THEN 1 -- tmp user exempt
+              WHEN CompStat.ComplianceState = @CICompliant and MBAMPolicy.MBAMPolicyEnforced0 = 2 THEN 2 -- user exempt    
+              ELSE 0 -- not exempted
+            END AS Exemption,
+            CASE 
+              WHEN CompStat.ComplianceState = @CICompliant and MBAMPolicy.MBAMPolicyEnforced0 = 0 THEN 50 -- policy not enforced
+              WHEN CompStat.ComplianceState = @CICompliant and MBAMPolicy.MBAMPolicyEnforced0 = 1 THEN 0 -- no error
+              WHEN CompStat.ComplianceState = @CINotCompliant and MBAMPolicy.MBAMMachineError0 IS NOT NULL and MBAMPolicy.MBAMMachineError0 &lt;&gt; 0 THEN MBAMPolicy.MBAMMachineError0 -- MBAM agent error status
+              ELSE -1 -- No Details \ Errors
+            END AS [ComplianceStatusDetails]
+          FROM v_R_System_Valid RSystem
+            INNER JOIN v_FullCollectionMembership FullCollection
+              ON FullCollection.ResourceID = RSystem.ResourceID
+            INNER JOIN v_SMSCICurrentComplianceStatus CompStat
+              ON CompStat.ItemKey = RSystem.ResourceID
+            INNER JOIN v_ConfigurationItems ConfigItems
+              ON ConfigItems.ModelID = CompStat.ModelID
+            INNER JOIN (SELECT ResourceID 
+                  FROM v_R_System_Valid RSystem
+				            INNER JOIN v_SMSCICurrentComplianceStatus CompStat
+                      ON CompStat.ItemKey = RSystem.ResourceID
+				            INNER JOIN v_ConfigurationItems ConfigItems
+			                ON ConfigItems.ModelID = CompStat.ModelID
+                    WHERE (ConfigItems.CI_ID IN (select v.CI_ID from v_BLM_CI_ID_AND_COLL_ID v where v.CollectionID = @collectionIdParameter ))) DriveTypeCompStat
+              ON CompStat.ItemKey = DriveTypeCompStat.ResourceID
+            INNER JOIN v_GS_COMPUTER_SYSTEM ComputerSys
+              ON FullCollection.ResourceID = ComputerSys.ResourceID
+            LEFT OUTER JOIN v_GS_MBAM_POLICY MBAMPolicy
+              ON MBAMPolicy.ResourceID = FullCollection.ResourceID
+
+            JOIN v_BLM_ComplianceStatus compliance
+              ON compliance.CI_ID = ConfigItems.CI_ID AND compliance.ItemKey = CompStat.ItemKey
+
+      WHERE MBAMPolicy.EncodedComputerName0 IS NOT NULL
+          AND FullCollection.IsClient = 1
+          AND FullCollection.CollectionID = @collectionIdParameter
+          AND (ConfigItems.CI_ID IN (select v.CI_ID from v_BLM_CI_ID_AND_COLL_ID v where v.CollectionID = @collectionIdParameter))
+        
+		 GROUP BY MBAMPolicy.EncodedComputerName0, 
+            ConfigItems.CI_UniqueID, 
+            CompStat.ComplianceState, 
+            ComputerSys.Manufacturer0, 
+            ComputerSys.Model0, 
+            MBAMPolicy.MBAMPolicyEnforced0, 
+            MBAMPolicy.MBAMMachineError0,
+            compliance.ComplianceStatus,
+            compliance.ItemType
+		UNION ALL
+		SELECT CompStat.ComplianceState [ComplianceStatus],
+            1 AS [ItemType],
+            ComputerSys.Manufacturer0 + N' ' + ComputerSys.Model0 [Hardware],
+            CASE 
+              WHEN MBAMPolicy.MBAMPolicyEnforced0 IS NULL THEN -1 -- (when outer join returns null : N/A)
+              WHEN CompStat.ComplianceState = @CINotCompliant and MBAMPolicy.MBAMPolicyEnforced0 = 3 THEN 1 -- tmp user exempt
+              WHEN CompStat.ComplianceState = @CICompliant and MBAMPolicy.MBAMPolicyEnforced0 = 2 THEN 2 -- user exempt    
+              ELSE 0 -- not exempted
+            END AS Exemption,
+            CASE 
+              WHEN CompStat.ComplianceState = @CICompliant and MBAMPolicy.MBAMPolicyEnforced0 = 0 THEN 50 -- policy not enforced
+              WHEN CompStat.ComplianceState = @CICompliant and MBAMPolicy.MBAMPolicyEnforced0 = 1 THEN 0 -- no error
+              WHEN CompStat.ComplianceState = @CINotCompliant and MBAMPolicy.MBAMMachineError0 IS NOT NULL and MBAMPolicy.MBAMMachineError0 &lt;&gt; 0 THEN MBAMPolicy.MBAMMachineError0 -- MBAM agent error status
+              ELSE -1 -- No Details \ Errors
+            END AS [ComplianceStatusDetails]
+          FROM v_R_System_Valid RSystem
+            INNER JOIN v_FullCollectionMembership FullCollection
+              ON FullCollection.ResourceID = RSystem.ResourceID
+            INNER JOIN v_SMSCICurrentComplianceStatus CompStat
+              ON CompStat.ItemKey = RSystem.ResourceID
+	          INNER JOIN v_ConfigurationItems ConfigItems
+			        ON ConfigItems.ModelID = CompStat.ModelID
+            INNER JOIN (SELECT ResourceID 
+                  FROM v_R_System_Valid RSystem
+				            INNER JOIN v_SMSCICurrentComplianceStatus CompStat
+                      ON CompStat.ItemKey = RSystem.ResourceID
+				            INNER JOIN v_ConfigurationItems ConfigItems
+			                ON ConfigItems.ModelID = CompStat.ModelID
+                  WHERE (ConfigItems.CI_ID IN (select v.CI_ID from v_BLM_CI_ID_AND_COLL_ID v where v.CollectionID = @collectionIdParameter ))) DriveTypeCompStat
+              ON CompStat.ItemKey = DriveTypeCompStat.ResourceID
+            INNER JOIN v_GS_COMPUTER_SYSTEM ComputerSys
+              ON FullCollection.ResourceID = ComputerSys.ResourceID
+            LEFT OUTER JOIN v_GS_MBAM_POLICY MBAMPolicy
+              ON MBAMPolicy.ResourceID = FullCollection.ResourceID
+		      WHERE MBAMPolicy.EncodedComputerName0 IS NOT NULL
+            AND FullCollection.IsClient = 1
+            AND FullCollection.CollectionID = @collectionIdParameter
+            AND (ConfigItems.CI_ID IN 
+					    (select v.CI_ID from v_BLM_CI_ID_AND_COLL_ID v where v.CollectionID = @collectionIdParameter))
+          GROUP BY MBAMPolicy.EncodedComputerName0, 
+            ConfigItems.CI_UniqueID, 
+            CompStat.ComplianceState, 
+            ComputerSys.Manufacturer0, 
+            ComputerSys.Model0, 
+            MBAMPolicy.MBAMPolicyEnforced0, 
+            MBAMPolicy.MBAMMachineError0
+
+        </CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="ComplianceStatus">
+          <DataField>ComplianceStatus</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ItemType">
+          <DataField>ItemType</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Hardware">
+          <DataField>Hardware</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Exemption">
+          <DataField>Exemption</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ComplianceStatusDetails">
+          <DataField>ComplianceStatusDetails</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="DataSetAdminID">
+      <Query>
+        <DataSourceName>SCCM_DB</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@UserTokenSIDs">
+            <Value>=Parameters!UserTokenSIDs.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>select dbo.fn_rbac_GetAdminIDsfromUserSIDs(@UserTokenSIDs) as UserSIDs</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="UserSIDs">
+          <DataField>UserSIDs</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="errorViewMissingTxt">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_01", User!Language)</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>Red</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>19.25cm</Top>
+            <Left>0.19687in</Left>
+            <Height>0.29626in</Height>
+            <Width>28.75cm</Width>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") &gt; 0, True, False)</Hidden>
+            </Visibility>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Chart Name="ComplianceStatePieChart">
+            <ChartCategoryHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label />
+                </ChartMember>
+              </ChartMembers>
+            </ChartCategoryHierarchy>
+            <ChartSeriesHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Exemption</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Exemption</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Exemption</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartSeriesHierarchy>
+            <ChartData>
+              <ChartSeriesCollection>
+                <ChartSeries Name="Series1">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 1 AND CInt(Fields!Exemption.Value) &lt;= 0 AND CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 50, 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 1 AND CInt(Fields!Exemption.Value) &lt;= 0 AND CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 50, 1, 0)) / Sum(IIF(CInt(Fields!ItemType.Value) = 1, 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>1</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>10</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Green</Color>
+                        <BackgroundGradientType>LeftRight</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_02", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series2">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 2 AND CInt(Fields!Exemption.Value) = 0, 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 2 AND CInt(Fields!Exemption.Value) = 0, 1, 0)) / Sum(IIF(CInt(Fields!ItemType.Value) = 1, 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>10</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Red</Color>
+                        <BackgroundGradientType>TopBottom</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_03", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series3">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 1 AND CInt(Fields!Exemption.Value) = 2, 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 1 AND CInt(Fields!Exemption.Value) = 2, 1, 0)) / Sum(IIF(CInt(Fields!ItemType.Value) = 1, 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>5</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>10</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Blue</Color>
+                        <BackgroundGradientType>Center</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_04", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series4">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 2 AND CInt(Fields!Exemption.Value) = 1, 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 2 AND CInt(Fields!Exemption.Value) = 1, 1, 0)) / Sum(IIF(CInt(Fields!ItemType.Value) = 1, 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>4</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>10</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Yellow</Color>
+                        <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_05", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series5">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 1 AND CInt(Fields!ComplianceStatusDetails.Value) = 50, 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF(CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) = 1 AND CInt(Fields!ComplianceStatusDetails.Value) = 50, 1, 0))/ Sum(IIF(CInt(Fields!ItemType.Value) = 1, 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>6</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>10</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Gray</Color>
+                        <BackgroundGradientType>DiagonalRight</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_06", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series6">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1 AND CInt(Fields!ComplianceStatus.Value) &lt;&gt; 1) AND (CInt(Fields!ComplianceStatus.Value) &lt;&gt; 2), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) &lt;&gt; 1) AND (CInt(Fields!ComplianceStatus.Value) &lt;&gt; 2), 1, 0)) / Sum(IIF(CInt(Fields!ItemType.Value) = 1, 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>3</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>10</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Brown</Color>
+                        <BackgroundGradientType>HorizontalCenter</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_07", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+              </ChartSeriesCollection>
+            </ChartData>
+            <ChartAreas>
+              <ChartArea Name="Default">
+                <ChartCategoryAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Style>None</Style>
+                        <Width>0.75pt</Width>
+                      </Border>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <Margin>False</Margin>
+                    <Interval>1</Interval>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                      <IntervalOffset>-1</IntervalOffset>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Type>None</Type>
+                    </ChartMinorTickMarks>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <PreventFontShrink>true</PreventFontShrink>
+                    <PreventFontGrow>true</PreventFontGrow>
+                    <IncludeZero>false</IncludeZero>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartCategoryAxes>
+                <ChartValueAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Style>None</Style>
+                        <Width>0.75pt</Width>
+                      </Border>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <Margin>True</Margin>
+                    <ChartMajorGridLines>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Type>None</Type>
+                    </ChartMinorTickMarks>
+                    <Scalar>true</Scalar>
+                    <Minimum>0</Minimum>
+                    <PreventFontShrink>true</PreventFontShrink>
+                    <PreventFontGrow>true</PreventFontGrow>
+                    <IncludeZero>false</IncludeZero>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartValueAxes>
+                <ChartThreeDProperties>
+                  <ProjectionMode>Perspective</ProjectionMode>
+                  <Inclination>45</Inclination>
+                  <Shading>Simple</Shading>
+                  <WallThickness>15</WallThickness>
+                  <Clustered>true</Clustered>
+                </ChartThreeDProperties>
+                <Style>
+                  <Border>
+                    <Width>0.75pt</Width>
+                  </Border>
+                  <BackgroundColor>White</BackgroundColor>
+                </Style>
+              </ChartArea>
+            </ChartAreas>
+            <ChartLegends>
+              <ChartLegend Name="Default">
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                    <Width>0.75pt</Width>
+                  </Border>
+                </Style>
+                <Position>RightCenter</Position>
+                <Layout>Column</Layout>
+                <ChartLegendTitle>
+                  <Caption />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </ChartLegendTitle>
+                <AutoFitTextDisabled>true</AutoFitTextDisabled>
+              </ChartLegend>
+            </ChartLegends>
+            <ChartTitles>
+              <ChartTitle Name="Default">
+                <Caption>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_08", User!Language)</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <TextAlign>General</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                </Style>
+              </ChartTitle>
+            </ChartTitles>
+            <ChartBorderSkin>
+              <Style>
+                <BackgroundColor>Gray</BackgroundColor>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <Color>White</Color>
+              </Style>
+            </ChartBorderSkin>
+            <ChartNoDataMessage Name="NoDataMessageTitle">
+              <Caption>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_09", User!Language)</Caption>
+              <Style>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <TextAlign>General</TextAlign>
+                <VerticalAlign>Top</VerticalAlign>
+              </Style>
+            </ChartNoDataMessage>
+            <DataSetName>ComplianceDetails</DataSetName>
+            <Top>0.5cm</Top>
+            <Left>0.5cm</Left>
+            <Height>10cm</Height>
+            <Width>14.75cm</Width>
+            <ZIndex>1</ZIndex>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") = 0, True, False)</Hidden>
+            </Visibility>
+            <ToolTip>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_10", User!Language)</ToolTip>
+            <CustomProperties>
+              <CustomProperty>
+                <Name>__Upgraded2005__</Name>
+                <Value>__Upgraded2005__</Value>
+              </CustomProperty>
+            </CustomProperties>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <BackgroundColor>White</BackgroundColor>
+            </Style>
+          </Chart>
+          <Chart Name="ErrorPieChart">
+            <ChartCategoryHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label />
+                </ChartMember>
+              </ChartMembers>
+            </ChartCategoryHierarchy>
+            <ChartSeriesHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status Details</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartSeriesHierarchy>
+            <ChartData>
+              <ChartSeriesCollection>
+                <ChartSeries Name="Series1">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  5), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  5), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Green</Color>
+                        <BackgroundGradientType>LeftRight</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_11", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series2">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  7), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  7), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>4</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Blue</Color>
+                        <BackgroundGradientType>TopBottom</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_12", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series3">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  6), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  6), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>3</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Yellow</Color>
+                        <BackgroundGradientType>Center</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_13", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series4">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  8), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  8), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>5</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Purple</Color>
+                        <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_14", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series5">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  9), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  9), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>6</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Red</Color>
+                        <BackgroundGradientType>DiagonalRight</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_15", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series6">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  10), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  10), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>7</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Aqua</Color>
+                        <BackgroundGradientType>HorizontalCenter</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_16", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series7">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  1), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  1), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>1</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Black</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Brown</Color>
+                        <BackgroundGradientType>VerticalCenter</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_17", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series8">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  -1), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Round(100*(Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) =  -1), 1, 0)) / Sum(IIF((CInt(Fields!ItemType.Value) = 1) AND (CInt(Fields!ComplianceStatus.Value) = 2) AND (CInt(Fields!ComplianceStatusDetails.Value) &lt;&gt; 0), 1, 0)))) &amp; "%"</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>BitLocker Enterprise Compliance Details</ReportName>
+                              <Parameters>
+                                <Parameter Name="collectionIdParameter">
+                                  <Value>=Parameters!collectionIdParameter.Value</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusParameter">
+                                  <Value>2</Value>
+                                </Parameter>
+                                <Parameter Name="complianceStatusDetailsParameter">
+                                  <Value>8</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Gray</Color>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                      <ChartItemInLegend>
+                        <LegendText>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_18", User!Language)</LegendText>
+                      </ChartItemInLegend>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+              </ChartSeriesCollection>
+            </ChartData>
+            <ChartAreas>
+              <ChartArea Name="Default">
+                <ChartCategoryAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Style>None</Style>
+                        <Width>0.75pt</Width>
+                      </Border>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <Margin>False</Margin>
+                    <Interval>1</Interval>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                      <IntervalOffset>-1</IntervalOffset>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Type>None</Type>
+                    </ChartMinorTickMarks>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <PreventFontShrink>true</PreventFontShrink>
+                    <PreventFontGrow>true</PreventFontGrow>
+                    <IncludeZero>false</IncludeZero>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartCategoryAxes>
+                <ChartValueAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Style>None</Style>
+                        <Width>0.75pt</Width>
+                      </Border>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <Margin>True</Margin>
+                    <ChartMajorGridLines>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Type>None</Type>
+                    </ChartMinorTickMarks>
+                    <Scalar>true</Scalar>
+                    <Minimum>0</Minimum>
+                    <PreventFontShrink>true</PreventFontShrink>
+                    <PreventFontGrow>true</PreventFontGrow>
+                    <IncludeZero>false</IncludeZero>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartValueAxes>
+                <ChartThreeDProperties>
+                  <ProjectionMode>Perspective</ProjectionMode>
+                  <Rotation>0</Rotation>
+                  <Inclination>45</Inclination>
+                  <Shading>None</Shading>
+                  <WallThickness>15</WallThickness>
+                  <Clustered>true</Clustered>
+                </ChartThreeDProperties>
+                <Style>
+                  <Border>
+                    <Width>0.75pt</Width>
+                  </Border>
+                  <BackgroundColor>White</BackgroundColor>
+                </Style>
+              </ChartArea>
+            </ChartAreas>
+            <ChartLegends>
+              <ChartLegend Name="Default">
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                    <Width>0.75pt</Width>
+                  </Border>
+                </Style>
+                <Position>RightCenter</Position>
+                <Layout>Column</Layout>
+                <ChartLegendTitle>
+                  <Caption />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </ChartLegendTitle>
+                <AutoFitTextDisabled>true</AutoFitTextDisabled>
+              </ChartLegend>
+            </ChartLegends>
+            <ChartTitles>
+              <ChartTitle Name="Default">
+                <Caption>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_19", User!Language)</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <TextAlign>General</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                </Style>
+              </ChartTitle>
+            </ChartTitles>
+            <ChartBorderSkin>
+              <Style>
+                <BackgroundColor>Gray</BackgroundColor>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <Color>White</Color>
+              </Style>
+            </ChartBorderSkin>
+            <ChartNoDataMessage Name="NoDataMessageTitle">
+              <Caption>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_20", User!Language)</Caption>
+              <Style>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <TextAlign>General</TextAlign>
+                <VerticalAlign>Top</VerticalAlign>
+              </Style>
+            </ChartNoDataMessage>
+            <DataSetName>ComplianceDetails</DataSetName>
+            <Top>0.5cm</Top>
+            <Left>15.5cm</Left>
+            <Height>10cm</Height>
+            <Width>20.5cm</Width>
+            <ZIndex>2</ZIndex>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") = 0, True, False)</Hidden>
+            </Visibility>
+            <ToolTip>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_21", User!Language)</ToolTip>
+            <CustomProperties>
+              <CustomProperty>
+                <Name>__Upgraded2005__</Name>
+                <Value>__Upgraded2005__</Value>
+              </CustomProperty>
+            </CustomProperties>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <BackgroundColor>White</BackgroundColor>
+            </Style>
+          </Chart>
+          <Chart Name="complianceByDriveColumnChart">
+            <ChartCategoryHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Group Name="complianceByDriveColumnChart_CategoryGroup1">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!ItemType.Value</GroupExpression>
+                    </GroupExpressions>
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=Fields!ItemType.Value</FilterExpression>
+                        <Operator>NotEqual</Operator>
+                        <FilterValues>
+                          <FilterValue>=CInt("1")</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
+                  <Label>=IIF(Fields!ItemType.Value = 2, SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_Operating_System_Drive", User!Language), SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_Fixed_Data_Drive", User!Language))</Label>
+                  <DataElementOutput>Output</DataElementOutput>
+                </ChartMember>
+              </ChartMembers>
+            </ChartCategoryHierarchy>
+            <ChartSeriesHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label>Compliance Status</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Exemption</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Compliance Status</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartSeriesHierarchy>
+            <ChartData>
+              <ChartSeriesCollection>
+                <ChartSeries Name="Series1">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF(CInt(Fields!ComplianceStatus.Value) = 1, 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Sum(IIF(CInt(Fields!ComplianceStatus.Value) = 1, 1, 0))</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <Style>
+                        <Border>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Green</Color>
+                        <BackgroundGradientType>LeftRight</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <CustomProperties>
+                    <CustomProperty>
+                      <Name>PointWidth</Name>
+                      <Value>0.6</Value>
+                    </CustomProperty>
+                  </CustomProperties>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series2">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF(CInt(Fields!ComplianceStatus.Value) = 2 AND CInt(Fields!Exemption.Value) = 0, 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Sum(IIF(CInt(Fields!ComplianceStatus.Value) = 2 AND CInt(Fields!Exemption.Value) = 0, 1, 0))</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <Style>
+                        <Border>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Red</Color>
+                        <BackgroundGradientType>TopBottom</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <CustomProperties>
+                    <CustomProperty>
+                      <Name>PointWidth</Name>
+                      <Value>0.6</Value>
+                    </CustomProperty>
+                  </CustomProperties>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Series3">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(IIF((CInt(Fields!ComplianceStatus.Value) &lt;&gt; 1) AND (CInt(Fields!ComplianceStatus.Value) &lt;&gt; 2), 1, 0))</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                        <Label>=Sum(IIF((CInt(Fields!ComplianceStatus.Value) &lt;&gt; 1) AND (CInt(Fields!ComplianceStatus.Value) &lt;&gt; 2), 1, 0))</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <Style>
+                        <Border>
+                          <Width>0.376pt</Width>
+                        </Border>
+                        <Color>Brown</Color>
+                        <BackgroundGradientType>Center</BackgroundGradientType>
+                        <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      </Style>
+                      <ChartMarker>
+                        <Size>6pt</Size>
+                        <Style />
+                      </ChartMarker>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <CustomProperties>
+                    <CustomProperty>
+                      <Name>PointWidth</Name>
+                      <Value>0.6</Value>
+                    </CustomProperty>
+                  </CustomProperties>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+              </ChartSeriesCollection>
+            </ChartData>
+            <ChartAreas>
+              <ChartArea Name="Default">
+                <ChartCategoryAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Style>None</Style>
+                        <Width>0.75pt</Width>
+                      </Border>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <Margin>False</Margin>
+                    <Interval>1</Interval>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                      <IntervalOffset>-1</IntervalOffset>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Type>None</Type>
+                    </ChartMinorTickMarks>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <PreventFontShrink>true</PreventFontShrink>
+                    <PreventFontGrow>true</PreventFontGrow>
+                    <IncludeZero>false</IncludeZero>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartCategoryAxes>
+                <ChartValueAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Style>None</Style>
+                        <Width>0.75pt</Width>
+                      </Border>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <Margin>True</Margin>
+                    <ChartMajorGridLines>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Enabled>True</Enabled>
+                      <Type>Inside</Type>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.75pt</Width>
+                        </Border>
+                      </Style>
+                      <Interval>NaN</Interval>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Type>None</Type>
+                    </ChartMinorTickMarks>
+                    <Scalar>true</Scalar>
+                    <Minimum>0</Minimum>
+                    <PreventFontShrink>true</PreventFontShrink>
+                    <PreventFontGrow>true</PreventFontGrow>
+                    <IncludeZero>false</IncludeZero>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartValueAxes>
+                <ChartThreeDProperties>
+                  <ProjectionMode>Perspective</ProjectionMode>
+                  <Perspective>22</Perspective>
+                  <Rotation>5</Rotation>
+                  <Inclination>0</Inclination>
+                  <Shading>Simple</Shading>
+                  <WallThickness>10</WallThickness>
+                  <Clustered>true</Clustered>
+                </ChartThreeDProperties>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                    <Width>0.75pt</Width>
+                  </Border>
+                  <BackgroundColor>LightCyan</BackgroundColor>
+                </Style>
+              </ChartArea>
+            </ChartAreas>
+            <ChartLegends>
+              <ChartLegend Name="Default">
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                    <Width>0.75pt</Width>
+                  </Border>
+                </Style>
+                <Position>RightCenter</Position>
+                <Layout>Column</Layout>
+                <ChartLegendTitle>
+                  <Caption />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </ChartLegendTitle>
+                <AutoFitTextDisabled>true</AutoFitTextDisabled>
+              </ChartLegend>
+            </ChartLegends>
+            <ChartTitles>
+              <ChartTitle Name="Default">
+                <Caption>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_23", User!Language)</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <TextAlign>General</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                </Style>
+              </ChartTitle>
+            </ChartTitles>
+            <ChartBorderSkin>
+              <Style>
+                <BackgroundColor>Gray</BackgroundColor>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <Color>White</Color>
+              </Style>
+            </ChartBorderSkin>
+            <ChartNoDataMessage Name="NoDataMessageTitle">
+              <Caption>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_24", User!Language)</Caption>
+              <Style>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <TextAlign>General</TextAlign>
+                <VerticalAlign>Top</VerticalAlign>
+              </Style>
+            </ChartNoDataMessage>
+            <DataSetName>ComplianceDetails</DataSetName>
+            <Top>10.75cm</Top>
+            <Left>0.5cm</Left>
+            <Height>8.25cm</Height>
+            <Width>14.75cm</Width>
+            <ZIndex>3</ZIndex>
+            <Visibility>
+              <Hidden>=IIf(Sum(Fields!Status.Value, "InventoryViewExistence") = 0, True, False)</Hidden>
+            </Visibility>
+            <ToolTip>=SrsResources.Localization.GetString("Bitlocker_Enterprise_Compliance_Dashboard_25", User!Language)</ToolTip>
+            <CustomProperties>
+              <CustomProperty>
+                <Name>__Upgraded2005__</Name>
+                <Value>__Upgraded2005__</Value>
+              </CustomProperty>
+            </CustomProperties>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <BackgroundColor>White</BackgroundColor>
+            </Style>
+          </Chart>
+        </ReportItems>
+        <Height>7.875in</Height>
+        <Style />
+      </Body>
+      <Width>14.37187in</Width>
+      <Page>
+        <PageHeight>29.7cm</PageHeight>
+        <PageWidth>21cm</PageWidth>
+        <InteractiveHeight>11in</InteractiveHeight>
+        <InteractiveWidth>8.5in</InteractiveWidth>
+        <LeftMargin>2.5cm</LeftMargin>
+        <RightMargin>2.5cm</RightMargin>
+        <TopMargin>2.5cm</TopMargin>
+        <BottomMargin>2.5cm</BottomMargin>
+        <ColumnSpacing>1cm</ColumnSpacing>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="UserTokenSIDs">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=SrsResources.UserIdentity.GetUserSIDs(User!UserID)</Value>
+        </Values>
+      </DefaultValue>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="UserSIDs">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>DataSetAdminID</DataSetName>
+          <ValueField>UserSIDs</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="collectionIdParameter">
+      <DataType>String</DataType>
+      <Prompt>Collection ID</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>AvailableCollections</DataSetName>
+          <ValueField>CollectionID</ValueField>
+          <LabelField>Name</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
+  <EmbeddedImages>
+    <EmbeddedImage Name="icon_report">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAAC4AAAAsCAYAAAAacYo8AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNAay06AAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTEvMDcvMDd3s0FQAAAKmklEQVRYha2ZWYxlVRWGv7X2udV1q7q7CmmayFQioiGmVVqcutUQE30wPqmIEoIaTD8gCd1pNR1eIYbn8sk4oTghStQoYpw6GiVtCLaJ+gBoByccQKuotoZ76+zfhz2cc6saQkKdm3PPPsPd599r/+vfa61rknD3ZmZm9kWhaVxRtNoUQSAE9ZCaWzbrffeu2cQ12/acTT4/+ftneUdcXVtdGm+MxwAmicsuW3jvwYNX31cevP6jH/jlwmsueWJzNJ6ScIEDDjJqO+0GjlkwzAwr1y3dMzfMBZaxG7mt7jxfkvUNUY2VDjYzOzNc/u0zlwOsrKzc3qS78fX9Ec7OzcwN54ez7Whq2rCGBCiYWQCCQeiDVw9sNoaBHECSKYGyck/IIjHjFDFdyzhlSkflewB68KFTC284dCkAex7Z88nm6LHjJx548Mcf29hY53Of+TS//MWv+MPZP7zyt38//UrfdNwcxzEMt3QMFrK5HLPnnuZksmRBIagMzN/KdxSJ+QyQUjtKiguzC9Nbe21iO+beb9z7u5Xl5QO/PnWK2LZgspaYOxSRiJsTlY6S8iCE6dmB93yjtqVq2WxNbfsgiETl9/c66d7VLC4u3nXeeeddcflLLj8gRLOroY2pQ5S5ZpMvri8oDO05lxC2xcJly/QowGqfpZ2fl6RicSXKnAM4wNzeObvk0ks6aygSFUFgZjidtesLc3d+Drr0KTFh9f6gt9q6dy8SM18SXbqRW+2tATC32LELoloisVqyglbsBkLEZLS0OF77tr4icO6Z2kqLc4HvW71v8WKi
+BmB5eXncd4s2xgrcZHUABWAkZm22CsrMJkD3qVkocs5BPFu7o0q1eBKrDPzoseMnfvKznx9ZXV3lq/fczU9/cpLXck2yLlYVRRKttbi8AnS8DqA/wD7ICcAZThlM31G3UKXMdHa2PJutVZo3sR1zxx13nFpfXzv8xJk/Jn5ni5OUrANZeG2p/acnz7C2tp46fS5ZrAC3fz9zdoXXHrh6K4UkdcPpuklKBllVZmaGL7vyypcfbpqGJjSsjzYwVK1uec12vFrEMFbX1vjYoY8/O+Dnsd16360TkKOitoLvkGe6kDk+HM7ooosuqlM3Ho8Y0ICgpSVYSCrTo4WbVwoc3P3qFwS+GCMmOpfVdZsqbZNDSZVOAjbbMQ0hUUQ+Ad4tO2iWy53YorZresY1ATw8GgBYXl5OsUpwDyIiDKSyZtWOKnhCokmWRO0Q8j7Y7pBiGmUz7zsY/nLt/msvK79pjh47fuIHP/rpTU8/9W++ff83eeDb3+eluoLCLocU9oikKngdyE6ZvK8qRbGiopUBPPSfh546sPeATp48WV54exPbMR+4/rrvTg0G71leWkISYzYIJswCgZA1JSQnzUrjhB0BPQG+05QUSSLPbRexBU4BTwGfbBYXF+/as3v35xYWXsLceXMgGPkam+EseIpWXY4p4DENoOzrcWOHUKvIqUkSRo3DMcyE5zViL7AJ2TkHU1PthRdemCmRdpnAIshoLQJtfkkOrQUj1ncE99m1DWrEVlZHGSY3ZNa2wdvQjIGpvCfgm5ubMSKI2UXyRE1mWtkqdS2bXClfyLY6XqfESabk+kQzZGbRLbayjfF4E4h5T8AvvvjivVUOVeYoi2OZNjMkMOs75A7pYYg1rjdhKMrcIBq4HOSEqAw6UeXoseMn7r3v/vefPXuWL3/pC3zrG/dzKS/OoDuyFZMIy70bq8+sc+t9t74gzM2g6WZXScFMxTxmhrsUPVqbZSH/LrZj3nz4jV+ZGQ5vvOaa1+Hu
+9W6RpzyHKfXscgwuu3o/yLHCr7KyRcv5L921uupZ7/l0lCK1FJBnF2HmLimaQmt4FDAg5bv44uLiXUij+fl5Hn/8MeZetHfSJDkFtozFDdwNz8u/G5gbbtY9Eyw/l/Z0XSnltmQEWewEwCN4m49CHk0mk7cub5FFl0Vl0APIHA8htPv27aME9mWS+jF3kqsSneViRLVo75n+eZm5Ungo0WaeQFlZ2ouNhMpMBSwpCy6iR4stSdo651xbW9uUYlHCLJ4lbbAJGGaeM5EEXpaQVcUpR7f0iqQRxOwyKeko78k/qWFP5mEtrhiSGURC47vS3CfndIAjR45cp9gFNW5piUkRiWPmBHOChXTPPflCLl0ES1Rxd9yM4EYgnZtbplg+enk2DdYNLICH5EJm5BJSppO3Jm818MFwND26AngT8Knm6LHjJz5885H5666/gXu++Hm+863vcJVelmaqc6dqBOvNAbkuVUOBkspRlb9zFMvnOccs1heO5TJFNMPUKReSSShaa7Ype8cb3zGpKgdfc+CLu2dnbzZ3hlMzmLr013ov74PvsPcXoS3KUOQnUyONTTUZKCu1spG8ukJ6JtFQDkJOe/r0aQEsLS3dbpKYm5v77P4L9t9cosBr73wzu97qaH0SbknP+qw/Zz2ox9+6DHThaj0vEagytyNlIJMR4yiOeP3MocdfdebVDpwG3p1rh8S5+bncoZLFNajBTwWqxNMCfWJF6CPur1vZGCoTUEDlX5eqoWRYgt57JiflDp4mpShLUpWVlZVxVwxKztlYSF0Xxaj83kKRCfS9EKBIXQVfUoJCgwI4Vk5LjixZPrVzdisDtxKntJBpdcstt7xPJfORcAJBDYFubwiprQGBwZZ73SdosOW3+duarEpZmSwkpfJQVcnMsoKVonUuuqb7ZQGaAghLyysnbrjxpncdOvwW+/vf/srvH/kdV73zKqYXpvHNLv4ONtkOWSqdkNoWqnw6IRdFvXfN6rf1gBZV
+cstrRKGiFVqCaLlocOk/L3j6whlgBbiiie2Ytxx6w+enh9MfQcb01DROoGGAcsnNSPFIdU5ZFZDtm3qtrsRTztySBKqyuBQ8HSPmb+U8FIzIZhpsIeUs5FhlODPDvvP3cf6+85ndO0uQ06ihYUCjQUeDbdQYpN0GvfuDHkXKU4Veg4k+QiGShUSjfCWUBY9Q75nVbGZYnTPGGHfv2QOCSMkwmxoddp9tAcDWqCRZ1jp7l5ZXy3Yl5a72G3MNPutKDimiRSQr2S7AxgTwpmmCYufllSql8Jnrh1VVbCv8SZpIRVVUBW6yxBMz5IjnM8/XoE0xkBJpokWchkGY2gWsAnsAmttuO/rg9x744duWl5f5+lfv4eGHH8aqxSPgeJbEAtOfg+N5wa6LivcWl+7T5lJ1W40Te2IbiVX/SQiY3jWtDHwOoJHiyZtuvOF/oHevra4SRxGPTojZOUkKUCNCkveXDK6fJPVpQm9FLE5ItbZnwI5oM+wu4jRFYknOAZNjcs3Pzx9eWloCOGKSGA6Hd++amvrgaDRiejDkzq/d+Y8Dbz/w5Hht3JhZUdVMmY4q/XYXkPWTva1/RqU6GUgxrXhK/z4opv98oiIxKt2PMZ+3avWKuVf8+ft3/+Bnn/jQJ75UOY7ZY9PTwzNmFjDx70f/dWbpgv8+OdoYNRhFUQtZKmkK1N5ZFxAm0SwreKxl8XzeO0ZSfSG3JbB8ruQI5ptP7PpL+5vTj/yreyvsBxbcfR/U3MHdPPRJwMTJ88/ud6CEYcBI6J/tZvuopJVycQBMww7X1J4foOe7RWAEbChl1vwfVP+tNXjrRUsAAAAASUVORK5CYII=</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <Language>=User!Language</Language>
+  <CodeModules>
+    <CodeModule>SrsResources, culture=neutral</CodeModule>
+  </CodeModules>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>A72F6F32-7438-46DF-A7FF-E1C2508D32CE</rd:ReportID>
+</Report>
