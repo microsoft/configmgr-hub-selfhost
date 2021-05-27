@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_CC69155D-EE29-4079-A2A6-76186993F74D" LogicalName="Application_dd70c17d-4b49-458a-ba4a-69df5d2639e1" Version="1">
+  <Application AuthoringScopeId="ScopeId_CC69155D-EE29-4079-A2A6-76186993F74D" LogicalName="Application_dd70c17d-4b49-458a-ba4a-69df5d2639e1" Version="2">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>2103_2106_app_curated</Title>
@@ -9,7 +9,7 @@
       </Info>
     </DisplayInfo>
     <Title ResourceId="Res_550959267">2103_2106_app_curated</Title>
-    <Description ResourceId="Res_1522671437" />
+    <Description ResourceId="Res_1522671437">Push update</Description>
     <Publisher ResourceId="Res_204933438" />
     <SoftwareVersion ResourceId="Res_112238169" />
     <CustomId ResourceId="Res_1147192626" />
