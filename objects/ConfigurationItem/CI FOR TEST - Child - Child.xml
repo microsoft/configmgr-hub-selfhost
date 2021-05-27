@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_90D3628E-2D0E-4F66-AD7A-29EA75E41453" LogicalName="OperatingSystem_5a886fec-c4d4-4f59-a7ed-cea55107931e" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI FOR TEST - Child - Child" ResourceId="ID-87ee5422-89ed-4846-bc80-170f5e90430c" />
+      <Description Text="Child test+child test" ResourceId="ID-cc72e5b4-460c-4786-b2a1-5567743c4bc7" />
+    </Annotation>
+    <BaseReference AuthoringScopeId="ScopeId_90D3628E-2D0E-4F66-AD7A-29EA75E41453" LogicalName="OperatingSystem_0acbe37b-cb97-4d25-8f02-62b432e4fb2e" />
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
