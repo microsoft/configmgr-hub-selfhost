@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_19a2f5f5-4c53-41c7-b1bf-c9cc04801054" Version="7" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-DefaultClientSetting-HINV-Classes" ResourceId="ID-e9167d1a-157d-4265-a4a2-36a4b844b377" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo&#xA;This item can be used to validate the active hardware Inventory (HINV) classes of any client setting." ResourceId="ID-b60e76aa-7a8a-4d6c-a2ee-2e1eaac2ae93" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_792081b3-ab6d-4acd-8f0a-9f33aa3831f8" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Validate Default Client Setting HINV Classes" ResourceId="ID-e750c2a4-bf61-474b-aec4-cb4d9536bb08" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">
+
+#region Parameters
+[CmdletBinding()]
+param
+(
+    [Parameter(Mandatory=$false)]
+    [string]$ClientSettingsName = 'Default Client Setting',
+    [Parameter(Mandatory=$false)]
+    [string]$ProviderMachineName = $env:COMPUTERNAME,
+    [Parameter(Mandatory=$false)]
+    [string]$SiteCode,
+    [Parameter(Mandatory=$false)]
+    [switch]$ForceWSMANConnection,
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("ShowData", "ExportAsCSV", "CreateScript","CompareData")]
+    [string]$OutputMode = 'CompareData'
+)
+#endregion
+
+
+#region Initializing
+$scriptPathAndName = ($MyInvocation.MyCommand.Source)
+$scriptName = ($MyInvocation.MyCommand.Name)
+
+# removing invalid filename characters and spaces from client setting name to be able to use the name as a filename
+[System.IO.Path]::GetInvalidFileNameChars() | ForEach-Object {
+
+    $ClientSettingsNameClean = $ClientSettingsName -replace "\$_",''
+}
+$ClientSettingsNameClean = $ClientSettingsNameClean -replace " ","-"
+#endregion
+
+
+#region Reference data
+$referenceData = @{}
+$referenceData.add("System Devices;CompatibleIDs","1")
+$referenceData.add("Desktop Monitor;DisplayType","1")
+$referenceData.add("Desktop Monitor;MonitorManufacturer","1")
+$referenceData.add("Desktop Monitor;MonitorType","1")
+$referenceData.add("Desktop Monitor;Name","1")
+$referenceData.add("Desktop Monitor;PixelsPerXLogicalInch","1")
+$referenceData.add("Physical Memory;Model","1")
+$referenceData.add("Network Client;Status","1")
+Write-Verbose "$($referenceData.count) reference data entries"
+#endregion
+
+
+#region CIMSession settings
+if (-NOT ($ForceWSMANConnection))
+{
+    $cimSessionOption = New-CimSessionOption -Protocol Dcom
+    $cimSession = New-CimSession -ComputerName $ProviderMachineName -SessionOption $cimSessionOption
+    Write-Verbose "Using DCOM for CimSession"
+}
+else 
+{
+    $cimSession = New-CimSession -ComputerName $ProviderMachineName
+    Write-Verbose "Using WSMAN for CimSession"
+}
+#endregion
+
+
+#region Get ConfigMgr sitecode
+if (-NOT($siteCode))
+{
+    # getting sitecode
+    $siteCode = Get-CimInstance -CimSession $cimSession -Namespace root\sms -Query 'Select SiteCode From SMS_ProviderLocation Where ProviderForLocalSite=1' -ErrorAction Stop | Select-Object -ExpandProperty SiteCode -First 1
+}
+
+if (-NOT($siteCode))
+{
+    # stopping script, no sitecode means script cannot run
+    $cimSession | Remove-CimSession -ErrorAction SilentlyContinue
+    exit 1
+}
+Write-Verbose "$($siteCode) detected sitecode"
+#endregion
+
+
+#region Get client settings with hardware inventory data
+# getting client settings with HINV data and extracting InventoryReportID
+[array]$SMSClientSettings = Get-CimInstance -CimSession $cimSession -Namespace "root\sms\site_$siteCode" -Query "SELECT * FROM SMS_ClientSettings where Type = 1 and Name = '$($ClientSettingsName)'"
+
+Write-Verbose "$($SMSClientSettings.count) client setting/s found"
+$SMSClientSettingsWithHINVData = @{}
+# Adding default entries to the list
+$SMSClientSettingsWithHINVData.Add('{00000000-0000-0000-0000-000000000001}', 'Default Client Setting')
+$SMSClientSettingsWithHINVData.Add('{00000000-0000-0000-0000-000000000003}', 'Heartbeat')
+
+foreach ($clientSetting in $SMSClientSettings)
+{
+    # loading lazy properties to get HINV data
+    $clientSetting = $clientSetting | Get-CimInstance 
+    $HINVInventoryData = $clientSetting.AgentConfigurations | Where-Object {$_.AgentID -eq 15}
+    if ($HINVInventoryData)
+    {
+        $SMSClientSettingsWithHINVData.Add($HINVInventoryData.InventoryReportID,$clientSetting.Name)
+    }
+}
+Write-Verbose "$($SMSClientSettingsWithHINVData.count) client settings with hardware inventory settings found"
+
+
+# select client setting inventory report ID
+foreach($clientSettingKey in $SMSClientSettingsWithHINVData.keys)
+{
+    if ($SMSClientSettingsWithHINVData[$clientSettingKey] -eq $ClientSettingsName)
+    {
+        $clientsettingInventoryReportID = $clientSettingKey
+    }
+}
+
+if (-NOT($clientsettingInventoryReportID))
+{
+    Write-Output "No client setting with hardware inventory data found with name: `"$ClientSettingsName`""
+    exit
+}
+Write-Verbose "$($clientsettingInventoryReportID) selected report ID"
+#endregion
+
+
+#region Get all possible inventory classes for "show" or "export" mode
+#$completeSMSInventoryClassesArrayList = New-Object system.collections.arraylist
+[array]$SMSInventoryClasses = Get-CimInstance -CimSession $cimSession -Namespace "root\sms\site_$siteCode" -Query "SELECT * FROM SMS_InventoryClass"
+
+# normalize object for comparison
+$SMSInventoryClassesArrayList = New-Object system.collections.arraylist
+foreach ($InventoryClass in $SMSInventoryClasses)
+{
+
+    $InventoryClassExpanded = $InventoryClass | Select-Object -Property ClassName, Namespace, SMSClassID, SMSGroupName -ExpandProperty Properties
+    foreach ($expandedItem in $InventoryClassExpanded)
+    {
+        
+        $propertiesList = @('ClassName','ClassType','Namespace','SMSClassID','SMSGroupName','IsKey','PropertyName','SMSDeviceUri','Type','Units','Width' )
+        $tmpObj2 = New-Object pscustomobject | Select-Object -Property $propertiesList
+    
+        foreach ($property in $propertiesList)
+        {
+
+            $tmpObj2."$property" = $expandedItem."$property"
+        }
+    
+        if ($expandedItem.SMSClassID -ilike 'Microsoft*')
+        {
+            $tmpObj2.ClassType = 'Default'
+        }
+        else
+        {
+            $tmpObj2.ClassType = 'Custom'    
+        }
+
+        [void]$SMSInventoryClassesArrayList.Add($tmpObj2)
+    }
+}
+
+Write-Verbose "$($SMSInventoryClassesArrayList.count) total HINV classes found"
+
+# for faster searches
+$SMSInventoryClassesArrayUniqueList = $SMSInventoryClassesArrayList | Select-Object -Property SMSClassID, ClassName, ClassType, Namespace, SMSGroupName -Unique
+
+Write-Verbose "$($SMSInventoryClassesArrayUniqueList.count) unique total HINV classes"
+#endregion
+
+
+#region Get classes of selected client setting
+[array]$SMSInventoryReports = Get-CimInstance -CimSession $cimSession -Namespace "root\sms\site_$siteCode" -Query "SELECT * FROM SMS_InventoryReport where InventoryReportID = '$($clientsettingInventoryReportID)'"
+
+Write-Verbose "$($SMSInventoryReports.count) class info for client setting"
+$SMSInventoryReportsArrayList = New-Object system.collections.arraylist
+$propertiesList = @('clientSettingsName','SMSGroupName','PropertyName','ClassType','ClassName','SMSClassID','Namespace','InventoryReportID')
+foreach ($inventoryReport in $SMSInventoryReports)
+{
+    $inventoryReport = $inventoryReport | Get-CimInstance
+
+    foreach ($inventoryReportClass in $inventoryReport.ReportClasses)
+    {
+        foreach ($PropertyName in $inventoryReportClass.ReportProperties)
+        {
+            
+            $inventoryReportID = $inventoryReport.InventoryReportID
+            $clientSettingsName = $SMSClientSettingsWithHINVData[$inventoryReportID]
+
+            $tmpObj3 = New-Object pscustomobject | Select-Object -Property $propertiesList   
+            $tmpObj3.clientSettingsName = $clientSettingsName
+            $tmpObj3.InventoryReportID = $inventoryReportID
+            $tmpObj3.SMSClassID = $inventoryReportClass.SMSClassID
+            $tmpObj3.PropertyName = $PropertyName
+
+            # adding additional Info to the object
+            $classInfo = $SMSInventoryClassesArrayUniqueList.Where({$_.SMSClassID -eq $tmpObj3.SMSClassID})
+
+            $tmpObj3.ClassName = $classInfo.ClassName
+            $tmpObj3.Namespace = $classInfo.Namespace
+            $tmpObj3.SMSGroupName = $classInfo.SMSGroupName
+            
+
+            if ($inventoryReportClass.SMSClassID -ieq 'System' -or $inventoryReportClass.SMSClassID -ieq 'MIFGroup')
+            {
+                $tmpObj3.ClassType = 'Default'
+                #ignoring default MIF data
+            }
+            else
+            {
+                $tmpObj3.ClassType = $classInfo.ClassType
+                
+                [void]$SMSInventoryReportsArrayList.Add($tmpObj3)   
+            }
+
+        }    
+    }
+}
+if ($cimSession){$cimSession | Remove-CimSession -ErrorAction SilentlyContinue}
+Write-Verbose "$($SMSInventoryReportsArrayList.count) HINV items of client setting"
+#endregion
+
+
+#region Show data
+# reducing object data to minimun to be able to compare data
+$propertiesList = @('SMSGroupName','PropertyName')
+$exportObj = $SMSInventoryReportsArrayList | Select-Object -Property $propertiesList
+
+# show data
+if ($OutputMode -eq "ShowData")
+{
+    $SMSInventoryClassesArrayList | Out-GridView -Title 'All available HINV classes'
+    $SMSInventoryReportsArrayList | Out-GridView -Title "HINV Inventory Items in client setting: `"$($ClientSettingsName)`""
+}
+#endregion
+
+
+#region Export data as csv
+if ($OutputMode -eq "ExportAsCSV")
+{
+    $exportPathAndNameAll = "{0}\{1}-All-Available-HINV-Classes.csv" -f (Split-Path $scriptPathAndName -Parent), ($scriptName -replace ".ps1","")
+    $SMSInventoryClassesArrayList | Export-Csv -Path $exportPathAndNameAll -NoTypeInformation -Delimiter ';' -Force
+
+    $exportPathAndNamePerSetting = "{0}\{1}-{2}-HINV-Classes.csv" -f (Split-Path $scriptPathAndName -Parent), ($scriptName -replace ".ps1",""), $ClientSettingsNameClean
+    $SMSInventoryReportsArrayList | Export-Csv -Path $exportPathAndNamePerSetting -NoTypeInformation -Delimiter ';' -Force
+}
+#endregion
+
+
+#region Create new script file
+# creating new script for current HINV client setting settings 
+if ($OutputMode -eq "CreateScript")
+{
+    # create new script file first
+    # name like: Compare-HINVClasses_Default-Client-Setting_20210411-1138.ps1
+    $newScriptName = "{0}_{1}_{2}.ps1" -f ($scriptName -replace ".ps1",""), $ClientSettingsNameClean ,(Get-Date -Format 'yyyyMMdd-hhmm')
+    $newFile = New-Item -Path (Split-Path $scriptPathAndName -Parent) -Name $newScriptName -ItemType File -Force
+
+    # reading existing script and replacing classes for comparison
+    $i = 0
+    $referenceDataReplaced = $false
+    foreach ($scriptLine in (Get-Content -Path $scriptPathAndName))
+    {
+        # replacing parameter value to be able to use the script in a ConfigMgr config item
+        if ($scriptLine -match '\[string\]\$ClientSettingsName \=')
+        {
+            $parameterString = "{0}{1}{2}" -f '    [string]$ClientSettingsName = "', $ClientSettingsName, '",'
+            $parameterString | Out-File -FilePath ($newFile.FullName) -Append -Encoding utf8
+            $i++
+        }
+        elseif ($scriptLine -match '\$referenceData.add\(')
+        {
+            if (-NOT($referenceDataReplaced))
+            {
+                $referenceDataReplaced = $true
+                # replacing data for comparison
+                $exportObj | Sort-Object | ForEach-Object {
+                    # output will look like this: 
+                    # $referenceData.add("Processor;NumberOfLogicalProcessors","1")
+                    $outputString = "{0}(`"{1};{2}`",`"1`")" -f '$referenceData.add', ($_.SMSGroupName), ($_.PropertyName)
+                    $outputString | Out-File -FilePath ($newFile.FullName) -Append -Encoding utf8
+                }              
+            }
+            $i++
+        }
+        else
+        {
+            if ($i -eq 0)
+            {
+                # starting file
+                $scriptLine | Out-File -FilePath ($newFile.FullName) -Force -Encoding utf8
+            }
+            else
+            {
+                $scriptLine | Out-File -FilePath ($newFile.FullName) -Append -Encoding utf8
+            }            
+            $i++
+        }
+   
+    } 
+
+}
+#endregion
+
+
+#region Compare data for compliance checks
+if ($OutputMode -eq "CompareData")
+{
+    # had some issues with compare-object. Using hashtables instead. 
+    $compareResultArrayList = New-Object system.collections.arraylist
+    $differenceData = @{}
+    $exportObj | ForEach-Object {
+
+        $outputString = "{0};{1}" -f ($_.SMSGroupName), ($_.PropertyName)
+        $differenceData.Add($outputString,"1")
+        # Test if the settings has been added
+        if (-NOT ($referenceData[$outputString]))
+        {
+            $tmpObj = New-Object pscustomobject | Select-Object SMSGroupName, PropertyName, Action
+            $tmpArray = $outputString -split ';'
+            $tmpObj.SMSGroupName = $tmpArray[0]
+            $tmpObj.PropertyName = $tmpArray[1]
+            $tmpObj.Action = 'Added'
+            [void]$compareResultArrayList.Add($tmpObj)
+        }
+    }
+    
+    # Test the other way around to see if any settings have been removed
+    $referenceData.GetEnumerator() | ForEach-Object {
+    
+        if (-NOT ($differenceData[$_.Key]))
+        {
+            $tmpObj = New-Object pscustomobject | Select-Object SMSGroupName, PropertyName, Action
+            $tmpArray = $_.Key -split ';'
+            $tmpObj.SMSGroupName = $tmpArray[0]
+            $tmpObj.PropertyName = $tmpArray[1]
+            $tmpObj.Action = 'Removed'
+            [void]$compareResultArrayList.Add($tmpObj)
+
+        }
+    }
+    
+    if ($compareResultArrayList)
+    {
+        Write-Verbose "$($compareResultArrayList.count) compare results"
+        if ([Security.Principal.WindowsIdentity]::GetCurrent().Name -ieq 'NT AUTHORITY\SYSTEM')
+        {
+            # formatting output in case the script is running in system context, for readability in COnfigMgr config item. 
+            $compareResultArrayList | Sort-Object -Property SMSGroupName | Format-Table -HideTableHeaders @{Label="TMP"; Expression={"{0};{1};{2}" -f $_.SMSGroupName, $_.PropertyName, $_.Action }}
+        }
+        else
+        {
+            $compareResultArrayList | Sort-Object -Property SMSGroupName
+        }
+        
+    }
+    else
+    {
+        Write-Output 'Compliant'
+    }
+
+}
+#endregion</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_7a64f20d-0f8b-41f1-a920-59e85ce9e332" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Default HINV Classes" ResourceId="ID-c9531e3e-6b02-4e16-90b1-9da8b2c9619b" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_19a2f5f5-4c53-41c7-b1bf-c9cc04801054" Version="7" DataType="String" SettingLogicalName="ScriptSetting_792081b3-ab6d-4acd-8f0a-9f33aa3831f8" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="Compliant" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script># detect a ConfigMgr site server
+if ((Get-Service -Name 'SMS_EXECUTIVE' -ErrorAction SilentlyContinue) -and (Get-Service -Name 'SMS_SITE_COMPONENT_MANAGER' -ErrorAction SilentlyContinue) -and ((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\SMS\Identification' -Name 'Site Type' -ErrorAction SilentlyContinue).'Site Type' -ne 2))
+{
+    Write-Output 'Detected'
+}</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
