@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="Application_10771cb5-8498-45e4-9942-7d7c82dcdb81" Version="3">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>Test MSI #40-second</Title>
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="DeploymentType_ed955583-93b4-43f0-adcb-b29e751f2a04" Version="3" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_556935818">Test MSI #40-second</Title>
+    <Owners>
+      <User Qualifier="LogonName" Id="ehomid" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="ehomid" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="DeploymentType_ed955583-93b4-43f0-adcb-b29e751f2a04" Version="3">
+    <Title ResourceId="Res_1013946153">Test MSI #40 - Windows Installer (*.msi file)</Title>
+    <Description ResourceId="Res_1567840630">updating dt 2:20</Description>
+    <DeploymentTechnology>GLOBAL/MSIDeploymentTechnology</DeploymentTechnology>
+    <Technology>MSI</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="MSI">
+      <ExecutionContext>System</ExecutionContext>
+      <Contents>
+        <Content ContentId="Content_b8ee314b-dad8-484a-b410-8fef82b21954" Version="1">
+          <File Name="Fake MSI 40.msi" Size="15872" />
+          <Location>\\scfs\users\ehomid\MSIs\Fake MSI 40\</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="ProductCode" Type="String">{6D34417C-C5CD-4308-A37B-2350B7ECCAAA}</Arg>
+          <Arg Name="PackageCode" Type="String" />
+          <Arg Name="PatchCodes" Type="String[]" />
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">msiexec /i "Fake MSI 40.msi" /q</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Hidden</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_b8ee314b-dad8-484a-b410-8fef82b21954" Version="1" />
+        </Contents>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">msiexec /x {6D34417C-C5CD-4308-A37B-2350B7ECCAAA} /q</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Hidden</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_b8ee314b-dad8-484a-b410-8fef82b21954" Version="1" />
+        </Contents>
+      </UninstallAction>
+      <CustomData>
+        <DetectionMethod>ProductCode</DetectionMethod>
+        <ProductCode>{6D34417C-C5CD-4308-A37B-2350B7ECCAAA}</ProductCode>
+        <ProductVersion>1.0.0.0</ProductVersion>
+        <InstallCommandLine>msiexec /i "Fake MSI 40.msi" /q</InstallCommandLine>
+        <InstallContent ContentId="Content_b8ee314b-dad8-484a-b410-8fef82b21954" Version="1" />
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <UninstallCommandLine>msiexec /x {6D34417C-C5CD-4308-A37B-2350B7ECCAAA} /q</UninstallCommandLine>
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <UserInteractionMode>Hidden</UserInteractionMode>
+        <UserInstall>true</UserInstall>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
