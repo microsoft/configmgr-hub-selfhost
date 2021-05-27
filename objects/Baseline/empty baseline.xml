@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <Baseline AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Baseline_deee4a72-124b-4110-98ca-8f6bf58bfa6f" Version="1" ConfigurationFlags="65">
+  <Baseline AuthoringScopeId="ScopeId_90D3628E-2D0E-4F66-AD7A-29EA75E41453" LogicalName="Baseline_deee4a72-124b-4110-98ca-8f6bf58bfa6f" Version="1" ConfigurationFlags="65">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="empty baseline" ResourceId="ID-a072b2b3-b216-40e8-a734-13935b179505" />
       <Description Text="" />
