@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_0CDD906D-0AEC-4F98-ACD8-27E11BCADABF" LogicalName="OperatingSystem_cfd46173-86c7-4d5b-8755-40cfae65a31c" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="Demo Registry CI 1" ResourceId="ID-f700d75f-509b-4987-811c-fa2d196756c3" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_19320141-286d-46f1-9d2f-28d7f4085022" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="SuppressDuplicateDuration" ResourceId="ID-9b3ca227-86f4-4e48-8dc3-d3a678bd80fb" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="true" CreateMissingPath="true">
+            <Key>SOFTWARE\Microsoft\EventSystem\Eventlog</Key>
+            <ValueName>SuppressDuplicateDuration</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_4621dd0f-708d-44f7-a9cb-31f83e6a6868" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="SuppressDuplicateDuration must exist" ResourceId="ID-36e4bd59-6e52-4f03-8e20-b56a17548e61" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_0CDD906D-0AEC-4F98-ACD8-27E11BCADABF" LogicalName="OperatingSystem_cfd46173-86c7-4d5b-8755-40cfae65a31c" Version="1" DataType="Int64" SettingLogicalName="RegSetting_19320141-286d-46f1-9d2f-28d7f4085022" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_379f5a90-ed53-48d1-80ba-c9144052b875" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="SuppressDuplicateDuration Equals 86400" ResourceId="ID-51cd53bb-b72c-463b-ae7e-30d8487dc2e3" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_0CDD906D-0AEC-4F98-ACD8-27E11BCADABF" LogicalName="OperatingSystem_cfd46173-86c7-4d5b-8755-40cfae65a31c" Version="1" DataType="Int64" SettingLogicalName="RegSetting_19320141-286d-46f1-9d2f-28d7f4085022" SettingSourceType="Registry" Method="Value" Changeable="false" />
+            <ConstantValue Value="86400" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
