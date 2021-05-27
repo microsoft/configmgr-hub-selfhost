@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_1EA3620E-C2FB-4CD2-BD04-8C662FDEDABD" LogicalName="OperatingSystem_f40ed1d9-6117-49ce-8b72-8e07b02fec71" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="test ci 2002" ResourceId="ID-0806aa2e-a2fe-4e3f-8db1-16e9ec636d7b" />
+      <Description Text="2002" ResourceId="ID-c76e9fe0-b93f-4bca-9ad2-ded388a4b8ec" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Mac/All_Mac" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
