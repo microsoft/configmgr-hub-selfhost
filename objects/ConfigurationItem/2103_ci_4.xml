@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_A550831A-7D99-4385-AD60-4B1AAF57A304" LogicalName="OperatingSystem_fd842788-065b-4b9d-aa08-b228ac5de3da" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2103_ci_4" ResourceId="ID-6313481f-8282-4882-bba5-c951567dd012" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <RegistryKey Hive="HKEY_LOCAL_MACHINE" Is64Bit="false" LogicalName="RegKey_cf3af07c-e592-49df-9d6d-f9c5715e1d32">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="regKey1" ResourceId="ID-5f509884-1da3-4921-8e84-ec87d52e9474" />
+          <Description Text="regKey1" ResourceId="ID-eadd36f3-2d86-49cc-84e7-effe70f94f39" />
+        </Annotation>
+        <Key>Software\Microsoft</Key>
+      </RegistryKey>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
