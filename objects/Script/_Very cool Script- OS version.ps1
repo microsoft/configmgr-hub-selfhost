@@ -1,0 +1,1 @@
+Write-Output (Get-WmiObject -Class Win32_operatingSystem).Caption
