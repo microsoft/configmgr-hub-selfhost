@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_74DBB939-0659-4FA1-9076-ABBC07AFC86E" LogicalName="Application_2fe76b03-a226-4db8-a0be-5c449c614cd5" Version="2">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>admin.manage.contoso.com</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_74DBB939-0659-4FA1-9076-ABBC07AFC86E" LogicalName="DeploymentType_c71f9d6f-d9af-4f0b-b795-2c6c83178891" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_1174168914">AppTest2006</Title>
+    <Description ResourceId="Res_582953682" />
+    <Publisher ResourceId="Res_1563882099" />
+    <SoftwareVersion ResourceId="Res_626784779" />
+    <CustomId ResourceId="Res_734191583" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_74DBB939-0659-4FA1-9076-ABBC07AFC86E" LogicalName="DeploymentType_c71f9d6f-d9af-4f0b-b795-2c6c83178891" Version="1">
+    <Title ResourceId="Res_430619864">HTTP://ADMIN.MANAGE.CONTOSO.COM - Web Application</Title>
+    <DeploymentTechnology>GLOBAL/WebAppDeploymentTechnology</DeploymentTechnology>
+    <Technology>WebApp</Technology>
+    <Hosting>WebApp</Hosting>
+    <Installer Technology="WebApp">
+      <ExecutionContext>User</ExecutionContext>
+      <DetectAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">HTTP://ADMIN.MANAGE.CONTOSO.COM</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_EC6CBE4D-D444-4086-8B76-B5B783B3DC42/Application_cfc25cd5-083b-4bd5-bf72-fb7b91d8c2ac</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">HTTP://ADMIN.MANAGE.CONTOSO.COM</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_EC6CBE4D-D444-4086-8B76-B5B783B3DC42/Application_cfc25cd5-083b-4bd5-bf72-fb7b91d8c2ac</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">HTTP://ADMIN.MANAGE.CONTOSO.COM</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_EC6CBE4D-D444-4086-8B76-B5B783B3DC42/Application_cfc25cd5-083b-4bd5-bf72-fb7b91d8c2ac</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <TargetUrl>HTTP://ADMIN.MANAGE.CONTOSO.COM</TargetUrl>
+        <LocalAppId>ScopeId_EC6CBE4D-D444-4086-8B76-B5B783B3DC42/Application_cfc25cd5-083b-4bd5-bf72-fb7b91d8c2ac</LocalAppId>
+        <LocalAppVersion>1</LocalAppVersion>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
