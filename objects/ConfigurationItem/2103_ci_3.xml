@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_BDD29ACC-232B-42D4-A00B-7F1F894B3A5A" LogicalName="OperatingSystem_3170d3eb-ce3f-438d-80ab-6d0ab36c97d9" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2103_ci_3" ResourceId="ID-5cf88f13-b403-4368-8116-2fc0791832cc" />
+      <Description Text="2103_ci_3" ResourceId="ID-7bdce762-8c8d-421a-95b5-dd7b97bf01f9" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <File Is64Bit="false" LogicalName="File_627edb57-5d79-4f7a-8670-0edc72692aaa">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="file1" ResourceId="ID-50b4cd69-846a-4a4c-810a-897ab826e5d5" />
+          <Description Text="" />
+        </Annotation>
+        <Path>%windir%</Path>
+        <Filter>notepad.exe</Filter>
+      </File>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
