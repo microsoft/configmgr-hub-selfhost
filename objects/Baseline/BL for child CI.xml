@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_CC69155D-EE29-4079-A2A6-76186993F74D" LogicalName="Baseline_a071bdae-756e-4e4c-8dfe-d4e80bfd94d6" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="BL for child CI" ResourceId="ID-0fa8808b-9f5b-4557-968a-62f93ff7989b" />
+      <Description Text="BL with child ci for parent" ResourceId="ID-a24546b6-e06b-4c8a-877c-5e3deecc63f7" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_22A1E274-F7B8-45B1-8B53-B08834C2E76A" LogicalName="OperatingSystem_d74ad5a6-d324-42ab-a5db-1cf99a0aae09" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_22A1E274-F7B8-45B1-8B53-B08834C2E76A" LogicalName="OperatingSystem_f7bf1cec-2996-4784-9223-b1f55d16e7e3" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
