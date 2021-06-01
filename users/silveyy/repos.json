@@ -1,0 +1,28 @@
+[
+  {
+    "SupportsOnboarding": false,
+    "ReferenceBranch": null,
+    "BranchOwner": "silveyy",
+    "RepositoryName": "SoftwareLibrary",
+    "ObjectStoreTypeName": null,
+    "ApiEndpoint": null,
+    "Token": null,
+    "AccessKeyName": null,
+    "ClientIdentifier": null,
+    "ClientDistinction": null,
+    "Id": 0
+  },
+  {
+    "SupportsOnboarding": false,
+    "ReferenceBranch": null,
+    "BranchOwner": "notgonnalie",
+    "RepositoryName": "configmgr-hub-selfhost",
+    "ObjectStoreTypeName": null,
+    "ApiEndpoint": null,
+    "Token": null,
+    "AccessKeyName": null,
+    "ClientIdentifier": null,
+    "ClientDistinction": null,
+    "Id": 0
+  }
+]
