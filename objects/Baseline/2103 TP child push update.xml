@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_7F68086D-3464-467C-9745-D282B7956FCC" LogicalName="Baseline_a1470189-5e2f-4356-a659-546c5fda606c" Version="2">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2103 TP child push update" ResourceId="ID-49158df0-5a12-4364-8a25-68209c26b0e6" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems>
+      <BusinessPolicyReference AuthoringScopeId="ScopeId_7F68086D-3464-467C-9745-D282B7956FCC" LogicalName="BusinessPolicy_fe143dc6-388c-49ff-885c-33252da833e6" />
+    </RequiredItems>
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_7F68086D-3464-467C-9745-D282B7956FCC" LogicalName="OperatingSystem_e2fed352-20c1-412f-b14e-16861ec3bf8d" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
