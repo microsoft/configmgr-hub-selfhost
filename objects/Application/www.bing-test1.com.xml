@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="Application_3ce8ab07-8e51-489b-918d-ab0141362a94" Version="4">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>www.bing-test1.com</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="DeploymentType_c4d0d729-d536-4c68-b47c-53ccd166d640" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_1236371387">www.bing-test1.com</Title>
+    <Description ResourceId="Res_1850067807">updated 6:31</Description>
+    <Publisher ResourceId="Res_1789106892" />
+    <SoftwareVersion ResourceId="Res_1934122197" />
+    <CustomId ResourceId="Res_673012019" />
+    <Owners>
+      <User Qualifier="LogonName" Id="ehomid" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="ehomid" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="DeploymentType_c4d0d729-d536-4c68-b47c-53ccd166d640" Version="1">
+    <Title ResourceId="Res_1729865299">https://www.bing-test1.com - Web Application</Title>
+    <DeploymentTechnology>GLOBAL/WebAppDeploymentTechnology</DeploymentTechnology>
+    <Technology>WebApp</Technology>
+    <Hosting>WebApp</Hosting>
+    <Installer Technology="WebApp">
+      <ExecutionContext>User</ExecutionContext>
+      <DetectAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">https://www.bing-test1.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_3ce8ab07-8e51-489b-918d-ab0141362a94</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">https://www.bing-test1.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_3ce8ab07-8e51-489b-918d-ab0141362a94</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">https://www.bing-test1.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_3ce8ab07-8e51-489b-918d-ab0141362a94</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <TargetUrl>https://www.bing-test1.com</TargetUrl>
+        <LocalAppId>ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA/Application_3ce8ab07-8e51-489b-918d-ab0141362a94</LocalAppId>
+        <LocalAppVersion>1</LocalAppVersion>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
