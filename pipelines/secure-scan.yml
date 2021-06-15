@@ -66,6 +66,14 @@ steps:
     inputs:
       toolMajorVersion: 'V2'
 
+  - task: BinSkim@3
+    inputs:
+      InputType: 'Basic'
+      Function: 'analyze'
+      AnalyzeTarget: '$(Build.SourcesDirectory)\objects\ConsoleExtension\*.dll;$(Build.SourcesDirectory)\objects\ConsoleExtension\*.exe'
+      DumpVerbose: 'True'
+      DumpTarget: '$(Build.SourcesDirectory)\objects\ConsoleExtension'
+
   - task: CodeSign@1
     inputs:
       Path: '$(Build.SourcesDirectory)\objects\ConsoleExtension'
