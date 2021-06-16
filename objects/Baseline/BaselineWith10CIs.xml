@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="Baseline_bfcac505-7c6e-473c-9a6c-0692861c2b6f" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="BaselineWith10CIs" ResourceId="ID-47979ebb-1467-4880-8831-69895f8185ab" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_A550831A-7D99-4385-AD60-4B1AAF57A304" LogicalName="OperatingSystem_ea50f4ae-4feb-492c-9c4f-378240b24bb7" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_A550831A-7D99-4385-AD60-4B1AAF57A304" LogicalName="OperatingSystem_dbc779ce-ee62-4618-82d3-ca1b907638c1" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_A550831A-7D99-4385-AD60-4B1AAF57A304" LogicalName="OperatingSystem_3170d3eb-ce3f-438d-80ab-6d0ab36c97d9" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_A550831A-7D99-4385-AD60-4B1AAF57A304" LogicalName="OperatingSystem_fd842788-065b-4b9d-aa08-b228ac5de3da" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_A550831A-7D99-4385-AD60-4B1AAF57A304" LogicalName="OperatingSystem_30c28518-6e5e-47a0-9912-9fb755e0bd35" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="OperatingSystem_d996e864-29d7-4dfd-8b71-4841c004b27f" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="OperatingSystem_038cce72-8e56-455e-a240-94ce34979929" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="OperatingSystem_ebdef459-601b-40a8-b641-820e3a6b2956" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="OperatingSystem_0738f578-632b-479e-9325-c7322e5184c7" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="OperatingSystem_4fafc208-4fd7-4e14-a43c-2620dca2f956" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
