@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_1CE72EAF-6470-412F-95AF-0C86FECDBDC2" LogicalName="Baseline_f278e2dd-747f-43a8-b399-5a34b3bb976a" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="Seattle Baseline" ResourceId="ID-8a64ff35-aad2-402b-b5f6-c3e2837d2df9" />
+      <Description Text="Desc" ResourceId="ID-79312e1f-7714-47f5-82dc-e7baeefa80d8" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_1CE72EAF-6470-412F-95AF-0C86FECDBDC2" LogicalName="OperatingSystem_11c77be5-ac87-4cae-93b9-5c76f1e79bd7" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
