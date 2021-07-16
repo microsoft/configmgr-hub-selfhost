@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_7C23A9D0-15D7-4DBA-AC49-59B4AA192E86" LogicalName="OperatingSystem_65166582-50f3-435e-825e-837a71c8da5a" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2107_2107_CI" ResourceId="ID-73ce0a4b-09aa-43cd-add0-86a0b0d51674" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_14af49d8-09d2-46fd-af1c-a7210783f190" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Reg" ResourceId="ID-e2bc7227-1b73-4dc6-9ef0-a0b3f839f411" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Microsoft\.NETFramework</Key>
+            <ValueName>Enable64Bit</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_63771175-5e10-4dd4-a9d8-f1bf2bad4cec" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Enable64Bit must exist" ResourceId="ID-506d7cbf-f1c6-438d-b354-a18a6b1bd337" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_7C23A9D0-15D7-4DBA-AC49-59B4AA192E86" LogicalName="OperatingSystem_65166582-50f3-435e-825e-837a71c8da5a" Version="1" DataType="Int64" SettingLogicalName="RegSetting_14af49d8-09d2-46fd-af1c-a7210783f190" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
