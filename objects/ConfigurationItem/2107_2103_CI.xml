@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_2BFA7C6F-9152-4BE0-9EF9-6D6D7E6DB3C1" LogicalName="OperatingSystem_a939f502-bde6-4471-ae10-625a0dc3fcd2" Version="2">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2107_2103_CI" ResourceId="ID-6d58ee84-29df-43cc-a851-5feed3e5ea73" />
+      <Description Text="Updated" ResourceId="ID-78b013f8-4acd-45d1-834b-abd89113c3bc" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_2cf268fc-632e-4c54-af51-2c77550bb7bf" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="reg" ResourceId="ID-793669a4-7da2-404d-b721-ab5d5b772030" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Google\Chrome\NativeMessagingHosts\com.microsoft.browsercore</Key>
+            <ValueName />
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_5fb4e85e-1af3-44e8-9094-fd6449b465e6" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text=" must exist" ResourceId="ID-94ed5d07-1817-44e4-9ed2-d90582c67d8b" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_2BFA7C6F-9152-4BE0-9EF9-6D6D7E6DB3C1" LogicalName="OperatingSystem_a939f502-bde6-4471-ae10-625a0dc3fcd2" Version="2" DataType="Int64" SettingLogicalName="RegSetting_2cf268fc-632e-4c54-af51-2c77550bb7bf" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
