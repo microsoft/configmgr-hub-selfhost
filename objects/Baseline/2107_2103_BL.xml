@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_2BFA7C6F-9152-4BE0-9EF9-6D6D7E6DB3C1" LogicalName="Baseline_753faff9-4df2-4625-939a-263b9ec6ef44" Version="3">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2107_2103_BL" ResourceId="ID-826b0852-a19e-46bc-bf0e-732c33706f76" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_2BFA7C6F-9152-4BE0-9EF9-6D6D7E6DB3C1" LogicalName="OperatingSystem_a939f502-bde6-4471-ae10-625a0dc3fcd2" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_2BFA7C6F-9152-4BE0-9EF9-6D6D7E6DB3C1" LogicalName="OperatingSystem_846d4245-6e37-41b4-bee5-8bbef9bc5317" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines>
+      <BaselineReference AuthoringScopeId="ScopeId_2BFA7C6F-9152-4BE0-9EF9-6D6D7E6DB3C1" LogicalName="Baseline_65692777-5d06-49b7-b9e8-3478cf11d4bb" />
+    </Baselines>
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
