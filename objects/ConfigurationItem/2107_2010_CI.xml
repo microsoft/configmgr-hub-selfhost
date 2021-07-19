@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <OperatingSystem AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="3">
+  <OperatingSystem AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="4">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="2107_2010_CI" ResourceId="ID-de10f363-41c9-4de6-bff4-0b9429ea2c9c" />
-      <Description Text="updated" ResourceId="ID-ec1fc2a5-b65a-41d8-9e80-d14ff7af3f7c" />
+      <Description Text="updated for 2006" ResourceId="ID-ec1fc2a5-b65a-41d8-9e80-d14ff7af3f7c" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
@@ -32,7 +32,7 @@
         <Expression>
           <Operator>NotEquals</Operator>
           <Operands>
-            <SettingReference AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="3" DataType="Int64" SettingLogicalName="RegSetting_c0d1ee1a-cbb5-48bc-a15d-43cf4918bc89" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <SettingReference AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="4" DataType="Int64" SettingLogicalName="RegSetting_c0d1ee1a-cbb5-48bc-a15d-43cf4918bc89" SettingSourceType="Registry" Method="Count" Changeable="false" />
             <ConstantValue Value="0" DataType="Int64" />
           </Operands>
         </Expression>
@@ -86,6 +86,15 @@
           <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
           <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
           <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+          <RuleExpression RuleId="Windows/All_Embedded_Windows_XP" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/x64_Embedded_Windows_7" />
+          <RuleExpression RuleId="Windows/x86_Embedded_Windows_7" />
         </Operands>
       </OperatingSystemExpression>
     </OperatingSystemDiscoveryRule>
