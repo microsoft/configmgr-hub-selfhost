@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="3">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2107_2010_CI" ResourceId="ID-de10f363-41c9-4de6-bff4-0b9429ea2c9c" />
+      <Description Text="updated" ResourceId="ID-ec1fc2a5-b65a-41d8-9e80-d14ff7af3f7c" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_c0d1ee1a-cbb5-48bc-a15d-43cf4918bc89" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Reg" ResourceId="ID-55ae5eef-d986-49f9-97ce-368e05a348ce" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Microsoft\.NETFramework</Key>
+            <ValueName>InstallRoot</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_67b65ddd-d813-4e9d-ab58-87830077c1e0" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="InstallRoot must exist" ResourceId="ID-a58ad6ab-efca-4d81-b69e-ecb5605ac5d9" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="3" DataType="Int64" SettingLogicalName="RegSetting_c0d1ee1a-cbb5-48bc-a15d-43cf4918bc89" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_XP_Professional" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_XP" />
+          <RuleExpression RuleId="Windows/x64_Windows_XP_Professional_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_XP_Professional_Service_Pack_3" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Vista" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Vista" />
+          <RuleExpression RuleId="Windows/x64_Windows_Vista_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Vista_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_ARM64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_MultiSession_Enterprise_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_CORE" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1_Core" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2_Core" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
