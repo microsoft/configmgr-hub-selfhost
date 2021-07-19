@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_DA2C047C-98CB-4EC6-9F5D-6FA98591DB56" LogicalName="OperatingSystem_04e349d1-38e2-4ae4-bd35-84117f476596" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2107_ci_1" ResourceId="ID-9d1cedea-6218-4754-9d0a-e5a3b21c9c5e" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <File Is64Bit="false" LogicalName="File_1a9b2695-a1ec-464e-9e1b-8f988f976bac">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="fs1" ResourceId="ID-ea1d0890-8e03-4873-8610-2305fc4d559d" />
+          <Description Text="" />
+        </Annotation>
+        <Path>%windir%\ccm</Path>
+        <Filter>text1.txt</Filter>
+      </File>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
