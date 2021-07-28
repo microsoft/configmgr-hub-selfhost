@@ -71,7 +71,6 @@ steps:
       Path: '$(Build.SourcesDirectory)\objects\ConsoleExtension'
       verboseOutput: true
       PolicyType: 'Custom'
-      PolicyFile: '$(codeSignPolicyFile)'
       ExcludePassesFromLog: false
       FailIfNoTargetsFound: 'false'
 
