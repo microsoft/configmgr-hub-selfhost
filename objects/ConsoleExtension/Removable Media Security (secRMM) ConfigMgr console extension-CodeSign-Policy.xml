@@ -3,6 +3,18 @@
   <VersionEx>10.0.0.0</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Required:Enforce Store Applications</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:UMCI</Option>
+    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs />
