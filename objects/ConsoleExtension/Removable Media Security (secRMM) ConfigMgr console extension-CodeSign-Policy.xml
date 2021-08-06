@@ -24,7 +24,6 @@
   <Signers>
     <Signer ID="ID_SIGNER_S_1" Name="DigiCert SHA2 High Assurance Code Signing CA">
       <CertRoot Type="TBS" Value="0BF095B845B69928B5D7DFD1C42AE4F90FEB8DC97F7830598C93E848877021FB" />
-      <CertPublisher Value="Squadra Technologies, LLC." />
     </Signer>
     <Signer ID="ID_SIGNER_S_B" Name="Microsoft Code Signing PCA">
       <CertRoot Type="TBS" Value="27543A3F7612DE2261C7228321722402F63A07DE" />
