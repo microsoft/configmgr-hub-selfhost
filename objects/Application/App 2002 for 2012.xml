@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_039C05B7-1087-44FD-9388-9FA11F71EF73" LogicalName="Application_16aa6634-4d15-48ed-ad7a-37648d48796e" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>App 2002 for 2012</Title>
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_1862163612">App 2002 for 2012</Title>
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
