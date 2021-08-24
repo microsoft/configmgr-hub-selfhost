@@ -1,0 +1,1 @@
+new detect ps1
