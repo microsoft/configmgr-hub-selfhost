@@ -1,0 +1,6 @@
+{
+  "downloadLocation": "https://github.com/microsoft/configmgr-hub/blob/master/objects/ConsoleExtensionCab/AllStatusMessageForTsDeployment.cab?raw=true",
+  "FileHash": "0E39C37409FC984A49802FDD056E49DA10776A5CA161BAC48DDC9FCA8FA3F179",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "AllStatusMessageForTsDeployment-CodeSign-Policy.xml"
+}
