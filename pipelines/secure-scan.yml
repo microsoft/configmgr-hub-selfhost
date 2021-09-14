@@ -1,13 +1,51 @@
 # Pipeline for running SDL scans
 # https://aka.ms/yaml
 
-trigger:
+trigger: none
+
+pr:
 - master
 
 pool:
   vmImage: 'windows-2019'
 
+variables:
+  codeSignPolicyFile: ''
+  codeSignEnabled: false
+
 steps:
+  - task: DownloadPackage@1
+    displayName: "Download console extension validation library"
+    inputs:
+      packageType: 'nuget'
+      feed: '/9b6eeac8-9d95-4be6-b625-aad8659f5c65'
+      view: 'dc24c3c3-a05b-4e24-80f2-8c90bf700a5f'
+      definition: 'd168c270-391f-4a3f-984a-6ca97aa9d532'
+      version: '5.2107.1022.1000'
+      downloadPath: '$(System.ArtifactsDirectory)'
+
+  - task: PowerShell@2
+    displayName: "Download, Expand, and Validate Console Extensions"
+    inputs:
+      filePath: '$(System.ArtifactsDirectory)\scripts\Extensiondownloader.ps1'
+      failOnStderr: true
+      workingDirectory: '$(Build.SourcesDirectory)\objects'
+
+  - powershell: 'get-childitem env:'
+    displayName: "Print variables"
+
+  - task: EsrpMalwareScanning@1
+    displayName: 'Run ESRP Malware Scan'
+    condition: and(succeeded(), eq(variables['codeSignEnabled'], 'true'))
+    inputs:
+      ConnectedServiceName: '[Selfhost] ESRP malware scan service connection'
+      FolderPath: '$(ESRPScanFolder)'
+      Pattern: '*.*'
+      Region: 'PuertoRico'
+      SessionTimeout: '60'
+      MaxConcurrency: '50'
+      MaxRetryAttempts: '5'
+
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
     displayName: 'Run PoliCheck'
     inputs:
@@ -18,8 +56,47 @@ steps:
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
     displayName: 'Run AntiMalware Scan'
     inputs:
-      FileDirPath: '$(Build.SourcesDirectory)\objects'
+      FileDirPath: '$(Build.SourcesDirectory)'
       EnableServices: true
-      TreatSignatureUpdateFailureAs: Standard
-      TreatStaleSignatureAs: Warning
+      TreatSignatureUpdateFailureAs: 'Error'
+      TreatStaleSignatureAs: 'Error'
     continueOnError: true
+
+  - task: CredScan@3
+    inputs:
+      toolMajorVersion: 'V2'
+
+  - task: CodeSign@1
+    inputs:
+      Path: '$(Build.SourcesDirectory)\objects\ConsoleExtension'
+      verboseOutput: true
+      PolicyType: 'Custom'
+      PolicyFile: '$(codeSignPolicyFile)'
+      ExcludePassesFromLog: false
+      FailIfNoTargetsFound: 'false'
+
+  - task: PublishSecurityAnalysisLogs@3
+    inputs:
+      ArtifactName: 'CodeAnalysisLogs'
+      ArtifactType: 'Container'
+      AllTools: true
+      ToolLogsNotFoundAction: 'Standard'
+
+  - task: PostAnalysis@2
+    inputs:
+      AllTools: false
+      APIScan: false
+      BinSkim: false
+      CodesignValidation: true
+      CodesignValidationBreakOn: 'WarningAbove'
+      CredScan: true
+      FortifySCA: false
+      FxCop: false
+      ModernCop: false
+      PoliCheck: true
+      PoliCheckBreakOn: 'Severity2Above'
+      RoslynAnalyzers: false
+      SDLNativeRules: false
+      Semmle: false
+      TSLint: false
+      ToolLogsNotFoundAction: 'Error'

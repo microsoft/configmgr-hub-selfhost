@@ -1,0 +1,9 @@
+Processor  | where Manufacturer == 'GenuineIntel' | project Device, Name, CPUFamily=case(
+    Name contains 'i3', 'i3',
+    Name contains 'i5', 'i5',
+    Name contains 'i7', 'i7',
+    Name contains 'i9', 'i9',
+    Name contains 'Celeron', 'Celeron',
+    Name contains 'Xeon', 'Xeon',
+    Name contains 'Pentium', 'Pentium',
+    Name contains 'Atom', 'Atom',  'Unknown') | order by Device asc | summarize count() by CPUFamily | order by count_ asc

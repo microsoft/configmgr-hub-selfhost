@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <OperatingSystem AuthoringScopeId="ScopeId_B651A46C-C971-4E8A-A2C0-6FDFBCB937C3" LogicalName="LogicalName_fa1b60b9-92d1-469a-8977-7782dbb06d47" Version="10">
+  <OperatingSystem AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="4">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-      <DisplayName Text="liharris_test_1" ResourceId="ID-759ac3a2-1f58-4bd6-b446-c9ca0e7d7921" />
-      <Description Text="" />
+      <DisplayName Text="2107_2010_CI" ResourceId="ID-de10f363-41c9-4de6-bff4-0b9429ea2c9c" />
+      <Description Text="updated for 2006" ResourceId="ID-ec1fc2a5-b65a-41d8-9e80-d14ff7af3f7c" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
     </Parts>
     <Settings>
       <RootComplexSetting>
-        <SimpleSetting LogicalName="RegSetting_80f8d4c6-bec5-480e-886f-af341748904e" DataType="String">
+        <SimpleSetting LogicalName="RegSetting_c0d1ee1a-cbb5-48bc-a15d-43cf4918bc89" DataType="String">
           <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-            <DisplayName Text="registryKey1" ResourceId="ID-c756a731-b17d-4509-b337-fe26a0e8f198" />
+            <DisplayName Text="Reg" ResourceId="ID-55ae5eef-d986-49f9-97ce-368e05a348ce" />
             <Description Text="" />
           </Annotation>
           <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
-            <Key>Software\Microsoft\CCM</Key>
-            <ValueName>TempDir</ValueName>
+            <Key>SOFTWARE\Microsoft\.NETFramework</Key>
+            <ValueName>InstallRoot</ValueName>
           </RegistryDiscoverySource>
         </SimpleSetting>
       </RootComplexSetting>
     </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_67b65ddd-d813-4e9d-ab58-87830077c1e0" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="InstallRoot must exist" ResourceId="ID-a58ad6ab-efca-4d81-b69e-ecb5605ac5d9" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_79ACF499-45BC-4D73-B9BB-8C2FDEAA39C1" LogicalName="OperatingSystem_ead3c3c2-33e9-4beb-be04-80654677915c" Version="4" DataType="Int64" SettingLogicalName="RegSetting_c0d1ee1a-cbb5-48bc-a15d-43cf4918bc89" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
     <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <OperatingSystemExpression>
         <Operator>OneOf</Operator>
         <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_XP_Professional" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_XP" />
+          <RuleExpression RuleId="Windows/x64_Windows_XP_Professional_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_XP_Professional_Service_Pack_3" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Vista" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Vista" />
+          <RuleExpression RuleId="Windows/x64_Windows_Vista_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Vista_SP2" />
           <RuleExpression RuleId="Windows/All_x64_Windows_7_Client" />
           <RuleExpression RuleId="Windows/All_x86_Windows_7_Client" />
           <RuleExpression RuleId="Windows/x64_Windows_7_Client" />
