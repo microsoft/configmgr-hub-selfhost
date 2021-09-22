@@ -60,7 +60,7 @@ function searchAndExpand {
 
     if((Test-Path $directory) -eq $true)
     {
-        (gci -path $directory *.cab -recurse) | foreach{
+        (gci -path $directory *.cab -recurse) | foreach {
             $expandedDirectory = expandCabFile -dir $directory -cab $_;
             searchAndExpand -directory $expandedDirectory[0].FullName;
         }
@@ -210,7 +210,7 @@ function DownloadAndExpand
             if ((Test-Path $cabFile) -eq $True)
             {
                 $errMsg = "File: " + $cabFile + " already exists. This is unexpected."; 
-                Write-Error $errMsg";
+                Write-Error $errMsg;
                 return;
             }
             
