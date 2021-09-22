@@ -186,7 +186,8 @@ function DownloadAndExpand
 
             if ($objectInfo.FileHash -ne "SHA256")
             {
-                Write-Error "Extension json specified invalid hash algorithm: ["$objectInfo.FileHash"]";
+                $errMsg = "Extension json specified invalid hash algorithm: [" + $objectInfo.FileHash + "]"
+                Write-Error $errMsg;
             }
 
             $pFile  = $consoleExtensionFolder + $objectInfo.codeSignPolicyFile;
@@ -198,7 +199,8 @@ function DownloadAndExpand
             # Ensure the folder has not been pre-created
             if (Test-Path $itemDir)
             {
-                Write-Error "Folder:" $itemDir "already exists. This is unexpected.";
+                $errMsg = "Folder: " + $itemDir + " already exists. This is unexpected.";
+                Write-Error errMsg;
                 return;
             }
 
@@ -207,7 +209,8 @@ function DownloadAndExpand
             # Always download to ensure we are verifying the correct latest file
             if ((Test-Path $cabFile) -eq $True)
             {
-                Write-Error "File:" $cabFile "already exists. This is unexpected.";
+                $errMsg = "File: " + $cabFile + " already exists. This is unexpected."; 
+                Write-Error $errMsg";
                 return;
             }
             
