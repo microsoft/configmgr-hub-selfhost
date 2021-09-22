@@ -224,7 +224,7 @@ function DownloadAndExpand
             write-host "Recursively searching for cab files.."
             searchAndExpand -directory $itemDir
 
-            Write-Host "Generating code signing policy XML file.."
+            Write-Host "Generating code signing policy XML file: ["$objectInfo.codeSignPolicyFile"]. This make take awhile."
             generateCodeSignPolicyXML -scanFolder $itemDir -policyFile $objectInfo.codeSignPolicyFile
 
             print-Summary;
@@ -251,6 +251,12 @@ function generateCodeSignPolicyXML
     else 
     {
         New-CIPolicy -ScanPath $scanFolder -UserPEs -Level LeafCertificate $policyFile
+
+        if (Test-Path $policyFile -eq $False)
+        {
+            $errMsg = "Cannot find generated policy file: " + $policyFile
+            Write-Error $errMsg;
+        }
     }    
 }
 
