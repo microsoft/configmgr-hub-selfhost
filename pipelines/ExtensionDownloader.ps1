@@ -186,7 +186,7 @@ function DownloadAndExpand
 
             if ($objectInfo.FileHash -ne "SHA256")
             {
-                $errMsg = "Extension json specified invalid hash algorithm: [" + $objectInfo.FileHash + "]"
+                $errMsg = "Extension json specified invalid hash algorithm: [" + $objectInfo.FileHash + "]";
                 Write-Error $errMsg;
             }
 
