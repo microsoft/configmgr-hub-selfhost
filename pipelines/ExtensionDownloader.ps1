@@ -190,8 +190,8 @@ function DownloadAndExpand
                 Write-Error $errMsg;
             }
 
-            $pFile  = $consoleExtensionFolder + $objectInfo.codeSignPolicyFile;
-            Write-Host "##vso[task.setvariable variable=codeSignPolicyFile;]$pFile"
+            $policyFile  = $consoleExtensionFolder + $objectInfo.codeSignPolicyFile;
+            Write-Host "##vso[task.setvariable variable=codeSignPolicyFile;]$policyFile"
 
             $itemDir = $consoleExtensionFolder + $objectName;
             $cabFile = $itemDir + "\" + $objectName + ".cab"
@@ -225,7 +225,7 @@ function DownloadAndExpand
             searchAndExpand -directory $itemDir
 
             Write-Host "Generating code signing policy XML file: ["$objectInfo.codeSignPolicyFile"]. This make take awhile."
-            generateCodeSignPolicyXML -scanFolder $itemDir -policyFile $objectInfo.codeSignPolicyFile
+            generateCodeSignPolicyXML -scanFolder $itemDir -policyFile $policyFile
 
             print-Summary;
         }
@@ -239,6 +239,8 @@ function DownloadAndExpand
 #
 #   Generates a codesign policy XML file to be consumed by the CodeSign task, and saves the file path to an ENV variable for use by CodeSign task.
 #
+#   $scanFolder - Full path to the folder whose contents will be used to generate the policy file.
+#   $policyFile - must be a full path to where the new policy XML file will be created
 # ===================================================================
 function generateCodeSignPolicyXML
 {
@@ -252,7 +254,7 @@ function generateCodeSignPolicyXML
     {
         New-CIPolicy -ScanPath $scanFolder -UserPEs -Level LeafCertificate $policyFile
 
-        if (Test-Path $policyFile -eq $False)
+        if ((Test-Path $policyFile) -eq $false)
         {
             $errMsg = "Cannot find generated policy file: " + $policyFile
             Write-Error $errMsg;
