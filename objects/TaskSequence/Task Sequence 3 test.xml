@@ -1,0 +1,19 @@
+<sequence version="3.10">
+  <referenceList>
+    <reference package="BBD00002" />
+  </referenceList>
+  <step type="SMS_TaskSequence_DownloadPackageContentAction" name="Download Package Content" description="test" runIn="WinPEandFullOS" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>OsdDownloadContent.exe </action>
+    <defaultVarList>
+      <variable name="OSDDownloadContinueDownloadOnError" property="ContinueDownloadOnError">true</variable>
+      <variable name="OSDDownloadDestinationLocationType" property="DestinationLocationType">TSCache</variable>
+      <variable name="OSDDownloadDownloadPackages" property="DownloadPackages">BBD00002</variable>
+      <variable name="OSDPackageCount" property="NumPackages">1</variable>
+      <variable name="OSDPackage" property="PackageInfo" hidden="true">1</variable>
+      <variable name="OSDPackage0Name" property="PackageInfo0Name">Configuration Manager Client Package</variable>
+      <variable name="OSDPackage0PackageId" property="PackageInfo0PackageId">BBD00002</variable>
+      <variable name="OSDPackage0PkgType" property="PackageInfo0PkgType">0</variable>
+      <variable name="OSDPackage0Size" property="PackageInfo0Size">320759</variable>
+    </defaultVarList>
+  </step>
+</sequence>
