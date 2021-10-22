@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="OperatingSystem_6198d9ce-6ad8-4821-bf1a-b316cc428919" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="nested - Child" ResourceId="ID-22625f0c-9638-47b4-b11e-b3f2095e7e7d" />
+      <Description Text="desc" ResourceId="ID-8da36d28-d428-469b-83c0-dba65181b157" />
+    </Annotation>
+    <BaseReference AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="OperatingSystem_f603bef3-1800-4060-bb6e-a1a0fcbda8fb" />
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_592a4540-fbf9-4eaa-88d0-778ab62a8688" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="script output1" ResourceId="ID-6196d4ee-691f-4ae6-975a-1b141c2b1fbc" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">echo(1)</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_b33b0060-ff81-406e-b711-6e8453db5fcc" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="New Rule" ResourceId="ID-2221c9b0-758a-403b-8b88-45647ca2f137" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="OperatingSystem_6198d9ce-6ad8-4821-bf1a-b316cc428919" Version="1" DataType="Int64" SettingLogicalName="ScriptSetting_592a4540-fbf9-4eaa-88d0-778ab62a8688" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="1" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
