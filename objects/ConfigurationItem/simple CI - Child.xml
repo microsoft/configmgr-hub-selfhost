@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="OperatingSystem_3ec92897-e326-4e57-973d-f46487fb9520" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="simple CI - Child" ResourceId="ID-f198afe6-f600-4c1b-830c-069cba4c8844" />
+      <Description Text="testing nested CI" ResourceId="ID-e4c98010-fea7-41d2-9c8e-acef25bf1df9" />
+    </Annotation>
+    <BaseReference AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="OperatingSystem_f29d4811-bf35-4484-b99e-a72674fac950" Version="1" />
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_23220a99-9e6b-4432-8902-14e134105b4c" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="dhd" ResourceId="ID-550f19cc-1a45-4273-acb2-6fcfc57704b3" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">sg</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
