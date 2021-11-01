@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_6512AE29-2D79-4DAC-90C4-85097CA0FEC5" LogicalName="OperatingSystem_5837bea6-5cc9-403a-bd83-9f3895ee9812" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="User CI" ResourceId="ID-eade5734-55c0-46f3-bf20-be2e9caa6df5" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <RegistryKey Hive="HKEY_LOCAL_MACHINE" Is64Bit="true" LogicalName="RegKey_821ba8e7-fb82-4412-934e-b0d12a8b24ec">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="Microsoft" ResourceId="ID-61a73e6f-f590-4ccc-bded-e25f2af795da" />
+          <Description Text="" />
+        </Annotation>
+        <Key>SOFTWARE\Policies\Microsoft</Key>
+      </RegistryKey>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_d7293232-8dbc-4c33-af7e-53f35d86f7c5" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Microsoft key must exist" ResourceId="ID-dc8ee476-f7c0-419a-977f-2b275862814c" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_6512AE29-2D79-4DAC-90C4-85097CA0FEC5" LogicalName="OperatingSystem_5837bea6-5cc9-403a-bd83-9f3895ee9812" Version="1" DataType="Int64" SettingLogicalName="RegKey_821ba8e7-fb82-4412-934e-b0d12a8b24ec" SettingSourceType="RegistryKey" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
