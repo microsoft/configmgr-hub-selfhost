@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_0E683CE7-35DF-44DF-A46A-3FA98E99782D" LogicalName="Application_686d683e-c568-4b74-8343-344259ef65e2" Version="1">
+  <Application AuthoringScopeId="ScopeId_0E683CE7-35DF-44DF-A46A-3FA98E99782D" LogicalName="Application_686d683e-c568-4b74-8343-344259ef65e2" Version="2">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>communityhubtest.microsoft.com</Title>
@@ -13,7 +13,7 @@
       <DeploymentType AuthoringScopeId="ScopeId_0E683CE7-35DF-44DF-A46A-3FA98E99782D" LogicalName="DeploymentType_78157012-d0ef-452f-96cf-e04c10772564" Version="1" />
     </DeploymentTypes>
     <Title ResourceId="Res_208437569">communityhubtest.microsoft.com</Title>
-    <Description ResourceId="Res_552614208">hub inception</Description>
+    <Description ResourceId="Res_552614208">hub inception 2</Description>
     <Publisher ResourceId="Res_1046173807" />
     <SoftwareVersion ResourceId="Res_560939021" />
     <CustomId ResourceId="Res_196223752" />
