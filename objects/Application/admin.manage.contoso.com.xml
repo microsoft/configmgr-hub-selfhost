@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_EC6CBE4D-D444-4086-8B76-B5B783B3DC42" LogicalName="Application_cfc25cd5-083b-4bd5-bf72-fb7b91d8c2ac" Version="1">
+  <Application AuthoringScopeId="ScopeId_6AD1EEB3-5702-42E1-B9A4-172AE8BD0D86" LogicalName="Application_cfc25cd5-083b-4bd5-bf72-fb7b91d8c2ac" Version="1">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>admin.manage.contoso.com</Title>
-        <Description />
-        <Publisher />
-        <Version />
       </Info>
     </DisplayInfo>
     <DeploymentTypes>
-      <DeploymentType AuthoringScopeId="ScopeId_EC6CBE4D-D444-4086-8B76-B5B783B3DC42" LogicalName="DeploymentType_4ca7c34f-1af0-4316-833c-d24f67efa191" Version="1" />
+      <DeploymentType AuthoringScopeId="ScopeId_6AD1EEB3-5702-42E1-B9A4-172AE8BD0D86" LogicalName="DeploymentType_4ca7c34f-1af0-4316-833c-d24f67efa191" Version="1" />
     </DeploymentTypes>
     <Title ResourceId="Res_819450984">admin.manage.contoso.com</Title>
-    <Description ResourceId="Res_1055610278" />
-    <Publisher ResourceId="Res_924845412" />
-    <SoftwareVersion ResourceId="Res_1413884383" />
-    <CustomId ResourceId="Res_647586035" />
     <Owners>
       <User Qualifier="LogonName" Id="Meg" />
     </Owners>
@@ -24,7 +17,7 @@
       <User Qualifier="LogonName" Id="Meg" />
     </Contacts>
   </Application>
-  <DeploymentType AuthoringScopeId="ScopeId_EC6CBE4D-D444-4086-8B76-B5B783B3DC42" LogicalName="DeploymentType_4ca7c34f-1af0-4316-833c-d24f67efa191" Version="1">
+  <DeploymentType AuthoringScopeId="ScopeId_6AD1EEB3-5702-42E1-B9A4-172AE8BD0D86" LogicalName="DeploymentType_4ca7c34f-1af0-4316-833c-d24f67efa191" Version="1">
     <Title ResourceId="Res_895446354">HTTP://ADMIN.MANAGE.CONTOSO.COM - Web Application</Title>
     <DeploymentTechnology>GLOBAL/WebAppDeploymentTechnology</DeploymentTechnology>
     <Technology>WebApp</Technology>
