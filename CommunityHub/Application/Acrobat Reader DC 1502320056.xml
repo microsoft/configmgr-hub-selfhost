@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_52710a52-470a-4aaf-b1fe-346f5ba78e37" Version="9">
+    <SourceId AuthoringScopeId="ScopeId_67DD9646-74AA-42CA-9A2D-5D90D50F1634" LogicalName="Application_7d67bac4-f753-45c6-9093-223c8d18debf" />
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="ar">
+        <Title>Test Arabic Name</Title>
+      </Info>
+      <Info Language="en-US">
+        <Title>Acrobat Reader DC 1502320056</Title>
+        <UserCategories>
+          <Tag>CatalogCategories:d0cd4765-573f-462f-a345-8d6b46cdc314</Tag>
+        </UserCategories>
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_317e1eb6-0b8d-49ee-bed4-19c5fc158425" Version="2" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_1946598988">Acrobat Reader DC 1502320056</Title>
+    <AutoInstall>true</AutoInstall>
+    <Owners>
+      <User Qualifier="LogonName" Id="dag5822" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="dag5822" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_317e1eb6-0b8d-49ee-bed4-19c5fc158425" Version="2">
+    <SourceId AuthoringScopeId="ScopeId_67DD9646-74AA-42CA-9A2D-5D90D50F1634" LogicalName="DeploymentType_513c8fee-0999-4690-b5e4-1d182c1c7594" />
+    <Title ResourceId="Res_1910561840">Install Acrobat Reader 1502320056</Title>
+    <Description ResourceId="Res_1364385295">comment</Description>
+    <DeploymentTechnology>GLOBAL/ScriptDeploymentTechnology</DeploymentTechnology>
+    <Technology>Script</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="Script">
+      <ExecutionContext>System</ExecutionContext>
+      <Contents>
+        <Content ContentId="Content_4b884f42-1a93-429b-a35b-00efad060099" Version="1">
+          <File Name="AcroRDR_0.ico" Size="4150" />
+          <File Name="detailsDC.rtf" Size="42962" />
+          <File Name="Install.app" Size="5670" />
+          <File Name="Install.wsf" Size="8001" />
+          <File Name="Package.vbs" Size="8627" />
+          <File Name="ScriptLib.vbs" Size="219879" />
+          <File Name="Media\ABCPY.INI" Size="625" />
+          <File Name="Media\AcroRdrDCUpd1502320056_MUI.msp" Size="43122688" />
+          <File Name="Media\AcroRead.msi" Size="3055616" />
+          <File Name="Media\AcroRead.mst" Size="49152" />
+          <File Name="Media\Data1.cab" Size="151041813" />
+          <File Name="Media\FontPack1500720033_XtdAlf_Lang_DC.msi" Size="55412736" />
+          <File Name="Media\Setup.exe" Size="420512" />
+          <File Name="Media\setup.ini" Size="1020" />
+          <File Name="Support\AcroRDRDC_package_install_confirm.hta" Size="23359" />
+          <File Name="Media\Transforms\1027.mst" Size="73728" />
+          <File Name="Media\Transforms\1028.mst" Size="61440" />
+          <File Name="Media\Transforms\1029.mst" Size="65536" />
+          <File Name="Media\Transforms\1030.mst" Size="73728" />
+          <File Name="Media\Transforms\1031.mst" Size="81920" />
+          <File Name="Media\Transforms\1033.mst" Size="32768" />
+          <File Name="Media\Transforms\1034.mst" Size="77824" />
+          <File Name="Media\Transforms\1035.mst" Size="73728" />
+          <File Name="Media\Transforms\1036.mst" Size="77824" />
+          <File Name="Media\Transforms\1038.mst" Size="69632" />
+          <File Name="Media\Transforms\1040.mst" Size="77824" />
+          <File Name="Media\Transforms\1041.mst" Size="77824" />
+          <File Name="Media\Transforms\1042.mst" Size="73728" />
+          <File Name="Media\Transforms\1043.mst" Size="77824" />
+          <File Name="Media\Transforms\1044.mst" Size="73728" />
+          <File Name="Media\Transforms\1045.mst" Size="69632" />
+          <File Name="Media\Transforms\1046.mst" Size="77824" />
+          <File Name="Media\Transforms\1048.mst" Size="69632" />
+          <File Name="Media\Transforms\1049.mst" Size="69632" />
+          <File Name="Media\Transforms\1050.mst" Size="69632" />
+          <File Name="Media\Transforms\1051.mst" Size="69632" />
+          <File Name="Media\Transforms\1053.mst" Size="73728" />
+          <File Name="Media\Transforms\1055.mst" Size="65536" />
+          <File Name="Media\Transforms\1058.mst" Size="69632" />
+          <File Name="Media\Transforms\1060.mst" Size="69632" />
+          <File Name="Media\Transforms\1069.mst" Size="69632" />
+          <File Name="Media\Transforms\2052.mst" Size="65536" />
+          <Location>\\sccmsql01\Dogfood\OSD\Customer Task Sequence\Boeing\part2whole_files\Content_56f85e23-b060-4ff8-862b-5be81fd4b3ec</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>Local</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="MethodBody" Type="String">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;EnhancedDetectionMethod xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+  &lt;Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+    &lt;MSI LogicalName="MSI_14202f69-1323-47bd-abc9-c08b7fd2ea28" IsPerUser="false" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration"&gt;
+      &lt;Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+        &lt;DisplayName Text="" /&gt;
+        &lt;Description Text="" /&gt;
+      &lt;/Annotation&gt;
+      &lt;ProductCode&gt;{AC76BA86-7AD7-FFFF-7B44-AC0F074E4100}&lt;/ProductCode&gt;
+    &lt;/MSI&gt;
+  &lt;/Settings&gt;
+  &lt;Rule id="ScopeId_67DD9646-74AA-42CA-9A2D-5D90D50F1634/DeploymentType_f466c2e8-5d7b-42ed-8c78-ffb51695b36d" Severity="Informational" NonCompliantWhenSettingIsNotFound="false" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+    &lt;Annotation&gt;
+      &lt;DisplayName Text="" /&gt;
+      &lt;Description Text="" /&gt;
+    &lt;/Annotation&gt;
+    &lt;Expression&gt;
+      &lt;Operator&gt;NotEquals&lt;/Operator&gt;
+      &lt;Operands&gt;
+        &lt;SettingReference AuthoringScopeId="ScopeId_67DD9646-74AA-42CA-9A2D-5D90D50F1634" LogicalName="Application_7d67bac4-f753-45c6-9093-223c8d18debf" Version="2" DataType="Int64" SettingLogicalName="MSI_14202f69-1323-47bd-abc9-c08b7fd2ea28" SettingSourceType="MSI" Method="Count" Changeable="false" /&gt;
+        &lt;ConstantValue Value="0" DataType="Int64" /&gt;
+      &lt;/Operands&gt;
+    &lt;/Expression&gt;
+  &lt;/Rule&gt;
+&lt;/EnhancedDetectionMethod&gt;</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>Script</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">cscript.exe install.wsf silent nogtcdialog nooscheck</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Normal</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_4b884f42-1a93-429b-a35b-00efad060099" Version="1" />
+        </Contents>
+      </InstallAction>
+      <CustomData>
+        <DetectionMethod>Enhanced</DetectionMethod>
+        <EnhancedDetectionMethod>
+          <Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest">
+            <MSI xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration" LogicalName="MSI_14202f69-1323-47bd-abc9-c08b7fd2ea28" IsPerUser="false">
+              <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+                <DisplayName Text="" />
+                <Description Text="" />
+              </Annotation>
+              <ProductCode>{AC76BA86-7AD7-FFFF-7B44-AC0F074E4100}</ProductCode>
+            </MSI>
+          </Settings>
+          <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="ScopeId_67DD9646-74AA-42CA-9A2D-5D90D50F1634/DeploymentType_f466c2e8-5d7b-42ed-8c78-ffb51695b36d" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+            <Annotation>
+              <DisplayName Text="" />
+              <Description Text="" />
+            </Annotation>
+            <Expression>
+              <Operator>NotEquals</Operator>
+              <Operands>
+                <SettingReference AuthoringScopeId="ScopeId_67DD9646-74AA-42CA-9A2D-5D90D50F1634" LogicalName="Application_7d67bac4-f753-45c6-9093-223c8d18debf" Version="2" DataType="Int64" SettingLogicalName="MSI_14202f69-1323-47bd-abc9-c08b7fd2ea28" SettingSourceType="MSI" Method="Count" Changeable="false" />
+                <ConstantValue Value="0" DataType="Int64" />
+              </Operands>
+            </Expression>
+          </Rule>
+        </EnhancedDetectionMethod>
+        <InstallCommandLine>cscript.exe install.wsf silent nogtcdialog nooscheck</InstallCommandLine>
+        <InstallContent ContentId="Content_4b884f42-1a93-429b-a35b-00efad060099" Version="1" />
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <AllowUninstall>true</AllowUninstall>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>

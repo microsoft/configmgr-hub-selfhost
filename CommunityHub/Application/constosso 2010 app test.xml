@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_2B3C9CC1-226A-4ED3-95D6-513D3BB316FD" LogicalName="Application_7485f1de-fb7d-435d-acca-ead5bd10ef05" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>constosso 2010 app test</Title>
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_83024476">constosso 2010 app test</Title>
+    <Description ResourceId="Res_1691436589" />
+    <Publisher ResourceId="Res_893284429" />
+    <SoftwareVersion ResourceId="Res_357074646" />
+    <CustomId ResourceId="Res_1608429779" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>

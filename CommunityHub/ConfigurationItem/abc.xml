@@ -1,0 +1,52 @@
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <BusinessPolicy AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="BusinessPolicy_712283ac-6582-467b-9e59-16de08474233" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="abc" ResourceId="ID-ca07950a-e3c3-44bb-927c-b3fd90807e92" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_468f78ac-9971-4c63-968f-d383d3dc8ad7" Severity="None" NonCompliantWhenSettingIsNotFound="true">
+        <Annotation>
+          <DisplayName Text="Require password settings on devices" ResourceId="ID-cf826097-72bb-4680-9e87-0effad86e0ff" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="GLOBAL" LogicalName="DeviceMgmtSetting" DataType="Boolean" SettingLogicalName="Device_Password_Required" SettingSourceType="CIM" Method="Value" Changeable="true" />
+            <ConstantValue Value="True" DataType="Boolean" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_924241f9-1579-4327-ade0-606329b85676" Severity="None" NonCompliantWhenSettingIsNotFound="true">
+        <Annotation>
+          <DisplayName Text="Number of passwords remembered" ResourceId="ID-fba4d9c4-3a46-4ca4-ade9-25d6da2c6190" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="GLOBAL" LogicalName="DeviceMgmtSetting" DataType="Int64" SettingLogicalName="Device_Password_History" SettingSourceType="CIM" Method="Value" Changeable="true" />
+            <ConstantValue Value="1" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+  </BusinessPolicy>
+</DesiredConfigurationDigest>
