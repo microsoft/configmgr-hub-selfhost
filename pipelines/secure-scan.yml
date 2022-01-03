@@ -29,7 +29,7 @@ steps:
     inputs:
       filePath: '$(System.ArtifactsDirectory)\scripts\Extensiondownloader.ps1'
       failOnStderr: true
-      workingDirectory: '$(Build.SourcesDirectory)\objects'
+      workingDirectory: '$(Build.SourcesDirectory)\CommunityHub'
 
   - powershell: 'get-childitem env:'
     displayName: "Print variables"
@@ -50,7 +50,7 @@ steps:
     displayName: 'Run PoliCheck'
     inputs:
       targetType: F
-      targetArgument: '$(Build.SourcesDirectory)\objects'
+      targetArgument: '$(Build.SourcesDirectory)\CommunityHub'
     continueOnError: true
 
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-antimalware.AntiMalware@3
@@ -68,7 +68,7 @@ steps:
 
   - task: CodeSign@1
     inputs:
-      Path: '$(Build.SourcesDirectory)\objects\ConsoleExtension'
+      Path: '$(Build.SourcesDirectory)\CommunityHub\ConsoleExtension'
       verboseOutput: true
       PolicyType: 'Custom'
       PolicyFile: '$(codeSignPolicyFile)'
