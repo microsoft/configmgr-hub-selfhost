@@ -1,0 +1,2 @@
+﻿If (Get-ItemProperty "HKLM:Software\Microsoft\Windows NT\CurrentVersion" -Name CM_DSLID -ErrorAction 0) {(Get-Item "HKLM:Software\Microsoft\Windows NT\CurrentVersion").GetValue('CM_DSLID')}
+   ELSE { Write-Host "Image not deployed via OSD" }

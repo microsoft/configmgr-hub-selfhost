@@ -1,0 +1,7 @@
+{
+  "downloadLocation": "https://releases.recastsoftware.com/releases/downloadcab/830",
+  "FileHash": "533C97B417DB046E2537EC6BAC7F6D81D4BB772A29A51AD780135659A6E155B5",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "2112 selfhost extension-CodeSign-Policy.xml",
+  "Version": "2112.1"
+}

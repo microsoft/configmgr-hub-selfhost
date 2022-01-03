@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_25d57003-15e2-4efd-8abe-8d59fe20021a" Version="3">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="liharris_test_hub_3" ResourceId="ID-4f19d995-37ef-41c8-a43f-efc616d750f4" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <File Is64Bit="false" LogicalName="File_36f9f90e-ca07-4f63-8d3e-1d9d6336df65">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="check for File 1" ResourceId="ID-93a96d77-c9c7-4c97-9b41-07a3ea29a691" />
+          <Description Text="checking for File 1" ResourceId="ID-71bde220-329b-4e1f-911c-7013a30f2a7f" />
+        </Annotation>
+        <Path>C:\somePath\someSubPath</Path>
+        <Filter>File1.txt</Filter>
+      </File>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
