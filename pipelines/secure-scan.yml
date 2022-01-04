@@ -75,7 +75,7 @@ steps:
       ExcludePassesFromLog: false
       FailIfNoTargetsFound: 'false'
 
-  - task: CodeSign@2
+  - task: CodeSign@1
     inputs:
       Path: '$(Build.SourcesDirectory)\Communityhub\ConsoleExtension'
       verboseOutput: true
