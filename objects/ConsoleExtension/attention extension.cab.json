@@ -1,0 +1,6 @@
+{
+  "downloadLocation": "https://raw.githubusercontent.com/sihlamMSFT/testing/master/SignedCab/AllStatusMessageForTsDeployment.cab",
+  "FileHash": "78288D61CF672FF7B1A2FBFC737DF2AA38811E7B30AE43541E612764A51FE1DA",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "attention extension-CodeSign-Policy.xml"
+}
