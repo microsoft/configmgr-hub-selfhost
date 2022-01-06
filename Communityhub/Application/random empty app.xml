@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_BFD240D2-33C5-4A8E-9D12-ACE7EBB6A000" LogicalName="Application_aa030e85-2f2e-4360-a2b1-6038d37bb6cc" Version="2">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>random empty app</Title>
+        <Publisher>contosso</Publisher>
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <Title ResourceId="Res_703659009">random empty app</Title>
+    <Description ResourceId="Res_638287515" />
+    <Publisher ResourceId="Res_744955128">contosso</Publisher>
+    <SoftwareVersion ResourceId="Res_183175628" />
+    <CustomId ResourceId="Res_888462507" />
+    <Owners>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Meg" />
+    </Contacts>
+  </Application>
+</AppMgmtDigest>
