@@ -1,0 +1,11 @@
+<sequence version="3.10">
+  <step type="SMS_TaskSequence_JoinDomainWorkgroupAction" name="Join Domain or Workgroup" description="" runIn="FullOS" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>osdjoin.exe /type:%OSDJoinType%</action>
+    <defaultVarList>
+      <variable name="OSDJoinDomainName" property="DomainName">R61460004DOM.net</variable>
+      <variable name="OSDJoinAccount" property="DomainUsername">R61460004DOM\Meg</variable>
+      <variable name="OSDJoinSkipReboot" property="SkipReboot">false</variable>
+      <variable name="OSDJoinType" property="Type">0</variable>
+    </defaultVarList>
+  </step>
+</sequence>
