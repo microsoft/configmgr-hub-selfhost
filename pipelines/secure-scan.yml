@@ -27,7 +27,7 @@ steps:
   - task: PowerShell@2
     displayName: "Download, Expand, and Validate Console Extensions"
     inputs:
-      filePath: '$(Build.SourcesDirectory)\pipelines\Extensiondownloader.ps1'
+      filePath: '$(System.ArtifactsDirectory)\scripts\Extensiondownloader.ps1'
       failOnStderr: true
       workingDirectory: '$(Build.SourcesDirectory)'
 
