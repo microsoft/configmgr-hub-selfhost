@@ -16,7 +16,7 @@
       <OperatingSystemExpression>
         <Operator>OneOf</Operator>
         <Operands>
-          <RuleExpression RuleId="Windows/All_x64_Windows_XP_Professional" />
+
           <RuleExpression RuleId="Windows/All_x86_Windows_XP" />
           <RuleExpression RuleId="Windows/x64_Windows_XP_Professional_SP2" />
           <RuleExpression RuleId="Windows/x86_Windows_XP_Professional_Service_Pack_3" />
