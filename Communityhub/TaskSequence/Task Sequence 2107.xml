@@ -1,0 +1,9 @@
+<sequence version="3.10">
+  <step type="SMS_TaskSequence_CaptureNetworkSettingsAction" name="Capture Network Settings" description="" runIn="FullOS" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>osdnetsettings.exe capture netmembership:%OSDMigrateNetworkMembership% adapters:%OSDMigrateAdapterSettings%</action>
+    <defaultVarList>
+      <variable name="OSDMigrateAdapterSettings" property="MigrateAdapterSettings">false</variable>
+      <variable name="OSDMigrateNetworkMembership" property="MigrateNetworkMembership">false</variable>
+    </defaultVarList>
+  </step>
+</sequence>
