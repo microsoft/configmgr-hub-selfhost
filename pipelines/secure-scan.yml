@@ -21,7 +21,7 @@ steps:
       feed: '/9b6eeac8-9d95-4be6-b625-aad8659f5c65'
       view: 'dc24c3c3-a05b-4e24-80f2-8c90bf700a5f'
       definition: 'd168c270-391f-4a3f-984a-6ca97aa9d532'
-      version: '5.2111.1040.1000'
+      version: '5.2203.1030.1000'
       downloadPath: '$(System.ArtifactsDirectory)'
 
   - task: PowerShell@2
