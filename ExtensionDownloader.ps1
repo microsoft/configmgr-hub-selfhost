@@ -116,13 +116,10 @@ function get-ChangedExtensions{
     write-host "Comparing commits:" $srcCommit  "," $destCommit;
 
     $wildCardPath = $consoleExsDirectory + "/*.json";
-    write-host $wildCardPath;
-    $step1 = git diff $srcCommit $destCommit --name-only;
-    write-host $step1;
     # return the list of json files changed between the source and destination branches.
     $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like $wildCardPath};
 
-    write-host "Changed extension json:" $changed;
+    write-host "Changed extension json:" $changed
 
     return $changed;
 }
@@ -188,7 +185,7 @@ function DownloadAndExpand {
 
         foreach($json in $extensionJson)
         {
-            $jsonFile = $repoRootFolder + "\" + $json; # ...\objects\ConsoleExtension\Some Extension.json
+            $jsonFile = $repoRootFolder + "\" + $json; + " # ...\" + $consoleExsPath + "\Some Extension.json"
 
             Write-Host "Processing extension json:" $jsonFile;
 
@@ -229,6 +226,8 @@ function DownloadAndExpand {
             }
             
             Write-Host "Downloading cab:" $objectInfo.downloadLocation "to:" $itemDir;
+            Write-Host "Uri:" $objectInfo.downloadLocation 
+            Write-Host "CabFile:" $cabFile
             Invoke-WebRequest -Uri $objectInfo.downloadLocation -OutFile $cabFile;
 
             verifyFileHash -expectedHash $objectInfo.FileHash -fileToCheck $cabFile -algorithm $objectInfo.HashAlgorithm -ErrorAction Stop
