@@ -10,13 +10,13 @@ function RunValidation {
     $artifactsLocation = $Env:SYSTEM_ARTIFACTSDIRECTORY;
     $consoleExValidatorLocation = $artifactsLocation + "\lib\net40\Microsoft.ConfigurationManager.ConsoleExtensionCommon.dll";
     $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
-    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath $consoleExsPath;
+    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath $consoleExsPath + "/consoleextension";
 
     Write-Host 'Using validator from ' $consoleExValidatorLocation;
 
     if((Test-Path $consoleExsDirectory) -eq $true)
     {
-        $extensionJson = get-ChangedExtensions $consoleExsPath;
+        $extensionJson = get-ChangedExtensions $consoleExsPath + "/consoleextension";
     
         if ($null -ne $extensionJson)
         {
@@ -115,7 +115,7 @@ function get-ChangedExtensions{
     
     write-host "Comparing commits:" $srcCommit  "," $destCommit;
 
-    $wildCardPath = $consoleExsDirectory + "/*.json";
+    $wildCardPath = $consoleExsDirectory + "\consoleExtension/*.json";
     # return the list of json files changed between the source and destination branches.
     $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like $wildCardPath};
 
@@ -172,20 +172,20 @@ function DownloadAndExpand {
 
     print-EnvironmentVariables;
 
-    $extensionJson = get-ChangedExtensions $consoleExsPath;
+    $extensionJson = get-ChangedExtensions $consoleExsPath + "/consoleextension";
 
    if($null -ne $extensionJson)
     {
         Write-Host "##vso[task.setvariable variable=codeSignEnabled]true"
         
         $repoRootFolder = (get-BuildRootDirectory);
-        $consoleExtensionFolder = Join-Path -Path $repoRootFolder -ChildPath $consoleExsPath
+        $consoleExtensionFolder = Join-Path -Path $repoRootFolder -ChildPath $consoleExsPath + "/consoleextension"
 
         write-host "Repository root:" $repoRootFolder;
 
         foreach($json in $extensionJson)
         {
-            $jsonFile = $repoRootFolder + "\" + $json + "; # ...\" + $consoleExsPath + "\Some Extension.json"
+            $jsonFile = $repoRootFolder + "\" + $json + "; # ...\" + $consoleExsPath + "\consoleextension\Some Extension.json"
 
             Write-Host "Processing extension json:" $jsonFile;
 
@@ -352,14 +352,14 @@ function print-EnvironmentVariables
     get-childitem env:
 }
 
-$objectsExts = "objects/consoleextension";
-$hubExts = "Communityhub/consoleextension";
+$objectsExts = "objects";
+$hubExts = "Communityhub";
 
-Write-host 'Extension downloader running on ' + $objectsExts
+Write-host 'Extension downloader running on ' $objectsExts
 
 DownloadAndExpand $objectsExts;
 
-Write-host 'Extension downloader running on ' + $hubExts
+Write-host 'Extension downloader running on ' $hubExts
 
 DownloadAndExpand $hubExts;
 
@@ -367,11 +367,11 @@ Write-Host "=================================================="
 Write-Host "Extension downloader finished";
 Write-Host "=================================================="
 
-Write-Host 'Running console extension validation on ' + $objectsExts
+Write-Host 'Running console extension validation on ' $objectsExts
 
 RunValidation $objectsExts;
 
-Write-Host 'Running console extension validation on ' + $hubExts
+Write-Host 'Running console extension validation on ' $hubExts
 
 RunValidation $hubExts;
 
