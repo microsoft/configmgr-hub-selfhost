@@ -175,7 +175,7 @@ function DownloadAndExpand {
 
     print-EnvironmentVariables;
 
-    $extensionJson = get-ChangedExtensions;
+    $extensionJson = get-ChangedExtensions $consoleExsPath;
 
    if($null -ne $extensionJson)
     {
