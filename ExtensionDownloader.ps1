@@ -115,7 +115,7 @@ function get-ChangedExtensions{
     
     write-host "Comparing commits:" $srcCommit  "," $destCommit;
 
-    $wildCardPath = $consoleExsDirectory + "\consoleExtension/*.json";
+    $wildCardPath = $consoleExsDirectory + "/*.json";
     # return the list of json files changed between the source and destination branches.
     $changed = git diff $srcCommit $destCommit --name-only | where-object { $_ -like $wildCardPath};
 
@@ -172,7 +172,7 @@ function DownloadAndExpand {
 
     print-EnvironmentVariables;
 
-    $extensionJson = get-ChangedExtensions $consoleExsPath + "/consoleextension";
+    $extensionJson = get-ChangedExtensions $consoleExsPath+"/consoleextension";
 
    if($null -ne $extensionJson)
     {
