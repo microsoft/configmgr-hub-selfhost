@@ -10,13 +10,13 @@ function RunValidation {
     $artifactsLocation = $Env:SYSTEM_ARTIFACTSDIRECTORY;
     $consoleExValidatorLocation = $artifactsLocation + "\lib\net40\Microsoft.ConfigurationManager.ConsoleExtensionCommon.dll";
     $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
-    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath $consoleExsPath + "/consoleextension";
+    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath $consoleExsPath "/consoleextension";
 
     Write-Host 'Using validator from ' $consoleExValidatorLocation;
 
     if((Test-Path $consoleExsDirectory) -eq $true)
     {
-        $extensionJson = get-ChangedExtensions $consoleExsPath + "/consoleextension";
+        $extensionJson = get-ChangedExtensions $consoleExsPath "/consoleextension";
     
         if ($null -ne $extensionJson)
         {
@@ -179,7 +179,7 @@ function DownloadAndExpand {
         Write-Host "##vso[task.setvariable variable=codeSignEnabled]true"
         
         $repoRootFolder = (get-BuildRootDirectory);
-        $consoleExtensionFolder = Join-Path -Path $repoRootFolder -ChildPath $consoleExsPath + "/consoleextension"
+        $consoleExtensionFolder = Join-Path -Path $repoRootFolder -ChildPath $consoleExsPath "/consoleextension"
 
         write-host "Repository root:" $repoRootFolder;
 
@@ -355,11 +355,11 @@ function print-EnvironmentVariables
 $objectsExts = "objects";
 $hubExts = "Communityhub";
 
-Write-host 'Extension downloader running on ' $objectsExts
+Write-host 'Extension downloader running on' $objectsExts
 
 DownloadAndExpand $objectsExts;
 
-Write-host 'Extension downloader running on ' $hubExts
+Write-host 'Extension downloader running on' $hubExts
 
 DownloadAndExpand $hubExts;
 
@@ -367,11 +367,11 @@ Write-Host "=================================================="
 Write-Host "Extension downloader finished";
 Write-Host "=================================================="
 
-Write-Host 'Running console extension validation on ' $objectsExts
+Write-Host 'Running console extension validation on' $objectsExts
 
 RunValidation $objectsExts;
 
-Write-Host 'Running console extension validation on ' $hubExts
+Write-Host 'Running console extension validation on' $hubExts
 
 RunValidation $hubExts;
 
