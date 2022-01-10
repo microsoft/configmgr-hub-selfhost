@@ -10,13 +10,13 @@ function RunValidation {
     $artifactsLocation = $Env:SYSTEM_ARTIFACTSDIRECTORY;
     $consoleExValidatorLocation = $artifactsLocation + "\lib\net40\Microsoft.ConfigurationManager.ConsoleExtensionCommon.dll";
     $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
-    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath $consoleExsPath "/consoleextension";
+    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath $consoleExsPath -AdditionalChildPath "consoleextension";
 
     Write-Host 'Using validator from ' $consoleExValidatorLocation;
 
     if((Test-Path $consoleExsDirectory) -eq $true)
     {
-        $extensionJson = get-ChangedExtensions $consoleExsPath "/consoleextension";
+        $extensionJson = get-ChangedExtensions $consoleExsPath+"/consoleextension";
     
         if ($null -ne $extensionJson)
         {
