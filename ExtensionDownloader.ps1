@@ -353,8 +353,8 @@ function print-EnvironmentVariables
     get-childitem env:
 }
 
-$objectsExts = "objects\consoleextension";
-$hubExts = "Communityhub\consoleextension";
+$objectsExts = "objects/consoleextension";
+$hubExts = "Communityhub/consoleextension";
 
 Write-host 'Extension downloader running on ' + $objectsExts
 
