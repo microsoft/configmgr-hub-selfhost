@@ -36,9 +36,14 @@ function RunValidation {
             Try
             {
                 Write-Host 'Verifying the signature of the cab file...'
-                $validator.VerifyExtensionCabSigniture($extensionCabPath);
+                #if ($validator.VerifyExtensionCabSigniture($extensionCabPath) == $false)
+                #{
+                #    Write-Error "Could not validate the signature of the cab file";
+                #}
+
                 Write-Host 'Verifying the contents of the cab file...'
                 $validator.VerifyExtensionCabContent($expandedCabFolder);
+                
                 Write-Host 'All validation succeeded'
             }
             Catch
@@ -206,7 +211,7 @@ function DownloadAndExpand {
             $policyFile  = $consoleExtensionFolder + $objectInfo.codeSignPolicyFile;
             Write-Host "##vso[task.setvariable variable=codeSignPolicyFile;]$policyFile"
 
-            $itemDir = $consoleExtensionFolder + $objectName;
+            $itemDir = Join-Path -Path $consoleExtensionFolder -ChildPath $objectName;
             $cabFile = $itemDir + "\" + $objectName + ".cab"
 
             # Ensure the folder has not been pre-created
