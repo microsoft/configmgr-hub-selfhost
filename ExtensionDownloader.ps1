@@ -10,9 +10,10 @@ function RunValidation {
     $artifactsLocation = $Env:SYSTEM_ARTIFACTSDIRECTORY;
     $consoleExValidatorLocation = $artifactsLocation + "\lib\net40\Microsoft.ConfigurationManager.ConsoleExtensionCommon.dll";
     $itemsRootDirectory = $Env:BUILD_REPOSITORY_LOCALPATH;
-    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath $consoleExsPath+"/consoleextension";
+    $consoleExsDirectory = Join-Path -Path $itemsRootDirectory -ChildPath ($consoleExsPath+"/consoleextension");
 
     Write-Host 'Using validator from ' $consoleExValidatorLocation;
+    Write-Host 'Using directory ' $consoleExsDirectory;
 
     if((Test-Path $consoleExsDirectory) -eq $true)
     {
@@ -179,7 +180,7 @@ function DownloadAndExpand {
         Write-Host "##vso[task.setvariable variable=codeSignEnabled]true"
         
         $repoRootFolder = (get-BuildRootDirectory);
-        $consoleExtensionFolder = Join-Path -Path $repoRootFolder -ChildPath $consoleExsPath+"/consoleextension"
+        $consoleExtensionFolder = Join-Path -Path $repoRootFolder -ChildPath ($consoleExsPath+"/consoleextension")
 
         write-host "Repository root:" $repoRootFolder;
 
