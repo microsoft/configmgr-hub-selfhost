@@ -187,7 +187,7 @@ function DownloadAndExpand {
 
         foreach($json in $extensionJson)
         {
-            $jsonFile = $repoRootFolder + "\" + $json + "; # ...\" + $consoleExsPath + "\consoleextension\Some Extension.json"
+            $jsonFile = $repoRootFolder + "\" + $json; # ...\" + $consoleExsPath + "\consoleextension\Some Extension.json"
 
             Write-Host "Processing extension json:" $jsonFile;
 
