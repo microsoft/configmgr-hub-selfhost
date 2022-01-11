@@ -16,7 +16,7 @@ function RunValidation {
 
     if((Test-Path $consoleExsDirectory) -eq $true)
     {
-        $extensionJson = get-ChangedExtensions $consoleExsPath+"/consoleextension";
+        $extensionJson = get-ChangedExtensions $consoleExsPath"\consoleextension";
     
         if ($null -ne $extensionJson)
         {
@@ -172,7 +172,7 @@ function DownloadAndExpand {
 
     print-EnvironmentVariables;
 
-    $extensionJson = get-ChangedExtensions $consoleExsPath+"/consoleextension";
+    $extensionJson = get-ChangedExtensions $consoleExsPath"\consoleextension";
 
    if($null -ne $extensionJson)
     {
