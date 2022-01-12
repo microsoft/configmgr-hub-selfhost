@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_619C9E4E-49BA-41E0-B647-DF9C129DE218" LogicalName="Baseline_bd263501-8f7e-4395-9366-1dd7f8a39aef" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="BL2107 for 2201[2]" ResourceId="ID-8b4fc1c1-1b2e-4b01-a1aa-3c6aeec9b5e1" />
+      <Description Text="test" ResourceId="ID-09bb0379-bf07-4a44-b1e0-7c58bb334816" />
+    </Annotation>
+    <RequiredItems>
+      <ApplicationReference AuthoringScopeId="ScopeId_619C9E4E-49BA-41E0-B647-DF9C129DE218" LogicalName="Application_75d09538-7000-4f72-a89d-4905941f527f" />
+    </RequiredItems>
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems />
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
