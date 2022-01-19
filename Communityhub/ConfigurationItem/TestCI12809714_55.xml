@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_595272E4-ACD9-4E7C-9117-A540402CA2E3" LogicalName="OperatingSystem_b2834fa4-7809-4913-ad30-fb4c9a95add2" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="TestCI12809714_55" ResourceId="ID-6402755a-5631-4624-b73d-a04641d125d5" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_ARM64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_MultiSession_Enterprise_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
