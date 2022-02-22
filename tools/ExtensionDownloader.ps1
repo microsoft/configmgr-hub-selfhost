@@ -36,7 +36,7 @@ function RunValidation {
             Try
             {
                 Write-Host 'Verifying the signature of the cab file...'
-                if ($validator.VerifyExtensionCabSigniture($extensionCabPath) == $false)
+                if ($validator.VerifyExtensionCabSigniture($extensionCabPath) -eq $false)
                 {
                     Write-Error "Could not validate the signature of the cab file";
                 }
