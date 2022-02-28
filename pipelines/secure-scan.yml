@@ -18,8 +18,8 @@ steps:
     displayName: "Download console extension validation library"
     inputs:
       packageType: 'nuget'
-      feed: '920d9546-58c4-42e5-b626-aeff84ceadb7/92dd544c-c0cf-4768-9ee3-f9246501c978'
-      view: '8e11e325-f60c-494c-a4d3-c2d3a1fbb94b'
+      feed: '/9b6eeac8-9d95-4be6-b625-aad8659f5c65'
+      view: 'dc24c3c3-a05b-4e24-80f2-8c90bf700a5f'
       definition: 'Microsoft.ConfigurationManager.ConsoleExtension-release'
       version: '5.2203.1080.1000'
       downloadPath: '$(System.ArtifactsDirectory)'
