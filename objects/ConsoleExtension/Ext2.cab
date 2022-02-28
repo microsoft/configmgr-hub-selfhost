@@ -1,0 +1,6 @@
+{
+  "downloadLocation": "https://bing.com",
+  "FileHash": "1234567890123456789012345678901234567890123456789012345678901234",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "Ext2-CodeSign-Policy.xml"
+}
