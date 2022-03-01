@@ -1,0 +1,7 @@
+{
+  "downloadLocation": "https://www.microsoft.com",
+  "FileHash": "075f0956584cfa8d32beb384fcf51ce3ee30a7e5aeee6434acc222928a30db3e",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "serse-CodeSign-Policy.xml",
+  "Version": "1.11"
+}
