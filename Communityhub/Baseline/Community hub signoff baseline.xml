@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_2ABB9561-579B-4183-BFB5-B9A6D8A8EC42" LogicalName="Baseline_b776b124-beb9-4eee-aaf8-23d3b7256cae" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="Community hub signoff baseline" ResourceId="ID-584efaff-b99b-449b-8171-14452be1d9a4" />
+      <Description Text="2 CIs" ResourceId="ID-cc768132-6a1c-40fe-a79c-7491ffa7ef2d" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_2ABB9561-579B-4183-BFB5-B9A6D8A8EC42" LogicalName="OperatingSystem_b077a8ad-a38f-4b61-82ef-bed300d64668" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_2ABB9561-579B-4183-BFB5-B9A6D8A8EC42" LogicalName="OperatingSystem_2b287ef0-cde6-432b-9538-cd280dccadf3" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
