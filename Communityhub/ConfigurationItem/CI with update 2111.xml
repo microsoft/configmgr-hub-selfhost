@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <BusinessPolicy AuthoringScopeId="ScopeId_05EB13E5-FE91-490E-8791-188A2A685230" LogicalName="BusinessPolicy_67987063-82fe-4bae-a73f-1ad77734e1e4" Version="3">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI with update 2111" ResourceId="ID-07dad257-8812-46df-96bf-543298642cef" />
+      <Description Text="test" ResourceId="ID-93416bc1-b9dc-4ad3-85a2-fde343981688" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <RegistryKey Hive="HKEY_LOCAL_MACHINE" Is64Bit="false" LogicalName="RegKey_34ca33a0-ea49-4902-96aa-4dfa62443611">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="SOFTWARE" ResourceId="ID-7813b399-f816-41cd-8fa6-9ee3ba2f43ca" />
+          <Description Text="" />
+        </Annotation>
+        <Key>SOFTWARE</Key>
+      </RegistryKey>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_b22e6a22-e5ce-41f1-8264-f2a52922faf9" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="SOFTWARE key must exist" ResourceId="ID-cee77100-ee45-40b2-8bd1-db2867053edb" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_05EB13E5-FE91-490E-8791-188A2A685230" LogicalName="BusinessPolicy_67987063-82fe-4bae-a73f-1ad77734e1e4" Version="3" DataType="Int64" SettingLogicalName="RegKey_34ca33a0-ea49-4902-96aa-4dfa62443611" SettingSourceType="RegistryKey" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+  </BusinessPolicy>
+</DesiredConfigurationDigest>
