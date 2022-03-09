@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_47443928-F1FA-47C8-AC63-116CBB1A351E" LogicalName="OperatingSystem_d3ea596e-9025-493c-a884-85a6b3ee3bc8" Version="1" ConfigurationFlags="256">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="Hub_ci_1_2203" ResourceId="ID-4dbcdebf-ae9f-4a83-beaa-4d6c6c124154" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_b498e227-ffdd-4641-ace7-53b162a694f2" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="regval1" ResourceId="ID-28f6e686-73be-4420-88ff-af7f5e79b7b1" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>Software\Microsoft\SomeKey</Key>
+            <ValueName>SomeVal</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_2b475187-eac4-43f6-9bf8-5a640452bb37" Severity="None" NonCompliantWhenSettingIsNotFound="true">
+        <Annotation>
+          <DisplayName Text="New_Rule" ResourceId="ID-b2d1b2b9-f74a-4be2-a4e6-19ee3b9a0428" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_47443928-F1FA-47C8-AC63-116CBB1A351E" LogicalName="OperatingSystem_d3ea596e-9025-493c-a884-85a6b3ee3bc8" Version="1" DataType="Int64" SettingLogicalName="RegSetting_b498e227-ffdd-4641-ace7-53b162a694f2" SettingSourceType="Registry" Method="Value" Changeable="true" />
+            <ConstantValue Value="1" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
