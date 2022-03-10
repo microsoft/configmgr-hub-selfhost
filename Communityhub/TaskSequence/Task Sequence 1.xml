@@ -1,0 +1,31 @@
+<sequence version="3.10">
+  <step type="SMS_TaskSequence_PrestartCheckAction" name="Check Readiness" description="" runIn="WinPEandFullOS" successCodeList="0" retryCount="0" runFromNet="false">
+    <action>OSDPrestartCheck.exe </action>
+    <defaultVarList>
+      <variable name="OSDCMClientMinVersion" property="CMClientMinVersion"> .  .    .</variable>
+      <variable name="OSDCheckCMClientMinVersion" property="CheckCMClientMinVersion">false</variable>
+      <variable name="OSDCheckDeviceUEFI" property="CheckDeviceUEFI">false</variable>
+      <variable name="OSDCheckFreeDiskSpace" property="CheckFreeDiskSpace">true</variable>
+      <variable name="OSDCheckMaxOsVersion" property="CheckMaxOSVersion">false</variable>
+      <variable name="OSDCheckMemory" property="CheckMemory">true</variable>
+      <variable name="OSDCheckMinOSVersion" property="CheckMinOSVersion">false</variable>
+      <variable name="OSDCheckNetworkConnected" property="CheckNetworkConnected">false</variable>
+      <variable name="OSDCheckNetworkWired" property="CheckNetworkWired">false</variable>
+      <variable name="OSDCheckOSArchitecture" property="CheckOSArchitecture">false</variable>
+      <variable name="OSDCheckOSLanguageID" property="CheckOSLanguageID">false</variable>
+      <variable name="OSDCheckOSType" property="CheckOSType">true</variable>
+      <variable name="OSDCheckPowerState" property="CheckPowerState">false</variable>
+      <variable name="OSDCheckProcessorSpeed" property="CheckProcessorSpeed">true</variable>
+      <variable name="OSDCheckDeviceTpmActivated" property="CheckTpmActivated">false</variable>
+      <variable name="OSDCheckDeviceTpmEnabled" property="CheckTpmEnabled">false</variable>
+      <variable name="OSDFreeDiskSpace" property="FreeDiskSpace">25000</variable>
+      <variable name="OSDMaxOSVersion" property="MaxOSVersion">  . .</variable>
+      <variable name="OSDMemory" property="Memory">512</variable>
+      <variable name="OSDMinOSVersion" property="MinOSVersion">  . .</variable>
+      <variable name="OSDOSArchitecture" property="OSArchitecture">64</variable>
+      <variable name="OSDOSLanguageID" property="OSLanguageID">1033</variable>
+      <variable name="OSDOSType" property="OSType">CLIENT</variable>
+      <variable name="OSDProcessorSpeed" property="ProcessorSpeed">800</variable>
+    </defaultVarList>
+  </step>
+</sequence>
