@@ -1,1 +1,1 @@
-﻿Write-Host "Community hub rocks!"
+﻿Write-Host "Community hub is the best!"
