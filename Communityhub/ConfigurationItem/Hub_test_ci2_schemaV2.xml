@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_98166c76-23f0-451a-8a68-4819580c280c" Version="2" ConfigurationFlags="256">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="Hub_test_ci2_schemaV2" ResourceId="ID-3a6d6d97-5fb9-45e3-b5a9-ccec01b00835" />
+      <Description Text="sdfsdf" ResourceId="ID-0ba7595a-3b0e-4f94-a7d1-fd2c2e8ef774" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_b5fa0f5d-2e2a-4f5d-aac7-f7d8d9afdc55" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="regkey1" ResourceId="ID-55d0fc22-f531-4548-8215-61657477be0c" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>Software\Microsoft\CCM</Key>
+            <ValueName>value1</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_ARM64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_MultiSession_Enterprise_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_CORE" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1_Core" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2_Core" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+          <RuleExpression RuleId="Windows/All_Embedded_Windows_XP" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/x64_Embedded_Windows_7" />
+          <RuleExpression RuleId="Windows/x86_Embedded_Windows_7" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2022_and_higher" />
+          <RuleExpression RuleId="Windows/All_ARM64_Windows_11_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_MultiSession_Enterprise_Windows_11_higher" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_11_and_higher_Clients" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
