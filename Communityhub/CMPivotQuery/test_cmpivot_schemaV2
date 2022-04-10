@@ -1,0 +1,2 @@
+Service
+| where Name == 'SMS Agent Host'
