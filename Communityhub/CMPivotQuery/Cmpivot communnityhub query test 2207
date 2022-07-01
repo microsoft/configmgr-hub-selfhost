@@ -1,0 +1,1 @@
+Device | where Device like '*0341'
