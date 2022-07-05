@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_c7b4bb3f-73fd-4e90-8796-88bd6f79565b" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>ggg</Title>
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_be848625-43a6-43f3-82aa-52b9f08e62c1" Version="1" />
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_05b18faa-2093-45c4-8997-e719f2f6263f" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_659583310">ggg</Title>
+    <Description ResourceId="Res_1825495732" />
+    <Owners>
+      <User Qualifier="LogonName" Id="csires" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="csires" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_be848625-43a6-43f3-82aa-52b9f08e62c1" Version="1">
+    <Title ResourceId="Res_1775484496">Edge X64 Default Deployment Type</Title>
+    <Requirements>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="requirement_rule_c6cbaf1e-032f-4b61-ab37-ebe0dcd92419" Severity="None" NonCompliantWhenSettingIsNotFound="false">
+        <OperatingSystemExpression>
+          <Operator>OneOf</Operator>
+          <Operands>
+            <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008_R2" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_7_Client" />
+            <RuleExpression RuleId="Windows/x64_Windows_7_Client" />
+            <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2" />
+            <RuleExpression RuleId="Windows/x64_Windows_7_SP1" />
+            <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_8_and_higher_Client" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_8_Client" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_8.1_and_higher_Clients" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2_and_higher" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_10_higher" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016_and_higher" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+            <RuleExpression RuleId="Windows/All_x64_Windows_8.1" />
+          </Operands>
+        </OperatingSystemExpression>
+      </Rule>
+    </Requirements>
+    <DeploymentTechnology>GLOBAL/ScriptDeploymentTechnology</DeploymentTechnology>
+    <Technology>Script</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="Script">
+      <ExecutionContext>System</ExecutionContext>
+      <Contents>
+        <Content ContentId="Content_0f38b96d-3382-4853-bd48-15101ea0bed1" Version="1">
+          <File Name="Install-Edge.ps1" Size="14272" />
+          <File Name="MicrosoftEdgeBetaEnterpriseX64.msi" Size="82325504" />
+          <Location>\\scfs\users\csires\empty\78.0.276.19\X64\</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>Local</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="MethodBody" Type="String">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;EnhancedDetectionMethod xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+  &lt;Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+    &lt;SimpleSetting LogicalName="RegSetting_3a32ed6f-44c3-4043-b748-e5e2de5b46b3" DataType="Version" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration"&gt;
+      &lt;Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+        &lt;DisplayName Text="" /&gt;
+        &lt;Description Text="" /&gt;
+      &lt;/Annotation&gt;
+      &lt;RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="false"&gt;
+        &lt;Key&gt;SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\Clients\{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}&lt;/Key&gt;
+        &lt;ValueName&gt;pv&lt;/ValueName&gt;
+      &lt;/RegistryDiscoverySource&gt;
+    &lt;/SimpleSetting&gt;
+  &lt;/Settings&gt;
+  &lt;Rule id="EdgeX64VersionRule" Severity="None" NonCompliantWhenSettingIsNotFound="false" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+    &lt;Expression&gt;
+      &lt;Operator&gt;GreaterEquals&lt;/Operator&gt;
+      &lt;Operands&gt;
+        &lt;SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_c7b4bb3f-73fd-4e90-8796-88bd6f79565b" Version="1" DataType="Version" SettingLogicalName="RegSetting_3a32ed6f-44c3-4043-b748-e5e2de5b46b3" SettingSourceType="Registry" Method="Value" Changeable="false" /&gt;
+        &lt;ConstantValue Value="78.0.276.19" DataType="Version" /&gt;
+      &lt;/Operands&gt;
+    &lt;/Expression&gt;
+  &lt;/Rule&gt;
+&lt;/EnhancedDetectionMethod&gt;</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>Script</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">powershell -File ".\Install-Edge.ps1" -MSIName "MicrosoftEdgeBetaEnterpriseX64.msi" -ChannelID "{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}"</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Normal</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">5</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">30</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_0f38b96d-3382-4853-bd48-15101ea0bed1" Version="1" />
+        </Contents>
+      </InstallAction>
+      <CustomData>
+        <DetectionMethod>Enhanced</DetectionMethod>
+        <EnhancedDetectionMethod>
+          <Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest">
+            <SimpleSetting xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration" LogicalName="RegSetting_3a32ed6f-44c3-4043-b748-e5e2de5b46b3" DataType="Version">
+              <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+                <DisplayName Text="" />
+                <Description Text="" />
+              </Annotation>
+              <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="false">
+                <Key>SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\Clients\{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}</Key>
+                <ValueName>pv</ValueName>
+              </RegistryDiscoverySource>
+            </SimpleSetting>
+          </Settings>
+          <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="EdgeX64VersionRule" Severity="None" NonCompliantWhenSettingIsNotFound="false">
+            <Expression>
+              <Operator>GreaterEquals</Operator>
+              <Operands>
+                <SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_c7b4bb3f-73fd-4e90-8796-88bd6f79565b" Version="1" DataType="Version" SettingLogicalName="RegSetting_3a32ed6f-44c3-4043-b748-e5e2de5b46b3" SettingSourceType="Registry" Method="Value" Changeable="false" />
+                <ConstantValue Value="78.0.276.19" DataType="Version" />
+              </Operands>
+            </Expression>
+          </Rule>
+        </EnhancedDetectionMethod>
+        <InstallCommandLine>powershell -File ".\Install-Edge.ps1" -MSIName "MicrosoftEdgeBetaEnterpriseX64.msi" -ChannelID "{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}"</InstallCommandLine>
+        <InstallContent ContentId="Content_0f38b96d-3382-4853-bd48-15101ea0bed1" Version="1" />
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <ExecuteTime>5</ExecuteTime>
+        <MaxExecuteTime>30</MaxExecuteTime>
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <AllowUninstall>true</AllowUninstall>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_05b18faa-2093-45c4-8997-e719f2f6263f" Version="1">
+    <Title ResourceId="Res_1567702018">Edge X86 Default Deployment Type</Title>
+    <Requirements>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="requirement_rule_4e124260-7e26-416d-b88e-48bdeb6ee1ae" Severity="None" NonCompliantWhenSettingIsNotFound="false">
+        <OperatingSystemExpression>
+          <Operator>OneOf</Operator>
+          <Operands>
+            <RuleExpression RuleId="Windows/All_x86_Windows_7_Client" />
+            <RuleExpression RuleId="Windows/x86_Windows_7_Client" />
+            <RuleExpression RuleId="Windows/x86_Windows_7_SP1" />
+            <RuleExpression RuleId="Windows/All_x86_Windows_8_and_higher_Client" />
+            <RuleExpression RuleId="Windows/All_x86_Windows_8_Client" />
+            <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+            <RuleExpression RuleId="Windows/All_x86_Windows_8.1_and_higher_Clients" />
+            <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+            <RuleExpression RuleId="Windows/All_x86_Windows_10_higher" />
+            <RuleExpression RuleId="Windows/All_x86_Windows_8.1" />
+          </Operands>
+        </OperatingSystemExpression>
+      </Rule>
+    </Requirements>
+    <DeploymentTechnology>GLOBAL/ScriptDeploymentTechnology</DeploymentTechnology>
+    <Technology>Script</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="Script">
+      <ExecutionContext>System</ExecutionContext>
+      <Contents>
+        <Content ContentId="Content_e95e9903-9439-4a57-a6f9-2850136ad028" Version="1">
+          <File Name="Install-Edge.ps1" Size="14272" />
+          <File Name="MicrosoftEdgeBetaEnterpriseX86.msi" Size="77324288" />
+          <Location>\\scfs\users\csires\empty\78.0.276.19\X86\</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>Local</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="MethodBody" Type="String">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;EnhancedDetectionMethod xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+  &lt;Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+    &lt;SimpleSetting LogicalName="RegSetting_ed554122-f6f5-4ab6-b59b-fe8925a0560f" DataType="Version" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration"&gt;
+      &lt;Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+        &lt;DisplayName Text="" /&gt;
+        &lt;Description Text="" /&gt;
+      &lt;/Annotation&gt;
+      &lt;RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="false"&gt;
+        &lt;Key&gt;SOFTWARE\Microsoft\EdgeUpdate\Clients\{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}&lt;/Key&gt;
+        &lt;ValueName&gt;pv&lt;/ValueName&gt;
+      &lt;/RegistryDiscoverySource&gt;
+    &lt;/SimpleSetting&gt;
+  &lt;/Settings&gt;
+  &lt;Rule id="EdgeX86VersionRule" Severity="None" NonCompliantWhenSettingIsNotFound="false" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+    &lt;Expression&gt;
+      &lt;Operator&gt;GreaterEquals&lt;/Operator&gt;
+      &lt;Operands&gt;
+        &lt;SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_c7b4bb3f-73fd-4e90-8796-88bd6f79565b" Version="1" DataType="Version" SettingLogicalName="RegSetting_ed554122-f6f5-4ab6-b59b-fe8925a0560f" SettingSourceType="Registry" Method="Value" Changeable="false" /&gt;
+        &lt;ConstantValue Value="78.0.276.19" DataType="Version" /&gt;
+      &lt;/Operands&gt;
+    &lt;/Expression&gt;
+  &lt;/Rule&gt;
+&lt;/EnhancedDetectionMethod&gt;</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>Script</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">powershell -File ".\Install-Edge.ps1" -MSIName "MicrosoftEdgeBetaEnterpriseX86.msi" -ChannelID "{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}"</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Normal</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">5</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">30</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_e95e9903-9439-4a57-a6f9-2850136ad028" Version="1" />
+        </Contents>
+      </InstallAction>
+      <CustomData>
+        <DetectionMethod>Enhanced</DetectionMethod>
+        <EnhancedDetectionMethod>
+          <Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest">
+            <SimpleSetting xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration" LogicalName="RegSetting_ed554122-f6f5-4ab6-b59b-fe8925a0560f" DataType="Version">
+              <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+                <DisplayName Text="" />
+                <Description Text="" />
+              </Annotation>
+              <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="false">
+                <Key>SOFTWARE\Microsoft\EdgeUpdate\Clients\{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}</Key>
+                <ValueName>pv</ValueName>
+              </RegistryDiscoverySource>
+            </SimpleSetting>
+          </Settings>
+          <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="EdgeX86VersionRule" Severity="None" NonCompliantWhenSettingIsNotFound="false">
+            <Expression>
+              <Operator>GreaterEquals</Operator>
+              <Operands>
+                <SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_c7b4bb3f-73fd-4e90-8796-88bd6f79565b" Version="1" DataType="Version" SettingLogicalName="RegSetting_ed554122-f6f5-4ab6-b59b-fe8925a0560f" SettingSourceType="Registry" Method="Value" Changeable="false" />
+                <ConstantValue Value="78.0.276.19" DataType="Version" />
+              </Operands>
+            </Expression>
+          </Rule>
+        </EnhancedDetectionMethod>
+        <InstallCommandLine>powershell -File ".\Install-Edge.ps1" -MSIName "MicrosoftEdgeBetaEnterpriseX86.msi" -ChannelID "{2cd8a007-e189-409d-a2c8-9af4ef3c72aa}"</InstallCommandLine>
+        <InstallContent ContentId="Content_e95e9903-9439-4a57-a6f9-2850136ad028" Version="1" />
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <ExecuteTime>5</ExecuteTime>
+        <MaxExecuteTime>30</MaxExecuteTime>
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <AllowUninstall>true</AllowUninstall>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
