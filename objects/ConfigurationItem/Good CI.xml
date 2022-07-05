@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <Application AuthoringScopeId="ScopeId_FE2ABC9E-5505-4971-89EE-D0E185B3FD28" LogicalName="Application_b095cc41-7779-4232-9902-b41cd402e450" Version="1" Is64Bit="false">
+  <Application AuthoringScopeId="ScopeId_12F29CB3-C0E5-4890-9C45-28A3FBB20C32" LogicalName="LogicalName_0cfb0d44-4284-4ced-9c97-e4fcb3f5a339" Version="1" Is64Bit="false">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="Good CI" ResourceId="ID-2228e5bd-e1a5-4ac9-852a-015dc6ba231d" />
       <Description Text="" />
@@ -32,7 +32,7 @@
         <Expression>
           <Operator>NotEquals</Operator>
           <Operands>
-            <SettingReference AuthoringScopeId="ScopeId_FE2ABC9E-5505-4971-89EE-D0E185B3FD28" LogicalName="Application_b095cc41-7779-4232-9902-b41cd402e450" Version="1" DataType="Int64" SettingLogicalName="RegSetting_c662ffd6-7a2e-443e-a1f4-0f6112f0f976" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <SettingReference AuthoringScopeId="ScopeId_12F29CB3-C0E5-4890-9C45-28A3FBB20C32" LogicalName="LogicalName_0cfb0d44-4284-4ced-9c97-e4fcb3f5a339" Version="1" DataType="Int64" SettingLogicalName="RegSetting_c662ffd6-7a2e-443e-a1f4-0f6112f0f976" SettingSourceType="Registry" Method="Count" Changeable="false" />
             <ConstantValue Value="0" DataType="Int64" />
           </Operands>
         </Expression>
@@ -45,7 +45,7 @@
         <Expression>
           <Operator>Equals</Operator>
           <Operands>
-            <SettingReference AuthoringScopeId="ScopeId_FE2ABC9E-5505-4971-89EE-D0E185B3FD28" LogicalName="Application_b095cc41-7779-4232-9902-b41cd402e450" Version="1" DataType="Int64" SettingLogicalName="RegSetting_c662ffd6-7a2e-443e-a1f4-0f6112f0f976" SettingSourceType="Registry" Method="Value" Changeable="false" />
+            <SettingReference AuthoringScopeId="ScopeId_12F29CB3-C0E5-4890-9C45-28A3FBB20C32" LogicalName="LogicalName_0cfb0d44-4284-4ced-9c97-e4fcb3f5a339" Version="1" DataType="Int64" SettingLogicalName="RegSetting_c662ffd6-7a2e-443e-a1f4-0f6112f0f976" SettingSourceType="Registry" Method="Value" Changeable="false" />
             <ConstantValue Value="0" DataType="Int64" />
           </Operands>
         </Expression>
