@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_2bccd03f-66fc-47d2-b403-9234f1a02b91" Version="3">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>AppNew</Title>
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_819dfeee-2025-4e1b-8f37-030822493217" Version="3" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_504617790">AppNew</Title>
+    <Owners>
+      <User Qualifier="LogonName" Id="vsorokin" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="vsorokin" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_819dfeee-2025-4e1b-8f37-030822493217" Version="3">
+    <Title ResourceId="Res_192027135">My TS</Title>
+    <Description ResourceId="Res_768002240">cc</Description>
+    <Requirements>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_fb379c4c-9302-46f1-8c49-057eb2281995" Severity="None" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Total physical memory Greater than or equal to 222 MB" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>GreaterEquals</Operator>
+          <Operands>
+            <GlobalSettingReference AuthoringScopeId="GLOBAL" LogicalName="TotalPhysicalMemory" DataType="Int64" SettingLogicalName="TotalPhysicalMemory_Setting_LogicalName" SettingSourceType="CIM" Method="Value" />
+            <ConstantValue Value="232783872" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Requirements>
+    <Dependencies>
+      <DeploymentTypeRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="DTRule_3636eb9c-d8cb-4562-b78c-6ac398dcc56e" Severity="Critical">
+        <Annotation>
+          <DisplayName Text="CBI" />
+          <Description Text="" />
+        </Annotation>
+        <DeploymentTypeExpression>
+          <Operator>Or</Operator>
+          <Operands>
+            <DeploymentTypeIntentExpression DesiredState="Required">
+              <DeploymentTypeApplicationReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_306de3fa-08a3-41ca-89c4-796e5a19d7c1" />
+              <DeploymentTypeReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_dde07fb1-4106-456c-93aa-c6ecefe05a24" Changeable="true" />
+            </DeploymentTypeIntentExpression>
+          </Operands>
+        </DeploymentTypeExpression>
+      </DeploymentTypeRule>
+    </Dependencies>
+    <DeploymentTechnology>GLOBAL/TaskSequenceDeploymentTechnology</DeploymentTechnology>
+    <Technology>TaskSequence</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="TaskSequence">
+      <ExecutionContext>System</ExecutionContext>
+      <RequiresLogOn>true</RequiresLogOn>
+      <DetectAction>
+        <Provider>Local</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">System</Arg>
+          <Arg Name="MethodBody" Type="String">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;EnhancedDetectionMethod xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+  &lt;Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest"&gt;
+    &lt;Folder Is64Bit="false" LogicalName="Folder_896102d8-eabc-4301-8049-ceae177133f7" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration"&gt;
+      &lt;Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+        &lt;DisplayName Text="" /&gt;
+        &lt;Description Text="" /&gt;
+      &lt;/Annotation&gt;
+      &lt;Path&gt;E:\&lt;/Path&gt;
+      &lt;Filter&gt;CM&lt;/Filter&gt;
+    &lt;/Folder&gt;
+  &lt;/Settings&gt;
+  &lt;Rule id="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/DeploymentType_819dfeee-2025-4e1b-8f37-030822493217" Severity="Informational" NonCompliantWhenSettingIsNotFound="false" xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"&gt;
+    &lt;Annotation&gt;
+      &lt;DisplayName Text="" /&gt;
+      &lt;Description Text="" /&gt;
+    &lt;/Annotation&gt;
+    &lt;Expression&gt;
+      &lt;Operator&gt;NotEquals&lt;/Operator&gt;
+      &lt;Operands&gt;
+        &lt;SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_2bccd03f-66fc-47d2-b403-9234f1a02b91" Version="1" DataType="Int64" SettingLogicalName="Folder_896102d8-eabc-4301-8049-ceae177133f7" SettingSourceType="Folder" Method="Count" Changeable="false" /&gt;
+        &lt;ConstantValue Value="0" DataType="Int64" /&gt;
+      &lt;/Operands&gt;
+    &lt;/Expression&gt;
+  &lt;/Rule&gt;
+&lt;/EnhancedDetectionMethod&gt;</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>TaskSequence</Provider>
+        <Args>
+          <Arg Name="InstallTaskSequenceId" Type="String">OPC001EB</Arg>
+          <Arg Name="InstallTaskSequenceName" Type="String">505654</Arg>
+          <Arg Name="InstallProgramName" Type="String">*</Arg>
+        </Args>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>TaskSequence</Provider>
+        <Args>
+          <Arg Name="UninstallTaskSequenceId" Type="String">OPC001EB</Arg>
+          <Arg Name="UninstallTaskSequenceName" Type="String">505654</Arg>
+          <Arg Name="UninstallProgramName" Type="String">*</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <DetectionMethod>Enhanced</DetectionMethod>
+        <EnhancedDetectionMethod>
+          <Settings xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest">
+            <Folder xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration" Is64Bit="false" LogicalName="Folder_896102d8-eabc-4301-8049-ceae177133f7">
+              <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+                <DisplayName Text="" />
+                <Description Text="" />
+              </Annotation>
+              <Path>E:\</Path>
+              <Filter>CM</Filter>
+            </Folder>
+          </Settings>
+          <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/DeploymentType_819dfeee-2025-4e1b-8f37-030822493217" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+            <Annotation>
+              <DisplayName Text="" />
+              <Description Text="" />
+            </Annotation>
+            <Expression>
+              <Operator>NotEquals</Operator>
+              <Operands>
+                <SettingReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_2bccd03f-66fc-47d2-b403-9234f1a02b91" Version="1" DataType="Int64" SettingLogicalName="Folder_896102d8-eabc-4301-8049-ceae177133f7" SettingSourceType="Folder" Method="Count" Changeable="false" />
+                <ConstantValue Value="0" DataType="Int64" />
+              </Operands>
+            </Expression>
+          </Rule>
+        </EnhancedDetectionMethod>
+        <InstallCommandLine>Task Sequence</InstallCommandLine>
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <UninstallCommandLine />
+        <UninstallFolder />
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <AllowUninstall>true</AllowUninstall>
+        <InstallProgramName>*</InstallProgramName>
+        <InstallTaskSequenceId>OPC001EB</InstallTaskSequenceId>
+        <InstallTaskSequenceName>505654</InstallTaskSequenceName>
+        <UninstallTaskSequenceId>OPC001EB</UninstallTaskSequenceId>
+        <UninstallTaskSequenceName>505654</UninstallTaskSequenceName>
+        <UninstallProgramName>*</UninstallProgramName>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
