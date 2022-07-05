@@ -1,1 +1,1 @@
-﻿echo ("script 2006 for 2012")
+﻿echo ("script 2006 for 2012 + updated")
