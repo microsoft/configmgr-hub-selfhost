@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="Application_3a7045d0-c7d3-4766-89d2-54cea1faf6d4" Version="1">
+  <Application AuthoringScopeId="ScopeId_84891A21-89D3-4C15-B24D-DA4E9B82FE17" LogicalName="Application_3a7045d0-c7d3-4766-89d2-54cea1faf6d4" Version="1">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>Hub App With Content Test</Title>
-        <Description />
         <Publisher>ehomid</Publisher>
-        <Version />
       </Info>
     </DisplayInfo>
     <DeploymentTypes>
-      <DeploymentType AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="DeploymentType_68ac742d-2833-4419-95f4-c247379e67b2" Version="1" />
+      <DeploymentType AuthoringScopeId="ScopeId_84891A21-89D3-4C15-B24D-DA4E9B82FE17" LogicalName="DeploymentType_68ac742d-2833-4419-95f4-c247379e67b2" Version="1" />
     </DeploymentTypes>
     <Title ResourceId="Res_566182685">Hub App With Content Test</Title>
-    <Description ResourceId="Res_804306448" />
     <Publisher ResourceId="Res_822783760">ehomid</Publisher>
-    <SoftwareVersion ResourceId="Res_995293451" />
-    <CustomId ResourceId="Res_1094644905" />
     <Owners>
       <User Qualifier="LogonName" Id="ehomid" />
     </Owners>
@@ -24,7 +19,7 @@
       <User Qualifier="LogonName" Id="ehomid" />
     </Contacts>
   </Application>
-  <DeploymentType AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="DeploymentType_68ac742d-2833-4419-95f4-c247379e67b2" Version="1">
+  <DeploymentType AuthoringScopeId="ScopeId_84891A21-89D3-4C15-B24D-DA4E9B82FE17" LogicalName="DeploymentType_68ac742d-2833-4419-95f4-c247379e67b2" Version="1">
     <Title ResourceId="Res_1727577578">Test MSI #2 - Windows Installer (*.msi file)</Title>
     <DeploymentTechnology>GLOBAL/MSIDeploymentTechnology</DeploymentTechnology>
     <Technology>MSI</Technology>
