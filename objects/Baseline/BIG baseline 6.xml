@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_021D6638-4BC2-4FD1-8A04-F77B3A1016C3" LogicalName="Baseline_b1848041-957c-40c7-b230-9991a24bf844" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="BIG baseline" ResourceId="ID-36ffebe6-171c-4d55-8905-394b74aceda0" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems>
+      <BusinessPolicyReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="BusinessPolicy_712283ac-6582-467b-9e59-16de08474233" />
+      <BusinessPolicyReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_e7350423-4889-4963-a783-62f3e5a6ed64" />
+    </RequiredItems>
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_021D6638-4BC2-4FD1-8A04-F77B3A1016C3" LogicalName="OperatingSystem_99a033ec-31c3-4154-b2e3-2f7693545970" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_4638a7f0-c3e2-4bfb-9d28-baa4811e6c3f" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_49c32b4a-f311-4674-b432-49c790781417" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_e4b797b2-98ad-4b12-959c-dc8e21dff0f8" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_24e24324-cb67-494c-b8ea-d6bab837a606" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_8c3560e0-a4d1-408c-9a2d-cd56aa35284d" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_6c4342a2-7aeb-4414-be74-94f0d402e981" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_ddbf9001-b2cf-4cfc-8e26-3db1b57f11a2" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_3C773E05-2C6C-49E1-97F1-87C6258B8846" LogicalName="OperatingSystem_db75c24e-0e6c-4074-a16c-c204e6316a34" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_D06D143F-5151-4993-8B5F-F39A7754B2FB" LogicalName="OperatingSystem_6d6bddb2-4884-4801-86e8-a2bfe7c07d32" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_0662c10b-2cee-46fe-b1fd-a1ed39f543db" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_18ad6c30-0d86-4a75-98dc-fb0e47691b1e" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_59c0171c-437a-451e-b2a8-f7c44dad77b3" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_814b2f5f-8808-416a-979f-125531ce5738" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="LogicalName_9e465b7d-8c1e-40b0-8d98-a87f52f6b4fd" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_a07f1233-40f1-4501-80e3-a60644093d31" />
+      <OperatingSystemReference AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_2bfe5bbb-f687-4f4f-8355-f1f687bbd99a" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
