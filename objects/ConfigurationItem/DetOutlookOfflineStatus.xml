@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="OperatingSystem_174f5e81-ba9c-4c16-a448-6680cf8ff4b8" Version="4">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="DetOutlookOfflineStatus" ResourceId="ID-05b76f13-195f-4505-bf6a-bd101b3b39b6" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_29193fa1-3e7d-4069-95df-61ce9e55bc2e" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="DetOutlookOfflineStatus" ResourceId="ID-b12a6479-71e4-48d7-8a2d-729912c85832" />
+            <Description Text="Check if HKCU\Software\Microsoft\Office\16.0\Outlook\Profiles\outlook\0a0d020000000000c000000000000046\00030398 exists &amp; value is 0x2" ResourceId="ID-9c8505d4-04d8-4cd9-a48e-c13f39506bb6" />
+          </Annotation>
+          <ScriptDiscoverySource IsPerUser="true" Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell">#Requires -RunAsAdministrator
+
+#=============================================================================================================================
+#
+# Script Name:     DetOutlookOfflineStatus.ps1
+# Creation Date:   07/15/2019
+# Author:          Eric C. Mattoon (ermatt)
+#
+#   Version:       01.00.0002
+#   Version Date:  08/01/2019
+# 
+# Description:     Purpose of this script is to detect reg key
+#                     
+#                       1) Check if HKCU\Software\Microsoft\Office\16.0 exists
+#                          A) If not, return message to that effect
+#                       2) Check if HKCU\Software\Microsoft\Office\16.0\Outlook\Profiles\outlook\0a0d020000000000c000000000000046\00030398 exists
+#                          A) If Office installing, loop until done
+#                                i) Check existence of key
+#                                    a) Check value is 0x2
+#                                ii) Check startup type
+#                       3) If all three above are correct, return "Success"
+#                          A) Else return "Failure" - then we will need to remediate
+#
+# Notes:           &lt;&gt;                  
+#
+#=============================================================================================================================
+
+# For testing, Clear the console
+Clear-Host
+
+# Define Variables
+
+$HKEY_CURRENT_USER =2147483649
+$computer ='.'
+$reg = [WMIClass]"ROOT\DEFAULT:StdRegProv"
+$Key = "Software\Microsoft\Office\16.0\Outlook\Profiles\Outlook\0a0d020000000000c000000000000046"
+$Value = "00030398"
+ 
+    if (-not (Test-Path -Path 'hklm:\Software\Microsoft\Office\16.0')){
+        Return "Office 16.0 not present on this machine"
+	    exit 1   
+        }
+
+    try
+    {
+        $results = $reg.GetBinaryValue($HKEY_CURRENT_USER, $Key, $value)
+        $x = $results.uValue.Get(0)
+        Return $x
+        exit 0
+    }
+    catch{
+        $errMsg = $_.Exception.Message
+        Write-Error $errMsg
+        exit 1
+    }
+
+# ENCODEDSCRIPT # Begin Configuration Manager encoded script block # 77u/I1JlcXVpcmVzIC1SdW5Bc0FkbWluaXN0cmF0b3INCg0KIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQojDQojIFNjcmlwdCBOYW1lOiAgICAgRGV0T3V0bG9va09mZmxpbmVTdGF0dXMucHMxDQojIENyZWF0aW9uIERhdGU6ICAgMDcvMTUvMjAxOQ0KIyBBdXRob3I6ICAgICAgICAgIEVyaWMgQy4gTWF0dG9vbiAoZXJtYXR0KQ0KIw0KIyAgIFZlcnNpb246ICAgICAgIDAxLjAwLjAwMDINCiMgICBWZXJzaW9uIERhdGU6ICAwOC8wMS8yMDE5DQojIA0KIyBEZXNjcmlwdGlvbjogICAgIFB1cnBvc2Ugb2YgdGhpcyBzY3JpcHQgaXMgdG8gZGV0ZWN0IHJlZyBrZXkNCiMgICAgICAgICAgICAgICAgICAgICANCiMgICAgICAgICAgICAgICAgICAgICAgIDEpIENoZWNrIGlmIEhLQ1VcU29mdHdhcmVcTWljcm9zb2Z0XE9mZmljZVwxNi4wIGV4aXN0cw0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgQSkgSWYgbm90LCByZXR1cm4gbWVzc2FnZSB0byB0aGF0IGVmZmVjdA0KIyAgICAgICAgICAgICAgICAgICAgICAgMikgQ2hlY2sgaWYgSEtDVVxTb2Z0d2FyZVxNaWNyb3NvZnRcT2ZmaWNlXDE2LjBcT3V0bG9va1xQcm9maWxlc1xvdXRsb29rXDBhMGQwMjAwMDAwMDAwMDBjMDAwMDAwMDAwMDAwMDQ2XDAwMDMwMzk4IGV4aXN0cw0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgQSkgSWYgT2ZmaWNlIGluc3RhbGxpbmcsIGxvb3AgdW50aWwgZG9uZQ0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaSkgQ2hlY2sgZXhpc3RlbmNlIG9mIGtleQ0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGEpIENoZWNrIHZhbHVlIGlzIDB4Mg0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWkpIENoZWNrIHN0YXJ0dXAgdHlwZQ0KIyAgICAgICAgICAgICAgICAgICAgICAgMykgSWYgYWxsIHRocmVlIGFib3ZlIGFyZSBjb3JyZWN0LCByZXR1cm4gIlN1Y2Nlc3MiDQojICAgICAgICAgICAgICAgICAgICAgICAgICBBKSBFbHNlIHJldHVybiAiRmFpbHVyZSIgLSB0aGVuIHdlIHdpbGwgbmVlZCB0byByZW1lZGlhdGUNCiMNCiMgTm90ZXM6ICAgICAgICAgICA8PiAgICAgICAgICAgICAgICAgIA0KIw0KIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCiMgRm9yIHRlc3RpbmcsIENsZWFyIHRoZSBjb25zb2xlDQpDbGVhci1Ib3N0DQoNCiMgRGVmaW5lIFZhcmlhYmxlcw0KDQokSEtFWV9DVVJSRU5UX1VTRVIgPTIxNDc0ODM2NDkNCiRjb21wdXRlciA9Jy4nDQokcmVnID0gW1dNSUNsYXNzXSJST09UXERFRkFVTFQ6U3RkUmVnUHJvdiINCiRLZXkgPSAiU29mdHdhcmVcTWljcm9zb2Z0XE9mZmljZVwxNi4wXE91dGxvb2tcUHJvZmlsZXNcT3V0bG9va1wwYTBkMDIwMDAwMDAwMDAwYzAwMDAwMDAwMDAwMDA0NiINCiRWYWx1ZSA9ICIwMDAzMDM5OCINCiANCiAgICBpZiAoLW5vdCAoVGVzdC1QYXRoIC1QYXRoICdoa2xtOlxTb2Z0d2FyZVxNaWNyb3NvZnRcT2ZmaWNlXDE2LjAnKSl7DQogICAgICAgIFJldHVybiAiT2ZmaWNlIDE2LjAgbm90IHByZXNlbnQgb24gdGhpcyBtYWNoaW5lIg0KCSAgICBleGl0IDEgICANCiAgICAgICAgfQ0KDQogICAgdHJ5DQogICAgew0KICAgICAgICAkcmVzdWx0cyA9ICRyZWcuR2V0QmluYXJ5VmFsdWUoJEhLRVlfQ1VSUkVOVF9VU0VSLCAkS2V5LCAkdmFsdWUpDQogICAgICAgICR4ID0gJHJlc3VsdHMudVZhbHVlLkdldCgwKQ0KICAgICAgICBSZXR1cm4gJHgNCiAgICAgICAgZXhpdCAwDQogICAgfQ0KICAgIGNhdGNoew0KICAgICAgICAkZXJyTXNnID0gJF8uRXhjZXB0aW9uLk1lc3NhZ2UNCiAgICAgICAgV3JpdGUtRXJyb3IgJGVyck1zZw0KICAgICAgICBleGl0IDENCiAgICB9 # ENCODEDSCRIPT# End Configuration Manager encoded script block
+
+</DiscoveryScriptBody>
+            <RemediationScriptBody ScriptType="PowerShell">#Requires -RunAsAdministrator
+
+#=============================================================================================================================
+#
+# Script Name:     RemOutlookOfflineStatus.ps1
+# Creation Date:   06/25/2019
+# Author:          Eric C. Mattoon (ermatt)
+#
+#   Version:       01.00.0001
+#   Version Date:  07/30/2019
+# 
+# Description:     Purpose of this script is to set value to 0x2
+#                     
+#                       1) Check if HKCU\Software\Microsoft\Office\16.0\Outlook\Profiles\outlook\0a0d020000000000c000000000000046 still exists
+#                          A) If not bail out and send back an error
+#                       2) If key still exists
+#                          A) Check to see if Office is installing (for future version...)
+#                             i) If installing, keep looping until started, then proceed to check Startup Type
+#                       3) Set value
+#
+# Notes:           &lt;&gt;
+#                   
+#                  
+#
+#=============================================================================================================================
+
+# For testing, Clear the console
+Clear-Host
+
+# Define Variables
+
+#$HKEY_CURRENT_USER =2147483649
+#$computer ='.'
+#$reg = [WMIClass]"ROOT\DEFAULT:StdRegProv"
+$path1 = 'hkcu:\Software\Microsoft\Office\16.0\Outlook\Profiles\Outlook\0a0d020000000000c000000000000046'
+$val1 = "00030398"
+
+    if (-not (Test-Path -Path $path1)){
+            $errMsg = "Something changed since detection, cannot find: $path1"
+            Write-Error $errMsg
+            exit 1
+        }
+
+    try
+    {
+        Set-ItemProperty -Path($path1) -Name $val1 -Value ([byte[]](0x02,0x00,0x00,0x00))
+        exit 0
+
+    }
+    catch{
+        $errMsg = $_.Exception.Message
+        Write-Error $errMsg
+        exit 1
+    }
+
+# ENCODEDSCRIPT # Begin Configuration Manager encoded script block # 77u/I1JlcXVpcmVzIC1SdW5Bc0FkbWluaXN0cmF0b3INCg0KIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQojDQojIFNjcmlwdCBOYW1lOiAgICAgUmVtT3V0bG9va09mZmxpbmVTdGF0dXMucHMxDQojIENyZWF0aW9uIERhdGU6ICAgMDYvMjUvMjAxOQ0KIyBBdXRob3I6ICAgICAgICAgIEVyaWMgQy4gTWF0dG9vbiAoZXJtYXR0KQ0KIw0KIyAgIFZlcnNpb246ICAgICAgIDAxLjAwLjAwMDENCiMgICBWZXJzaW9uIERhdGU6ICAwNy8zMC8yMDE5DQojIA0KIyBEZXNjcmlwdGlvbjogICAgIFB1cnBvc2Ugb2YgdGhpcyBzY3JpcHQgaXMgdG8gc2V0IHZhbHVlIHRvIDB4Mg0KIyAgICAgICAgICAgICAgICAgICAgIA0KIyAgICAgICAgICAgICAgICAgICAgICAgMSkgQ2hlY2sgaWYgSEtDVVxTb2Z0d2FyZVxNaWNyb3NvZnRcT2ZmaWNlXDE2LjBcT3V0bG9va1xQcm9maWxlc1xvdXRsb29rXDBhMGQwMjAwMDAwMDAwMDBjMDAwMDAwMDAwMDAwMDQ2IHN0aWxsIGV4aXN0cw0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgQSkgSWYgbm90IGJhaWwgb3V0IGFuZCBzZW5kIGJhY2sgYW4gZXJyb3INCiMgICAgICAgICAgICAgICAgICAgICAgIDIpIElmIGtleSBzdGlsbCBleGlzdHMNCiMgICAgICAgICAgICAgICAgICAgICAgICAgIEEpIENoZWNrIHRvIHNlZSBpZiBPZmZpY2UgaXMgaW5zdGFsbGluZyAoZm9yIGZ1dHVyZSB2ZXJzaW9uLi4uKQ0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaSkgSWYgaW5zdGFsbGluZywga2VlcCBsb29waW5nIHVudGlsIHN0YXJ0ZWQsIHRoZW4gcHJvY2VlZCB0byBjaGVjayBTdGFydHVwIFR5cGUNCiMgICAgICAgICAgICAgICAgICAgICAgIDMpIFNldCB2YWx1ZQ0KIw0KIyBOb3RlczogICAgICAgICAgIDw+DQojICAgICAgICAgICAgICAgICAgIA0KIyAgICAgICAgICAgICAgICAgIA0KIw0KIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCiMgRm9yIHRlc3RpbmcsIENsZWFyIHRoZSBjb25zb2xlDQpDbGVhci1Ib3N0DQoNCiMgRGVmaW5lIFZhcmlhYmxlcw0KDQojJEhLRVlfQ1VSUkVOVF9VU0VSID0yMTQ3NDgzNjQ5DQojJGNvbXB1dGVyID0nLicNCiMkcmVnID0gW1dNSUNsYXNzXSJST09UXERFRkFVTFQ6U3RkUmVnUHJvdiINCiRwYXRoMSA9ICdoa2N1OlxTb2Z0d2FyZVxNaWNyb3NvZnRcT2ZmaWNlXDE2LjBcT3V0bG9va1xQcm9maWxlc1xPdXRsb29rXDBhMGQwMjAwMDAwMDAwMDBjMDAwMDAwMDAwMDAwMDQ2Jw0KJHZhbDEgPSAiMDAwMzAzOTgiDQoNCiAgICBpZiAoLW5vdCAoVGVzdC1QYXRoIC1QYXRoICRwYXRoMSkpew0KICAgICAgICAgICAgJGVyck1zZyA9ICJTb21ldGhpbmcgY2hhbmdlZCBzaW5jZSBkZXRlY3Rpb24sIGNhbm5vdCBmaW5kOiAkcGF0aDEiDQogICAgICAgICAgICBXcml0ZS1FcnJvciAkZXJyTXNnDQogICAgICAgICAgICBleGl0IDENCiAgICAgICAgfQ0KDQogICAgdHJ5DQogICAgew0KICAgICAgICBTZXQtSXRlbVByb3BlcnR5IC1QYXRoKCRwYXRoMSkgLU5hbWUgJHZhbDEgLVZhbHVlIChbYnl0ZVtdXSgweDAyLDB4MDAsMHgwMCwweDAwKSkNCiAgICAgICAgZXhpdCAwDQoNCiAgICB9DQogICAgY2F0Y2h7DQogICAgICAgICRlcnJNc2cgPSAkXy5FeGNlcHRpb24uTWVzc2FnZQ0KICAgICAgICBXcml0ZS1FcnJvciAkZXJyTXNnDQogICAgICAgIGV4aXQgMQ0KICAgIH0= # ENCODEDSCRIPT# End Configuration Manager encoded script block
+
+</RemediationScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_d6c8e536-830f-4052-84b0-c91897129d81" Severity="Warning" NonCompliantWhenSettingIsNotFound="true">
+        <Annotation>
+          <DisplayName Text="IsValueCorrect" ResourceId="ID-cc5f1b87-b6b3-45a1-bd2c-c576035fc4b1" />
+          <Description Text="Check if HKCU\Software\Microsoft\Office\16.0\Outlook\Profiles\outlook\0a0d020000000000c000000000000046\00030398 exists and value == 0x2" ResourceId="ID-a669431d-7b35-4a9e-8cbc-8fdf1f876208" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_2FC90DE2-B63B-464E-9823-F8269C9A58EA" LogicalName="OperatingSystem_174f5e81-ba9c-4c16-a448-6680cf8ff4b8" Version="4" DataType="Int64" SettingLogicalName="ScriptSetting_29193fa1-3e7d-4069-95df-61ce9e55bc2e" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="2" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_CORE" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1_Core" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2_Core" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
