@@ -1,0 +1,6 @@
+{
+  "downloadLocation": "https://github.com/microsoft/configmgr-hub-selfhost/pull/670#",
+  "FileHash": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "ExtensionTest2006-CodeSign-Policy.xml"
+}
