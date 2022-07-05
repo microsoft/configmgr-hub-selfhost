@@ -1,1 +1,61 @@
-<?xml version="1.0" encoding="utf-16"?><AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><Application AuthoringScopeId="ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7" LogicalName="Application_8098d228-0166-4eb3-b107-da6221a35b33" Version="1"><DisplayInfo DefaultLanguage="en-US"><Info Language="en-US"><Title>something.common.com</Title><Description/><Publisher/><Version/></Info></DisplayInfo><DeploymentTypes><DeploymentType AuthoringScopeId="ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7" LogicalName="DeploymentType_8a2affca-b605-4850-89b8-ace4ace28fbb" Version="1"/></DeploymentTypes><Title ResourceId="Res_1737278169">something.common.com</Title><Description ResourceId="Res_631101759"/><Publisher ResourceId="Res_1053357389"/><SoftwareVersion ResourceId="Res_111839995"/><CustomId ResourceId="Res_68637643"/><Owners><User Qualifier="LogonName" Id="Carlos"/></Owners><Contacts><User Qualifier="LogonName" Id="Carlos"/></Contacts></Application><DeploymentType AuthoringScopeId="ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7" LogicalName="DeploymentType_8a2affca-b605-4850-89b8-ace4ace28fbb" Version="1"><Title ResourceId="Res_597716613">http://something.common.com - Web Application</Title><DeploymentTechnology>GLOBAL/WebAppDeploymentTechnology</DeploymentTechnology><Technology>WebApp</Technology><Hosting>WebApp</Hosting><Installer Technology="WebApp"><ExecutionContext>User</ExecutionContext><DetectAction><Provider>WebApp</Provider><Args><Arg Name="TargetUrl" Type="String">http://something.common.com</Arg><Arg Name="LocalAppId" Type="String">ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</Arg><Arg Name="LocalAppVersion" Type="String">1</Arg><Arg Name="ExecutionContext" Type="String">User</Arg></Args></DetectAction><InstallAction><Provider>WebApp</Provider><Args><Arg Name="TargetUrl" Type="String">http://something.common.com</Arg><Arg Name="LocalAppId" Type="String">ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</Arg><Arg Name="LocalAppVersion" Type="String">1</Arg><Arg Name="ExecutionContext" Type="String">User</Arg></Args></InstallAction><UninstallAction><Provider>WebApp</Provider><Args><Arg Name="TargetUrl" Type="String">http://something.common.com</Arg><Arg Name="LocalAppId" Type="String">ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</Arg><Arg Name="LocalAppVersion" Type="String">1</Arg><Arg Name="ExecutionContext" Type="String">User</Arg></Args></UninstallAction><CustomData><TargetUrl>http://something.common.com</TargetUrl><LocalAppId>ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</LocalAppId><LocalAppVersion>1</LocalAppVersion></CustomData></Installer></DeploymentType></AppMgmtDigest>
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_070979BC-5B28-4D30-8D36-64B68E02A8E1" LogicalName="Application_8098d228-0166-4eb3-b107-da6221a35b33" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>something.common.com</Title>
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_070979BC-5B28-4D30-8D36-64B68E02A8E1" LogicalName="DeploymentType_8a2affca-b605-4850-89b8-ace4ace28fbb" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_1737278169">something.common.com</Title>
+    <Owners>
+      <User Qualifier="LogonName" Id="Carlos" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="Carlos" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_070979BC-5B28-4D30-8D36-64B68E02A8E1" LogicalName="DeploymentType_8a2affca-b605-4850-89b8-ace4ace28fbb" Version="1">
+    <Title ResourceId="Res_597716613">http://something.common.com - Web Application</Title>
+    <DeploymentTechnology>GLOBAL/WebAppDeploymentTechnology</DeploymentTechnology>
+    <Technology>WebApp</Technology>
+    <Hosting>WebApp</Hosting>
+    <Installer Technology="WebApp">
+      <ExecutionContext>User</ExecutionContext>
+      <DetectAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">http://something.common.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">http://something.common.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>WebApp</Provider>
+        <Args>
+          <Arg Name="TargetUrl" Type="String">http://something.common.com</Arg>
+          <Arg Name="LocalAppId" Type="String">ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</Arg>
+          <Arg Name="LocalAppVersion" Type="String">1</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <TargetUrl>http://something.common.com</TargetUrl>
+        <LocalAppId>ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7/Application_8098d228-0166-4eb3-b107-da6221a35b33</LocalAppId>
+        <LocalAppVersion>1</LocalAppVersion>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
