@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-16"?>
 <AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_cdc16207-2e5e-4056-beff-64a679578af2" Version="2">
+  <Application AuthoringScopeId="ScopeId_8521DAF7-C3B1-4B08-AE67-3B695A6BE8ED" LogicalName="Application_cdc16207-2e5e-4056-beff-64a679578af2" Version="1">
     <DisplayInfo DefaultLanguage="en-US">
       <Info Language="en-US">
         <Title>No Gravity</Title>
@@ -8,8 +8,8 @@
       </Info>
     </DisplayInfo>
     <DeploymentTypes>
-      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_34143b03-4bbf-4e04-8b5b-ec7b83b77395" Version="1" />
-      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_66ec823d-9c3b-41f0-a0b8-e20ae60ab834" Version="1" />
+      <DeploymentType AuthoringScopeId="ScopeId_8521DAF7-C3B1-4B08-AE67-3B695A6BE8ED" LogicalName="DeploymentType_34143b03-4bbf-4e04-8b5b-ec7b83b77395" Version="1" />
+      <DeploymentType AuthoringScopeId="ScopeId_8521DAF7-C3B1-4B08-AE67-3B695A6BE8ED" LogicalName="DeploymentType_66ec823d-9c3b-41f0-a0b8-e20ae60ab834" Version="1" />
     </DeploymentTypes>
     <Title ResourceId="Res_688098970">No Gravity</Title>
     <SoftwareVersion ResourceId="Res_1087730781">1.1.7</SoftwareVersion>
@@ -20,7 +20,7 @@
       <User Qualifier="LogonName" Id="msilvey" />
     </Contacts>
   </Application>
-  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_34143b03-4bbf-4e04-8b5b-ec7b83b77395" Version="1">
+  <DeploymentType AuthoringScopeId="ScopeId_8521DAF7-C3B1-4B08-AE67-3B695A6BE8ED" LogicalName="DeploymentType_34143b03-4bbf-4e04-8b5b-ec7b83b77395" Version="1">
     <Title ResourceId="Res_1738813503">No Gravity - App Package for Android (*.apk file)</Title>
     <Requirements>
       <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="APILevelRule" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
@@ -87,9 +87,8 @@
       </CustomData>
     </Installer>
   </DeploymentType>
-  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_66ec823d-9c3b-41f0-a0b8-e20ae60ab834" Version="1">
+  <DeploymentType AuthoringScopeId="ScopeId_8521DAF7-C3B1-4B08-AE67-3B695A6BE8ED" LogicalName="DeploymentType_66ec823d-9c3b-41f0-a0b8-e20ae60ab834" Version="1">
     <Title ResourceId="Res_820233412">script1</Title>
-    <Description ResourceId="Res_770518731" />
     <DeploymentTechnology>GLOBAL/ScriptDeploymentTechnology</DeploymentTechnology>
     <Technology>Script</Technology>
     <Hosting>Native</Hosting>
@@ -140,9 +139,6 @@
         <DetectionScript Language="PowerShell">Write-Host "This is fake"</DetectionScript>
         <InstallCommandLine>"C:\Windows\hh.exe"</InstallCommandLine>
         <UninstallSetting>SameAsInstall</UninstallSetting>
-        <InstallFolder />
-        <UninstallCommandLine />
-        <UninstallFolder />
         <RequiresUserInteraction>true</RequiresUserInteraction>
         <ExitCodes>
           <ExitCode Code="0" Class="Success" />
