@@ -1,0 +1,30 @@
+<sequence version="3.10">
+  <referenceList>
+    <reference application="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_fd6f29c6-5b60-45bb-a28e-c5d849613b98" />
+  </referenceList>
+  <step type="SMS_TaskSequence_RunCommandLineAction" name="Create file for the DT Evaluation" description="" runIn="WinPEandFullOS" successCodeList="0 3010" retryCount="0" runFromNet="false">
+    <action>smsswd.exe /run: cmd /c echo bobmn &gt;&gt; C:\DoesNotExit.txt</action>
+    <defaultVarList>
+      <variable name="CommandLine" property="CommandLine" hidden="true">cmd /c echo bobmn &gt;&gt; C:\DoesNotExit.txt</variable>
+      <variable name="SMSTSDisableWow64Redirection" property="DisableWow64Redirection">false</variable>
+      <variable name="SMSTSRunCommandLineOutputVariableName" property="OutputVariableName"></variable>
+      <variable name="_SMSTSRunCommandLineAsUser" property="RunAsUser">false</variable>
+      <variable name="SuccessCodes" property="SuccessCodes" hidden="true">0 3010</variable>
+    </defaultVarList>
+  </step>
+  <step type="SMS_TaskSequence_InstallApplicationAction" name="Install Application" description="" runIn="FullOS" successCodeList="0" retryCount="2" runFromNet="false">
+    <action>smsappinstall.exe /app:ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_fd6f29c6-5b60-45bb-a28e-c5d849613b98 /basevar: /continueOnError:False</action>
+    <defaultVarList>
+      <variable name="OSDApp" property="AppInfo" hidden="true">1</variable>
+      <variable name="OSDApp0Description" property="AppInfo0Description">Valid</variable>
+      <variable name="OSDApp0DisplayName" property="AppInfo0DisplayName">App with no source</variable>
+      <variable name="OSDApp0Name" property="AppInfo0Name">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_fd6f29c6-5b60-45bb-a28e-c5d849613b98</variable>
+      <variable name="ApplicationName" property="ApplicationName" hidden="true">ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59/Application_fd6f29c6-5b60-45bb-a28e-c5d849613b98</variable>
+      <variable name="BaseVariableName" property="BaseVariableName" hidden="true"></variable>
+      <variable name="OSDAppClearCache" property="ClearCache">false</variable>
+      <variable name="ContinueOnInstallError" property="ContinueOnInstallError" hidden="true">false</variable>
+      <variable name="OSDAppCount" property="NumApps">1</variable>
+      <variable name="RetryCount" property="RetryCount" hidden="true">2</variable>
+    </defaultVarList>
+  </step>
+</sequence>
