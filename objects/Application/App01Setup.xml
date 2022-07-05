@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="Application_871bcc0c-48fa-4a22-a676-8193806b8a9f" Version="1">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>App01Setup</Title>
+        <Description />
+        <Publisher />
+        <Version />
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="DeploymentType_fc5fde65-63ed-481c-8a99-c1bc444e1085" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_1147821071">App01Setup</Title>
+    <Description ResourceId="Res_596414763" />
+    <Publisher ResourceId="Res_1185789875" />
+    <SoftwareVersion ResourceId="Res_1449065569" />
+    <CustomId ResourceId="Res_1798566942" />
+    <Owners>
+      <User Qualifier="LogonName" Id="t-jewan" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="t-jewan" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="DeploymentType_fc5fde65-63ed-481c-8a99-c1bc444e1085" Version="1">
+    <Title ResourceId="Res_429020501">App01Setup - Windows Installer (*.msi file)</Title>
+    <DeploymentTechnology>GLOBAL/MSIDeploymentTechnology</DeploymentTechnology>
+    <Technology>MSI</Technology>
+    <Hosting>Native</Hosting>
+    <Installer Technology="MSI">
+      <Contents>
+        <Content ContentId="Content_8b2f15f7-f269-403c-a06c-6ff550353e90" Version="1">
+          <File Name="#斯[尺lЫСRw艾F.А豆Й" Size="0" />
+          <File Name="App01Setup.msi" Size="557056" />
+          <File Name="setup.exe" Size="428032" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\" Size="0" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\" Size="0" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\!vmH_Эie艾}=.Э7B" Size="3742" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\#斯[尺lЫСRw艾F.А豆Й" Size="3752" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\#斯[尺lЫСRw艾F.А豆Й.txt" Size="0" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\$ЩW尺维f1维艾屁К.B5}" Size="3744" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\&amp;]艾u8Й尔德zU0.艾2#" Size="3784" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\1НСЬ伊(P4b丝H.德维l" Size="3766" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\1贼克哦TCЫ西艾Y豆.Ь)f" Size="3779" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\2p哦1@H开哦Q维I.^x+" Size="3760" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\4Щ艾Т]7伊2维&amp;В.诶sУ" Size="3776" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\7sЪИ伊qI!А]v.ДЬЭ" Size="3759" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\9{R07P尺^艾艾k.w!Y" Size="3714" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\=LЪP克ПKx[西4.艾nI" Size="3743" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\A-w7马И吾N屁Пv.艾比Y" Size="3740" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Af%M艾JL开bМk.#OС" Size="3765" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\A维МCЛУЙОned.И杰o" Size="3798" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\B弗艾ЛN贼С}3Хj.r.Р" Size="3775" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\C7SЬЁ维艾ШОDЫ.艾.У" Size="3795" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\DRВbЮ伊#=Ы&amp;艾.伊@=" Size="3781" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\eGШ弗伊rCDG47.维维9" Size="3756" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\eЦ艾b2吉弗Юaxz.迪uA" Size="3739" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\F艾Еq}Эydj#诶.3Б克" Size="3691" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\HhМ$МK+ZЩТ#.ЕIP" Size="3780" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\HЩ吾尔CРD杰ЦЦT.8吾开" Size="3716" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\iB杰N吾艾6ЯГ艾_.艾4s" Size="3804" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\jc艾{斯UxРa艾f.7Ъ5" Size="3729" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\L尺艾儿O=AИpV7.马Э$" Size="3721" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\mlDtneЛ弗.屁N.ОВО" Size="3772" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Noj儿]诶尔RТg儿.Ц丝Щ" Size="3743" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\nv&amp;艾Т吾比U艾B{.Л4q" Size="3709" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\O$艾XХ!jЗPЯБ.УpD" Size="3734" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Od德PЁ艾o(哦Ц%.%D=" Size="3748" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\OvФ娜S西AWhcu.УСП" Size="3789" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\q7-j杰fСuК诶Н.{XТ" Size="3719" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Q斯艾吉伊斯XF=$m._艾K" Size="3741" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Q维吾ХfFК艾IoШ.吾wЭ" Size="3758" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\RRНoФY吉]Z儿%.vXW" Size="3741" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\SL提8杰_A杰Нa维.$Г6" Size="3752" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\u德弗艾cAФ马N1h.dQ9" Size="3672" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\vr伊丝}W艾克艾屁u.[G儿" Size="3800" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\w尔克s#t伊勒屁X@.3Oh" Size="3709" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\x_Уn]m德w尔9Q.ЁZg" Size="3798" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\yP吾y维КВ艾j伊维.&amp;吾Ш" Size="3739" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\yЗ马УА提vg开+Ш.伊尔Ш" Size="3744" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\]J1吉iРbL^弗&amp;.No$" Size="3732" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\]xЙ吾(eЯИ德Ы维.b!儿" Size="3756" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\{f丝艾]Б艾8吾7杰.~a伊" Size="3758" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\АMШ弗НХFФЦУШ.КХ艾" Size="3764" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\АNuМv艾伊rБs德.#wИ" Size="3745" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\ВE艾FФ尺n提ЮВ提.艾Sf" Size="3782" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\ВR贼KkУ西#m)А.PjX" Size="3731" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Гt娜Т(IQFH5I.A丝I" Size="3754" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Г比ИwИ.IШОwУ.吾RК" Size="3755" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\И艾屁bЬT娜诶迪s3.dЗ艾" Size="3745" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\ЙsRkwJЫ^6#吾.ЫБК" Size="3771" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\МХijCИА艾西AV.q52" Size="3807" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\П艾FЗ艾Ч艾迪XL艾.b哦艾" Size="3753" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Сq吉JCnМAb伊i.i艾0" Size="3718" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\СЪSЦУkО9CИG.Юb_" Size="3750" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Ц{艾НUD.娜r7尺.贝Зj" Size="3748" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Ч艾维НNБ贼ПГl艾.bmv" Size="3739" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\ШЩB西kYOБz4Э.杰wR" Size="3772" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Ш吾i2尺艾М伊Юfs.]~2" Size="3758" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Щ迪吉KЯО2=!艾尺.{吉k" Size="3750" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Ь吉jgШЙ%9D5#.liН" Size="3706" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Ю)艾开吉dК7ztT.z德=" Size="3774" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\Я娜_Ц%%VХM1艾.屁贼6" Size="3778" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\伊8娜克v.CП_=h.OХ尺" Size="3749" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\伊n艾n!q3克МD艾.71p" Size="3768" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\伊艾}Г@马(艾迪}伊.Z杰Ё" Size="3755" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\儿}^4贼A吾豆Ц^s.丝Оd" Size="3713" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\克ЬС0(ВnUZx(.%ЦB" Size="3709" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\克诶艾Л4艾НR克=c.Q艾比" Size="3770" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\吉5吉tЮ(&amp;吾]kШ.O吉s" Size="3746" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\吉N娜艾维0NLIEq.8=尺" Size="3774" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\吉杰ОkS@j吉ЭЫ3.4艾Ь" Size="3770" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\吾П[8Ю1迪吉KT伊.ЬШl" Size="3752" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\尺z3#ЧA&amp;8iye.^N维" Size="3777" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\屁dN艾Yj维КBВ哦.西艾克" Size="3741" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\弗M勒Ыw1艾豆吾斯A.c尔比" Size="3766" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\弗ЯD杰斯[IШЗОB.ОЭ马" Size="3770" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\德a维^贼德^吾ВxО.吾hm" Size="3762" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\德艾З吉伊og伊24Ж.4克N" Size="3743" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\比ХN7УЮ(艾L吉I.IB_" Size="3712" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\维德艾+К_p艾维Цf.БNs" Size="3754" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾0WT伊Тbo豆xВ.伊Еs" Size="3758" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾3尔A克~x+吾艾Q.И艾Е" Size="3779" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾L贝娜ГGVNe提B.E8克" Size="3753" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾Q哦Эf比E%YZU.伊艾弗" Size="3770" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾ziН艾ВШМ$4吉.Qk比" Size="3783" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾ЁШ吉尺ScAf[d.gQ#" Size="3722" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾Л贝-CХ]}ЯУG.5尺m" Size="3787" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾ОTr比ЙT维Ё艾S.xЬm" Size="3746" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾С丝EGu儿t5B斯.@7W" Size="3741" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾У)F~屁艾H#Хg.9杰德" Size="3795" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\艾Ч儿J西C吾ФR3勒.I尺艾" Size="3817" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\诶Еi7А儿TFfПD.q5Л" Size="3746" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\豆斯Sf[wA克-K%.jK}" Size="3777" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\贝B丝.HЩ杰G弗艾i.艾7Ю" Size="3706" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\贼LBA6AЬSЪМ娜.LVM" Size="3777" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\贼p4П[H8hU艾V.)Г3" Size="3759" />
+          <File Name="fЁЮ屁zЬ艾艾.zШN吉B艾Ъ.О)\k贼М丝M儿F81维pt杰E\@ЧИ吉吾屁6З3К\迪贼维Ю4y(Н勒([.P(提" Size="3736" />
+          <Location>\\localhost\C$\TestContentShare\PKG01\</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="ExecutionContext" Type="String">Any</Arg>
+          <Arg Name="ProductCode" Type="String">{629B8457-9A20-4EC0-9021-5DC95D9E2C0B}</Arg>
+          <Arg Name="PackageCode" Type="String" />
+          <Arg Name="PatchCodes" Type="String[]" />
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">msiexec /i "App01Setup.msi" /q</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">Any</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Normal</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_8b2f15f7-f269-403c-a06c-6ff550353e90" Version="1" />
+        </Contents>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>MSI</Provider>
+        <Args>
+          <Arg Name="InstallCommandLine" Type="String">msiexec /x {629B8457-9A20-4EC0-9021-5DC95D9E2C0B} /q</Arg>
+          <Arg Name="WorkingDirectory" Type="String" />
+          <Arg Name="ExecutionContext" Type="String">Any</Arg>
+          <Arg Name="RequiresLogOn" Type="String" />
+          <Arg Name="RequiresElevatedRights" Type="Boolean">false</Arg>
+          <Arg Name="RequiresUserInteraction" Type="Boolean">false</Arg>
+          <Arg Name="RequiresReboot" Type="Boolean">false</Arg>
+          <Arg Name="UserInteractionMode" Type="String">Normal</Arg>
+          <Arg Name="PostInstallBehavior" Type="String">BasedOnExitCode</Arg>
+          <Arg Name="ExecuteTime" Type="Int32">0</Arg>
+          <Arg Name="MaxExecuteTime" Type="Int32">120</Arg>
+          <Arg Name="RunAs32Bit" Type="Boolean">false</Arg>
+          <Arg Name="SuccessExitCodes" Type="Int32[]">
+            <Item>0</Item>
+            <Item>1707</Item>
+          </Arg>
+          <Arg Name="RebootExitCodes" Type="Int32[]">
+            <Item>3010</Item>
+          </Arg>
+          <Arg Name="HardRebootExitCodes" Type="Int32[]">
+            <Item>1641</Item>
+          </Arg>
+          <Arg Name="FastRetryExitCodes" Type="Int32[]">
+            <Item>1618</Item>
+          </Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_8b2f15f7-f269-403c-a06c-6ff550353e90" Version="1" />
+        </Contents>
+      </UninstallAction>
+      <CustomData>
+        <DetectionMethod>ProductCode</DetectionMethod>
+        <ProductCode>{629B8457-9A20-4EC0-9021-5DC95D9E2C0B}</ProductCode>
+        <ProductVersion>1.0.0</ProductVersion>
+        <InstallCommandLine>msiexec /i "App01Setup.msi" /q</InstallCommandLine>
+        <InstallContent ContentId="Content_8b2f15f7-f269-403c-a06c-6ff550353e90" Version="1" />
+        <UninstallSetting>SameAsInstall</UninstallSetting>
+        <UninstallCommandLine>msiexec /x {629B8457-9A20-4EC0-9021-5DC95D9E2C0B} /q</UninstallCommandLine>
+        <ExitCodes>
+          <ExitCode Code="0" Class="Success" />
+          <ExitCode Code="1707" Class="Success" />
+          <ExitCode Code="3010" Class="SoftReboot" />
+          <ExitCode Code="1641" Class="HardReboot" />
+          <ExitCode Code="1618" Class="FastRetry" />
+        </ExitCodes>
+        <UserInstall>true</UserInstall>
+        <IncludesServices>true</IncludesServices>
+        <IncludesODBCDataSource>true</IncludesODBCDataSource>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
