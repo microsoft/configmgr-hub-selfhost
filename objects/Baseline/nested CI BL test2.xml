@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="Baseline_17cd8e12-ad69-45d2-8f0c-6643e57c062e" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="nested CI BL test2" ResourceId="ID-e1748ad4-cf27-4619-8481-367b876c9bad" />
+      <Description Text="testing it again" ResourceId="ID-f8851f85-42ad-41a6-87a6-f155d7526f74" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="OperatingSystem_3ec92897-e326-4e57-973d-f46487fb9520" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
