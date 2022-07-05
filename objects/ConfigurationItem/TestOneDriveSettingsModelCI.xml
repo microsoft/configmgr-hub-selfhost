@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="OperatingSystem_20c67965-9d78-484d-8d5a-b6bdd6e7e12b" Version="2">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="TestOneDriveSettingsModelCI" ResourceId="ID-9f7ef0cf-2d2b-422d-958d-a452227d9968" />
+      <Description Text="All Settings required to do OneDrive KFM." ResourceId="ID-c85ec40f-6ae0-4882-9990-e85ecf4543be" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_4fc53d50-696f-43e3-8f14-c5d791661b17" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="KFMOptInWithWizard" ResourceId="ID-c3341170-74e6-4c88-9870-26c360d4b0cc" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Policies\Microsoft\OneDrive</Key>
+            <ValueName>KFMOptInWithWizard</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="RegSetting_e152c3ee-a0ee-432e-a965-f3f1633f800b" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="KFMBlockOptIn" ResourceId="ID-b5b453d9-9ba1-460c-b6d0-7eadc892ca7c" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true" RemediateDword="true">
+            <Key>SOFTWARE\Policies\Microsoft\OneDrive</Key>
+            <ValueName>KFMBlockOptIn</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="RegSetting_45b8cc1f-b51f-4c49-a27e-cd5b8f283055" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="KFMBlockOptOut" ResourceId="ID-0c133387-6d7d-4101-8f78-d533d1452b1e" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true" RemediateDword="true">
+            <Key>SOFTWARE\Policies\Microsoft\OneDrive</Key>
+            <ValueName>KFMBlockOptOut</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="RegSetting_6c9ec4f7-bf09-4e5e-885c-af18a81b93cd" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="KFMSilentOptIn" ResourceId="ID-21656e15-da36-48d5-9b7c-f5f27f85f630" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Policies\Microsoft\OneDrive</Key>
+            <ValueName>KFMSilentOptIn</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="RegSetting_7dc40a4f-a8c2-4826-8f44-a6d5561ca9ab" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="KFMSilentOptInWithNotification" ResourceId="ID-5f3f09bc-5f9f-4e55-bbce-49278134164c" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true" RemediateDword="true">
+            <Key>SOFTWARE\Policies\Microsoft\OneDrive</Key>
+            <ValueName>KFMSilentOptInWithNotification</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/x64_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_CORE" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1_Core" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2_Core" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2016" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2019_and_higher" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
