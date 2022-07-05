@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <Baseline AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Baseline_deee4a72-124b-4110-98ca-8f6bf58bfa6f" Version="1" ConfigurationFlags="65">
+  <Baseline AuthoringScopeId="ScopeId_E6F76B26-227C-4975-85E4-C8FAB228A2A0" LogicalName="Baseline_1b08908a-1665-4017-b385-a54dd8ff70a3" Version="1" ConfigurationFlags="65">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
-      <DisplayName Text="empty baseline" ResourceId="ID-a072b2b3-b216-40e8-a734-13935b179505" />
-      <Description Text="" />
+      <DisplayName Text="empty baseline" ResourceId="ID-c4f9e824-4525-4cde-9b2a-5863d6ca280d" />
+      <Description Text="no CI added,flags set" ResourceId="ID-2b900b00-0cc1-40a1-8e8e-c342c6c50853" />
     </Annotation>
     <RequiredItems />
     <ProhibitedItems />
