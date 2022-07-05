@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <BusinessPolicy AuthoringScopeId="ScopeId_B2257805-03D9-4750-8FFD-AFB9F644C37D" LogicalName="BusinessPolicy_69106aea-3239-43cc-b88e-aa81b10f07a4" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI_for_test" ResourceId="ID-22feb1a1-a5e6-4eec-a21c-2500c0af8e23" />
+      <Description Text="Test" ResourceId="ID-844b05b4-c9c5-448f-9c74-fe6fa8de9f4d" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+  </BusinessPolicy>
+</DesiredConfigurationDigest>
