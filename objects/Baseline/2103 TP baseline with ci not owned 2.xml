@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_7F68086D-3464-467C-9745-D282B7956FCC" LogicalName="Baseline_5f088b87-8d03-494a-b755-6716ac9162fb" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="2103 TP baseline with ci not owned 2" ResourceId="ID-a257a3ec-7600-4dce-8a9a-74243cf7b465" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_7F68086D-3464-467C-9745-D282B7956FCC" LogicalName="OperatingSystem_db21a569-8a69-4c59-beac-658a319e25b1" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
