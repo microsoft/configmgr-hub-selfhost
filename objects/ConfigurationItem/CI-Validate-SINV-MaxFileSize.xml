@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_46f53f87-ab70-4ed1-929b-3c5e52f98fea" Version="5" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-SINV-MaxFileSize" ResourceId="ID-e5a3f89c-7e6c-424c-8c17-5cf379b5e7be" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo&#xA; This item will validate the Max File Size setting of the Software Inventory Processor. The default value should be 5000000 (5MB) but it might be neccessary to increase the value to import larger Software Inventory files." ResourceId="ID-06a98e21-b682-4e1e-b014-00f57e41fda1" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_e9529372-c7a2-4b54-8761-59b9faf4c802" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="SINVMaxFileSize" ResourceId="ID-699f584b-ba5c-4d9e-8741-04c92aa55ba0" />
+            <Description Text="" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>SOFTWARE\Microsoft\SMS\COMPONENTS\SMS_SOFTWARE_INVENTORY_PROCESSOR</Key>
+            <ValueName>Max File Size</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_7350b499-3a25-4563-b566-b666281734b7" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="MaxFileSize" ResourceId="ID-2a5517b5-0e4d-4dd2-b4f6-cedabd03103a" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_B970F417-6097-4CEE-91D6-94598E897240" LogicalName="LogicalName_46f53f87-ab70-4ed1-929b-3c5e52f98fea" Version="5" DataType="Int64" SettingLogicalName="RegSetting_e9529372-c7a2-4b54-8761-59b9faf4c802" SettingSourceType="Registry" Method="Value" Changeable="true" />
+            <ConstantValue Value="5000000" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script># Evaluate only if SMS_SOFTWARE_INVENTORY_PROCESSOR is present on machine
+if (Test-Path 'HKLM:\SOFTWARE\Microsoft\SMS\COMPONENTS\SMS_SOFTWARE_INVENTORY_PROCESSOR')
+{
+    Write-Output 'Detected'
+}</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
