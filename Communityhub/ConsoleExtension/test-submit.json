@@ -1,0 +1,7 @@
+{
+  "downloadLocation": "https://www.microsoft.com",
+  "FileHash": "03042cf8100db386818cee4ff0f2972431a62ed78edbd09ac08accfabbefd818",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "test-submit-CodeSign-Policy.xml",
+  "Version": "1.0"
+}
