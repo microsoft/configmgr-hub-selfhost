@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_B2257805-03D9-4750-8FFD-AFB9F644C37D" LogicalName="Baseline_db74acdc-6e59-4506-97db-b2750607f51e" Version="3">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="ChildBL_2103" ResourceId="ID-51076d18-6868-4c6c-865e-3b9ec03cb7d9" />
+      <Description Text="For chile base line TC update" ResourceId="ID-263c77f8-c43c-413b-9a09-9f9587728338" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_B2257805-03D9-4750-8FFD-AFB9F644C37D" LogicalName="OperatingSystem_fcec20ca-f711-4649-aa0c-47f937d1319f" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
