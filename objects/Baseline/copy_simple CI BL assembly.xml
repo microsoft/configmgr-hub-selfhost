@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_6AD1EEB3-5702-42E1-B9A4-172AE8BD0D86" LogicalName="Baseline_9f4166d5-fe55-4689-b9bd-5ab628aaf6cc" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="simple CI BL assembly" ResourceId="ID-d9e7036c-ab4e-436c-8279-d385f8707989" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_6AD1EEB3-5702-42E1-B9A4-172AE8BD0D86" LogicalName="OperatingSystem_f29d4811-bf35-4484-b99e-a72674fac950" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
