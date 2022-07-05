@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-16"?>
+<AppMgmtDigest xmlns="http://schemas.microsoft.com/SystemCenterConfigurationManager/2009/AppMgmtDigest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Application AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="Application_1a05579f-5d92-4990-ac13-f4bd9edcd4a7" Version="3">
+    <DisplayInfo DefaultLanguage="en-US">
+      <Info Language="en-US">
+        <Title>3D Boat Race</Title>
+        <Publisher>A Trillion Games</Publisher>
+        <Version>1.2.0.0</Version>
+      </Info>
+    </DisplayInfo>
+    <DeploymentTypes>
+      <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_841e3105-46f8-4415-8baa-0dc58bbc0173" Version="1" />
+    </DeploymentTypes>
+    <Title ResourceId="Res_1924878826">3D Boat Race</Title>
+    <Publisher ResourceId="Res_521960140">A Trillion Games</Publisher>
+    <SoftwareVersion ResourceId="Res_1577127211">1.2.0.0</SoftwareVersion>
+    <Owners>
+      <User Qualifier="LogonName" Id="msilvey" />
+    </Owners>
+    <Contacts>
+      <User Qualifier="LogonName" Id="msilvey" />
+    </Contacts>
+  </Application>
+  <DeploymentType AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="DeploymentType_841e3105-46f8-4415-8baa-0dc58bbc0173" Version="1">
+    <Title ResourceId="Res_745266022">3DBoatRace.xap - Windows Phone app package (*.xap file)</Title>
+    <DeploymentTechnology>GLOBAL/WinPhone8DeploymentTechnology</DeploymentTechnology>
+    <Technology>WinPhone8</Technology>
+    <Hosting>WinPhone8</Hosting>
+    <Installer Technology="WinPhone8">
+      <ExecutionContext>User</ExecutionContext>
+      <Contents>
+        <Content ContentId="Content_2c6a4e6a-2d86-4042-bed6-e2a1a800900b" Version="1">
+          <File Name="3DBoatRace.xap" />
+          <Location>\\novafs01\supernova\BVT\AppMgmtBVT\DemoApps\WindowsPhone\WP8_xap\</Location>
+          <PeerCache>true</PeerCache>
+          <OnFastNetwork>Download</OnFastNetwork>
+          <OnSlowNetwork>DoNothing</OnSlowNetwork>
+        </Content>
+      </Contents>
+      <DetectAction>
+        <Provider>WinPhone8</Provider>
+        <Args>
+          <Arg Name="IsDeeplink" Type="Boolean">false</Arg>
+          <Arg Name="ProductID" Type="String">{348c78a2-08b3-4a19-8b64-bfdf2c89ccd1}</Arg>
+          <Arg Name="Version" Type="String">1.2.0.0</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </DetectAction>
+      <InstallAction>
+        <Provider>WinPhone8</Provider>
+        <Args>
+          <Arg Name="IsDeeplink" Type="Boolean">false</Arg>
+          <Arg Name="ProductID" Type="String">{348c78a2-08b3-4a19-8b64-bfdf2c89ccd1}</Arg>
+          <Arg Name="Version" Type="String">1.2.0.0</Arg>
+          <Arg Name="PackageUri" Type="String">3DBoatRace.xap</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+        <Contents>
+          <Content ContentId="Content_2c6a4e6a-2d86-4042-bed6-e2a1a800900b" Version="1" />
+        </Contents>
+      </InstallAction>
+      <UninstallAction>
+        <Provider>WinPhone8</Provider>
+        <Args>
+          <Arg Name="IsDeeplink" Type="Boolean">false</Arg>
+          <Arg Name="ProductID" Type="String">{348c78a2-08b3-4a19-8b64-bfdf2c89ccd1}</Arg>
+          <Arg Name="Version" Type="String">1.2.0.0</Arg>
+          <Arg Name="PackageUri" Type="String">3DBoatRace.xap</Arg>
+          <Arg Name="ExecutionContext" Type="String">User</Arg>
+        </Args>
+      </UninstallAction>
+      <CustomData>
+        <ProductID>{348c78a2-08b3-4a19-8b64-bfdf2c89ccd1}</ProductID>
+        <Version>1.2.0.0</Version>
+        <PackageUri>3DBoatRace.xap</PackageUri>
+        <PackageUriNew>3DBoatRace.xap</PackageUriNew>
+        <VppProviderType>-1</VppProviderType>
+        <IsDeeplink>false</IsDeeplink>
+        <InstallContent ContentId="Content_2c6a4e6a-2d86-4042-bed6-e2a1a800900b" Version="1" />
+        <AppPlatformVersion>7.1</AppPlatformVersion>
+      </CustomData>
+    </Installer>
+  </DeploymentType>
+</AppMgmtDigest>
