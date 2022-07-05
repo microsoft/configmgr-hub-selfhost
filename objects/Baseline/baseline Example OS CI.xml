@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="Baseline_b294574e-471f-40c1-86ba-c5d4584d4607" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="baseline Example OS CI" ResourceId="ID-8f4488f0-734c-4387-bad3-3c6a26fcd7df" />
+      <Description Text="testing update CI (do not own the CI)" ResourceId="ID-69be981b-7183-4c6f-8021-c0e953694aaf" />
+    </Annotation>
+    <RequiredItems />
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems>
+      <OperatingSystemReference AuthoringScopeId="ScopeId_80C9E7FD-DDD9-4EAB-BF50-C222D5086788" LogicalName="LogicalName_ed3dc3d9-db4d-4673-b8f5-ed0e4c18b617" />
+    </OperatingSystems>
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
