@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-16"?>
 <DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
   <!--Authored against the following schema version: 5-->
-  <Application AuthoringScopeId="ScopeId_2B3C9CC1-226A-4ED3-95D6-513D3BB316FD" LogicalName="Application_289a08a9-0df7-467b-8c1f-f5b976e52fb1" Version="1" Is64Bit="false">
+  <Application AuthoringScopeId="ScopeId_2B3C9CC1-226A-4ED3-95D6-513D3BB316FD" LogicalName="Application_289a08a9-0df7-467b-8c1f-f5b976e52fb1" Version="2" Is64Bit="false">
     <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
       <DisplayName Text="CI 2010" ResourceId="ID-dc6edad7-fc76-4b77-9ea0-543a897db784" />
-      <Description Text="" />
+      <Description Text="modified" ResourceId="ID-c25a042a-57fa-4e9c-9319-e3f87282a102" />
     </Annotation>
     <Parts>
       <SuppressionReferences />
