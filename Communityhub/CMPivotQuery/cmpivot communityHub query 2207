@@ -1,0 +1,1 @@
+Device | where Model == 'Virtual Machine'
