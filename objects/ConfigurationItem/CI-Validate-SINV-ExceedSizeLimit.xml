@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_9FC83AFB-150C-4958-8742-643A304C4776" LogicalName="Application_0be2d5cc-5245-423c-b938-d0e4a25b4fd1" Version="3" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-SINV-ExceedSizeLimit" ResourceId="ID-e5a3f89c-7e6c-424c-8c17-5cf379b5e7be" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo&#xA; This item will check folder &quot;\inboxes\auth\sinv.box\bad&quot; for larger files. Try to reduce the scanned folders in that case or increase the default size limit for &quot;HKLM:\SOFTWARE\Microsoft\SMS\COMPONENTS\SMS_SOFTWARE_INVENTORY_PROCESSOR&quot; - &quot;Max File Size&quot;" ResourceId="ID-06a98e21-b682-4e1e-b014-00f57e41fda1" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_b7c268d8-16f2-45fc-9f38-821dba3091d8" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="SINV-ExceedSizeLimit" ResourceId="ID-7c5785e5-fabf-4b8b-a684-f43cd9b834b8" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># Check for large SINV files
+$maxFileSize = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\SMS\COMPONENTS\SMS_SOFTWARE_INVENTORY_PROCESSOR' -Name 'Max File Size' -ErrorAction SilentlyContinue
+if ($maxFileSize)
+{
+    $fileCounter = 0
+    $SINVBadFileDir = "{0}{1}" -f (Split-Path -Path $env:SMS_LOG_PATH -Parent), '\inboxes\auth\sinv.box\bad'
+
+    Get-ChildItem -Path $SINVBadFileDir | ForEach-Object {
+
+        if ($_.Length -gt $maxFileSize.'Max File Size')
+        {
+            $fileCounter++
+        }
+    }
+}
+Write-Output $fileCounter</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_acc91db1-a5cd-4e33-846e-5e20336c6281" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="LargeFilesFound" ResourceId="ID-90997eba-ea2a-44f9-8f82-b273ab52d162" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_9FC83AFB-150C-4958-8742-643A304C4776" LogicalName="Application_0be2d5cc-5245-423c-b938-d0e4a25b4fd1" Version="3" DataType="Int64" SettingLogicalName="ScriptSetting_b7c268d8-16f2-45fc-9f38-821dba3091d8" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script># Evaluate only if SMS_SOFTWARE_INVENTORY_PROCESSOR is present on machine
+if (Test-Path 'HKLM:\SOFTWARE\Microsoft\SMS\COMPONENTS\SMS_SOFTWARE_INVENTORY_PROCESSOR')
+{
+    Write-Output 'Detected'
+}</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
