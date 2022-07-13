@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_87AE45A1-0F82-4731-BC7D-48C927EA2023" LogicalName="Baseline_8eb44085-4d66-4977-8c20-f559cf118a01" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="liharris ci with my update 2103" ResourceId="ID-25331419-9fb3-4845-9926-afdeb6976a9e" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems>
+      <BusinessPolicyReference AuthoringScopeId="ScopeId_87AE45A1-0F82-4731-BC7D-48C927EA2023" LogicalName="LogicalName_ace564b1-f0a4-4d72-9183-2e0e3e8d1e00" />
+    </RequiredItems>
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems />
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
