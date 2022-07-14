@@ -1,1 +1,25 @@
-<?xml version="1.0" encoding="utf-16"?><DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration"><!--Authored against the following schema version: 5--><BusinessPolicy AuthoringScopeId="ScopeId_0F174188-FCE5-488B-847F-AD842C753BC7" LogicalName="BusinessPolicy_fe143dc6-388c-49ff-885c-33252da833e6" Version="2"><Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"><DisplayName Text="CI win 10" ResourceId="ID-60852dd0-0d01-435c-9ae5-eec450eac285"/><Description Text="modifying this item to test new version and update" ResourceId="ID-f7b56f77-cee0-4677-9d20-d403a5e60c87"/></Annotation><Parts><SuppressionReferences/></Parts><Settings><RootComplexSetting/></Settings><PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules"><OperatingSystemExpression><Operator>OneOf</Operator><Operands><RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients"/><RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients"/></Operands></OperatingSystemExpression></PlatformApplicabilityCondition></BusinessPolicy></DesiredConfigurationDigest>
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <BusinessPolicy AuthoringScopeId="ScopeId_EFE60650-D3EF-4210-BE71-FF3518504014" LogicalName="BusinessPolicy_fe143dc6-388c-49ff-885c-33252da833e6" Version="5">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI win 10" ResourceId="ID-60852dd0-0d01-435c-9ae5-eec450eac285" />
+      <Description Text="Test for download update 2103" ResourceId="ID-8def2b67-b0e4-480c-9349-504806f9142e" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+  </BusinessPolicy>
+</DesiredConfigurationDigest>
