@@ -1,0 +1,7 @@
+{
+  "downloadLocation": "https://releases.recastsoftware.com/releases/downloadcab/857",
+  "FileHash": "C8F50E16292ED83C10A82357C9817B93909AE4B05CA90C0702695DF1C86EEA4C",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "console extension test 2203-CodeSign-Policy.xml",
+  "Version": "4.8.2110.16001"
+}
