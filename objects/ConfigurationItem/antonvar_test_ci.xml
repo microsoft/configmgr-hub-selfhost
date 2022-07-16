@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <BusinessPolicy AuthoringScopeId="ScopeId_0D7D8B60-F2F9-484A-B9F3-4A8B68D14D59" LogicalName="BusinessPolicy_a11ef6e6-3af7-4be9-bb73-04f745a2ba6c" Version="7">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="antonvar_test_ci" ResourceId="ID-165b2fea-ae7d-4ef5-bde1-2f840b7d505b" />
+      <Description Text="v6" ResourceId="ID-90763a93-ea31-451d-9c63-f6a9c669bde1" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_ARM64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_and_higher_Clients" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_and_higher_Clients" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+  </BusinessPolicy>
+</DesiredConfigurationDigest>
