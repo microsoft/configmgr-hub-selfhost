@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-WSUS-AppPoolConfig" ResourceId="ID-5d98b897-18ff-4e2e-bcf8-cb8a00c6d66f" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo&#xA;This item aims to validate the WSUS best practices: https://docs.microsoft.com/en-us/troubleshoot/mem/configmgr/windows-server-update-services-best-practices" ResourceId="ID-57ee3c31-edb0-4b3b-a8b5-ba4669912b8c" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_babbc5f1-e366-470d-852c-013d5fe3bb5b" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-Recycling-RegularTime" ResourceId="ID-f7f1cc6c-db5b-4235-af88-c7c61c5b4ded" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.recycling.periodicRestart.time.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_233ff0c7-44f5-4088-8f65-55b87ee28247" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-CPU-LimitAction" ResourceId="ID-9638b76d-e8e1-41f7-afbb-6e0e4a2e82e6" />
+            <Description Text="Could be used to restrict CPU usage." ResourceId="ID-e972c9d0-c337-4343-b6a1-c23e373b39bd" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.cpu.action.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_5b8f18da-dd42-4b00-b52c-b5c57cfca6eb" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-CPU-LimitPercent" ResourceId="ID-3b109431-30ab-4fb3-a856-fa73129c6114" />
+            <Description Text="Could be used to restrict CPU usage." ResourceId="ID-d81ca757-369c-4b0f-9070-89a82f120cc6" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.cpu.limit.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_38289ef7-12b6-4ed1-910d-f1b2295414be" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-RapidFaildProtection-ResponseType" ResourceId="ID-4e9babd9-bcb7-4126-84d0-8bdc81e2737a" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.failure.loadBalancerCapabilities.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_c9843303-31dc-4238-ace5-1224a147da8a" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-ProcesModel-PingEnabled" ResourceId="ID-804a1442-a49b-423b-88e8-cec173313320" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.processModel.pingingEnabled.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_2f82144d-6d78-42ee-8f13-f9dd59a1b5b2" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-Recycling-PrivateMemory" ResourceId="ID-98cd2513-356c-40c1-98a9-1247099b6ab4" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.recycling.periodicRestart.privateMemory.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_498e74ff-feba-4501-afcd-576ab83d3661" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-General-QueueLength" ResourceId="ID-4aaadaa4-a797-4dd4-9a0b-af99e3893807" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS app-pool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+
+    $outString = $appPool.queueLength.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_60a1500a-fa87-4d86-b0ab-fc2671cb1ae6" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-RapidFailProtection-Enabled" ResourceId="ID-9877d536-5e6e-4760-8c69-8d232e58adff" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.failure.rapidFailProtection.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_1e4af1ac-c57b-4829-97cb-e23f78f626ef" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-RapidFailProtection-FailureInterval" ResourceId="ID-dc14f575-1353-4512-875b-51bfee9dba0a" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.failure.rapidFailProtectionInterval.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_5b11338f-a241-452e-9875-f3df94065306" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-AppPool-RapidFailProtection-MaxCrashes" ResourceId="ID-7b5e97c4-a67c-44bb-8b4b-b439e602db5c" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># little script to validate the WSUS apppool config
+Import-Module WebAdministration
+
+[string]$outString = $null
+$appPool = Get-Item IIS:\AppPools\WsusPool
+if ($appPool)
+{
+    $outString = $appPool.failure.rapidFailProtectionMaxCrashes.ToString()
+}
+else
+{
+    $outString = "WsusPool not found"
+}
+
+Write-Output $outString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_8d193f0b-3be8-47d1-806d-7cbefed8a233" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-ContentFolder-AnonymousAuth" ResourceId="ID-c7b53b49-10d6-43fe-907b-3d96cc1d8399" />
+            <Description Text="Only relevant if the server is configured to use a shared content source and shared DB. More can be found here: https://techcommunity.microsoft.com/t5/configuration-manager-archive/how-to-implement-a-shared-susdb-for-configuration-manager/ba-p/274103" ResourceId="ID-740deb4d-5ed1-4bf1-b7bc-800e05bd1456" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># Little script to check the WSUS content folder authentication
+# Default should be: "AnonymousAuth|Enabled|IUSR"
+# Schould be: "AnonymousAuth|Enabled|AppPollIdentity" in case of shared content path
+Import-Module WebAdministration
+$websiteToValidate = 'WSUS Administration/Content' 
+[string]$outputString = 'AnonymousAuth'
+$wsusWebConfiguration = $null
+$wsusWebConfiguration = Get-WebConfiguration -Filter 'system.webServer/security/authentication/anonymousAuthentication' -Location "$websiteToValidate"
+foreach ($wsusWebConfigAttribute in $wsusWebConfiguration.Attributes)
+{
+    switch ($wsusWebConfigAttribute.Name)
+    {
+        'enabled' 
+        {
+            if ($wsusWebConfigAttribute.Value -ieq 'True')
+            {
+                $outputString = "{0}|{1}" -f $outputString, 'Enabled'   
+            }
+            else
+            {
+                $outputString = "{0}|{1}" -f $outputString, 'Disabled'       
+            }
+        }
+        'userName' 
+        {
+            if ($wsusWebConfigAttribute.Value -eq "")
+            {
+                $outputString = "{0}|{1}" -f $outputString, "AppPollIdentity"
+            }
+            else
+            {
+                $outputString = "{0}|{1}" -f $outputString, $wsusWebConfigAttribute.Value
+            }
+            
+        }
+    }   
+}
+
+
+# Like: "AnonymousAuth|Enabled|IUSR"
+# OR
+# Like: "AnonymousAuth|Enabled|AppPollIdentity"
+Write-Output $outputString</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+        <SimpleSetting LogicalName="ScriptSetting_9a5c37c2-a8c2-4c91-ad79-544de2e24715" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="WSUS-ContentFolder-Path" ResourceId="ID-297eda29-8676-4655-9925-39e44ae3f5f4" />
+            <Description Text="Only relevant if the server is configured to use a shared content source and shared DB. Then the result should be a UNC path. More can be found here: https://techcommunity.microsoft.com/t5/configuration-manager-archive/how-to-implement-a-shared-susdb-for-configuration-manager/ba-p/274103" ResourceId="ID-a1cd93ac-2f3e-49f7-9c7f-e4e6631fbecf" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># Little script to check the WSUS content location
+# Should be a UNC path like "\\server1.contoso.local\wsus$" in case of shared content path
+Import-Module WebAdministration 
+$WSUSSite = Get-Item  'IIS:\Sites\WSUS Administration\Content'
+$WSUSSite.physicalPath</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_cd8ee303-75f9-4a1b-aa5a-9f42cffee20f" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="QueueLength" ResourceId="ID-0487cd78-a120-47db-8440-0a43e7e50a61" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_498e74ff-feba-4501-afcd-576ab83d3661" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="2000" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_105ad662-f602-4d38-be9f-51ec13edb495" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="CPULimit" ResourceId="ID-7fd8616a-8cf5-4d0d-96b8-72e314fe3a4d" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_5b8f18da-dd42-4b00-b52c-b5c57cfca6eb" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="0" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_07f286b4-87cd-43ce-90ac-0a1bc10e7781" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="CPUAction" ResourceId="ID-5f694c7e-7224-4fe8-8187-078cb1dfdcf8" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_233ff0c7-44f5-4088-8f65-55b87ee28247" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="NoAction" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_0cd23213-9535-424e-85d7-e1fb403a68bb" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="ResponseType" ResourceId="ID-c5daf0a9-a610-4ec1-9a5f-81c6b1527be2" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_38289ef7-12b6-4ed1-910d-f1b2295414be" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="TcpLevel" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_c1fb2dd5-049a-4d8d-83f7-d9cdac8e87e7" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="RapidFailProtection" ResourceId="ID-2ef02a4e-5c40-4794-82a5-277ea3a2c93b" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_60a1500a-fa87-4d86-b0ab-fc2671cb1ae6" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="True" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_293d6b8b-c13e-4154-ab8f-b07d380ed9b5" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="RapidFailProtectionInterval" ResourceId="ID-db889462-26b9-485c-868e-438f042d0964" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_1e4af1ac-c57b-4829-97cb-e23f78f626ef" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="00:30:00" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_bbcc9040-6d1e-4dfc-a5d0-1a205e106093" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="RapidFailProtectionMaxCrashes" ResourceId="ID-08a97bf7-9b01-41ea-870c-23259a1b3871" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_5b11338f-a241-452e-9875-f3df94065306" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="60" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_f4642bd4-b02c-4151-bea7-da25f4f81d79" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="AnonymousAuthentication" ResourceId="ID-fd4786ba-2c88-4723-99d4-fbb6520b082a" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_8d193f0b-3be8-47d1-806d-7cbefed8a233" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="AnonymousAuth|Enabled|AppPollIdentity" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_63148574-c517-4d99-bb50-bc1c3a848624" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="PhysicalPath" ResourceId="ID-93d57233-13b3-4661-9da3-243a5428362f" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_9a5c37c2-a8c2-4c91-ad79-544de2e24715" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="E:\WSUS\WsusContent\" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_1839c793-4472-4aee-905f-5c7d0e9d3ece" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="PrivateMemory" ResourceId="ID-a27c439b-47b5-4dc6-9fd0-ffe3f884978e" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_2f82144d-6d78-42ee-8f13-f9dd59a1b5b2" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="0" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_ae6ad97c-d651-49d4-911d-872e2b9153e4" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="PingEnabled" ResourceId="ID-66133ee4-9c08-47c5-81fb-9eed32e9551d" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_c9843303-31dc-4238-ace5-1224a147da8a" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="False" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_931227b7-dc4f-4ee9-be3d-991781f24eed" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Time" ResourceId="ID-9c24354a-9ed9-4fa1-acb6-eb3c7483a5fa" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_CD62B756-B593-4D99-98DE-0CA5DAFCF42C" LogicalName="Application_693d59be-3a54-406f-b545-10c31aee0e9e" Version="14" DataType="String" SettingLogicalName="ScriptSetting_babbc5f1-e366-470d-852c-013d5fe3bb5b" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="00:00:00" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script>Get-Service -Name WsusService -ErrorAction SilentlyContinue</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
