@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_9FC83AFB-150C-4958-8742-643A304C4776" LogicalName="Application_fff9ecd5-c115-4da1-90d4-3e00001aae11" Version="5" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI-Validate-HINV-ExceedSizeLimit" ResourceId="ID-e5a3f89c-7e6c-424c-8c17-5cf379b5e7be" />
+      <Description Text="Source: https://github.com/jonasatgit/scriptrepo &#xA;This item will check for files in &quot;\inboxes\auth\dataldr.box\bad\ExceedSizeLimit&quot;. Check &quot;CI-Validate-HINV-MaxMIFSize&quot; in that case. Also reduce the HINV classes for specific system types if possible and try to avoid large files." ResourceId="ID-06a98e21-b682-4e1e-b014-00f57e41fda1" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_e2bd5573-16f7-445c-ad08-3ca5a97326b6" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="HINV-ExceedSizeLimit" ResourceId="ID-40cf85b8-33db-4e2c-8f80-f30c714ae761" />
+            <Description Text="" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="PowerShell"># Check for large HINV files. 
+# The folder "dataldr.box\bad\ExceedSizeLimit" only contains files larger than what is configured under:
+# 'HKLM:\SOFTWARE\Microsoft\SMS\COMPONENTS\SMS_INVENTORY_DATA_LOADER' -&gt; 'Max Mif Size'
+# The folder does not exist in case the files are smaller
+$HINVBadFileDir = "{0}{1}" -f (Split-Path -Path $env:SMS_LOG_PATH -Parent), '\inboxes\auth\dataldr.box\bad\ExceedSizeLimit'
+if (Test-Path $HINVBadFileDir)
+{
+    [array]$largeFilesList = Get-ChildItem -Path $HINVBadFileDir
+    Write-Output $largeFilesList.Count
+}
+else
+{
+    Write-Output 0
+}</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_e3033aa0-781f-4830-861c-28796462465b" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="LargeFilesFound" ResourceId="ID-0d1c1688-43ba-4b47-9960-75381d3b6e86" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_9FC83AFB-150C-4958-8742-643A304C4776" LogicalName="Application_fff9ecd5-c115-4da1-90d4-3e00001aae11" Version="5" DataType="Int64" SettingLogicalName="ScriptSetting_e2bd5573-16f7-445c-ad08-3ca5a97326b6" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="PowerShell">
+      <Script># Evaluate only if SMS_INVENTORY_DATA_LOADER is present on machine
+if (Test-Path 'HKLM:\SOFTWARE\Microsoft\SMS\COMPONENTS\SMS_INVENTORY_DATA_LOADER')
+{
+    Write-Output 'Detected'
+}</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
