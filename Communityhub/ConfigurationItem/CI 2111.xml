@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <BusinessPolicy AuthoringScopeId="ScopeId_BC1C2B5D-57AD-48FF-AC79-465AFCCCFE52" LogicalName="BusinessPolicy_59c553ad-3171-4f10-90f6-391454f28537" Version="2">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI 2111" ResourceId="ID-ca8c2f34-fd4a-4baf-b5b4-c856d2663450" />
+      <Description Text="update" ResourceId="ID-3f280584-a510-445e-a9b0-6a978028f4e0" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_RT" />
+          <RuleExpression RuleId="Windows/All_ARM_Windows_8.1" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1" />
+          <RuleExpression RuleId="Windows/All_ARM64_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_Holographic_Enterprise_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_Holographic_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_Team_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_10_higher" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_10_higher" />
+          <RuleExpression RuleId="WindowsPhone/Windows_Phone_10_higher" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+  </BusinessPolicy>
+</DesiredConfigurationDigest>
