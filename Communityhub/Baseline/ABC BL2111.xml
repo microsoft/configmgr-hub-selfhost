@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Baseline AuthoringScopeId="ScopeId_BC1C2B5D-57AD-48FF-AC79-465AFCCCFE52" LogicalName="Baseline_d31e9f01-5a9f-45dc-a5d1-7b9896c517bb" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="ABC BL2111" ResourceId="ID-8d8728fa-71f0-428c-8c83-d2d65719612c" />
+      <Description Text="" />
+    </Annotation>
+    <RequiredItems>
+      <BusinessPolicyReference AuthoringScopeId="ScopeId_BC1C2B5D-57AD-48FF-AC79-465AFCCCFE52" LogicalName="BusinessPolicy_712283ac-6582-467b-9e59-16de08474233" />
+    </RequiredItems>
+    <ProhibitedItems />
+    <OptionalItems />
+    <OperatingSystems />
+    <SoftwareUpdates />
+    <Baselines />
+    <OtherConfigurationItems />
+  </Baseline>
+</DesiredConfigurationDigest>
