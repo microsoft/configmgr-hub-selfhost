@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <BusinessPolicy AuthoringScopeId="ScopeId_9E78D87C-9430-408D-B89A-03B6020B2B4C" LogicalName="ClonedCI_d2dcb00c-b3ba-46d7-a069-994c8d7332bb" Version="2">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="103885-1-Compliant" ResourceId="ID-8c426bb9-0fe0-44bf-afe4-b4e04bcf6b24" />
+      <Description Text="103885-1-Compliant" ResourceId="ID-2b4091ee-5629-4424-a31b-450fb6a8e8e8" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="ScriptSetting_999cc274-49db-4bbf-a89e-50d12b592fb3" DataType="String">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="Wscript.echo 103885" ResourceId="ID-403c1d43-7bc8-40ab-9922-768a4e579f5c" />
+            <Description Text="Wscript.echo 103885" ResourceId="ID-f77289ba-d97d-4b5b-986d-38528890a682" />
+          </Annotation>
+          <ScriptDiscoverySource Is64Bit="true">
+            <DiscoveryScriptBody ScriptType="VBScript">Wscript.echo 103885</DiscoveryScriptBody>
+          </ScriptDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_ScriptSetting_999cc274-49db-4bbf-a89e-50d12b592fb3_Existential" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Wscript.echo 103885 Existential Rule" ResourceId="ID-44aa30f8-1c1d-4de5-b054-4f5d5a32d0cc" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>GreaterThan</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_9E78D87C-9430-408D-B89A-03B6020B2B4C" LogicalName="ClonedCI_d2dcb00c-b3ba-46d7-a069-994c8d7332bb" Version="2" DataType="Int64" SettingLogicalName="ScriptSetting_999cc274-49db-4bbf-a89e-50d12b592fb3" SettingSourceType="Script" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_689e2fc7-6d30-413c-95af-c8a8aeac73e2" Severity="Informational" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="Wscript.echo 103885" ResourceId="ID-4b122a72-49b4-45cc-beb2-d10c6625a809" />
+          <Description Text="Wscript.echo 103885" ResourceId="ID-dfe3ff5d-a13c-47ef-a035-ed9dc4da8907" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_9E78D87C-9430-408D-B89A-03B6020B2B4C" LogicalName="ClonedCI_d2dcb00c-b3ba-46d7-a069-994c8d7332bb" Version="2" DataType="String" SettingLogicalName="ScriptSetting_999cc274-49db-4bbf-a89e-50d12b592fb3" SettingSourceType="Script" Method="Value" Changeable="false" />
+            <ConstantValue Value="103885" DataType="String" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+  </BusinessPolicy>
+</DesiredConfigurationDigest>
