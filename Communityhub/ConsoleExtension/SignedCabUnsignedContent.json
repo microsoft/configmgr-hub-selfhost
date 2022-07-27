@@ -1,0 +1,7 @@
+{
+  "downloadLocation": "https://raw.githubusercontent.com/sihlamMSFT/testing/master/SignedCabUnsignedContent.cab",
+  "FileHash": "aeff7333da0e0d93b1bc83c7390d13249abffbb0a0921f275127ea47590a6287",
+  "HashAlgorithm": "SHA256",
+  "codeSignPolicyFile": "SignedCabUnsignedContent-CodeSign-Policy.xml",
+  "Version": "1.0"
+}
