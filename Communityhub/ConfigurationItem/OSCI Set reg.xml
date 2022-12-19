@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <OperatingSystem AuthoringScopeId="ScopeId_99467BB2-AA24-4F45-90AC-D6E6ACE7697A" LogicalName="OperatingSystem_d49651ea-407d-4469-a604-2c1a29e901fb" Version="1">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="OSCI Set reg" ResourceId="ID-1c4cc5a6-0007-4130-8f0e-01fc4c16ccd1" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+    </Parts>
+    <Settings>
+      <RootComplexSetting>
+        <SimpleSetting LogicalName="RegSetting_59c6677d-e4d1-4933-9273-a8deb7fa14c8" DataType="Int64">
+          <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+            <DisplayName Text="reg set" ResourceId="ID-0af85993-ade5-484b-ab03-ffda81b16d14" />
+            <Description Text="setq" ResourceId="ID-10dd1d57-919b-4943-9978-9e06e1f74ffa" />
+          </Annotation>
+          <RegistryDiscoverySource Hive="HKEY_LOCAL_MACHINE" Depth="Base" Is64Bit="false" CreateMissingPath="true">
+            <Key>software\microsoft\dcmtest</Key>
+            <ValueName>intset</ValueName>
+          </RegistryDiscoverySource>
+        </SimpleSetting>
+      </RootComplexSetting>
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_9a8cdec7-1332-4449-8c2f-ab94516809e4" Severity="Warning" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="New_Rule" ResourceId="ID-b96cb1c9-ac0b-4a0d-baf3-24b79df3abec" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>Equals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_99467BB2-AA24-4F45-90AC-D6E6ACE7697A" LogicalName="OperatingSystem_d49651ea-407d-4469-a604-2c1a29e901fb" Version="1" DataType="Int64" SettingLogicalName="RegSetting_59c6677d-e4d1-4933-9273-a8deb7fa14c8" SettingSourceType="Registry" Method="Value" Changeable="true" />
+            <ConstantValue Value="9999" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_6f4beb9f-4c31-4efc-b641-f339782a0439" Severity="Critical" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="New_Rule_1" ResourceId="ID-d44d0c8b-f8e4-4170-bf78-804eb0ac2342" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_99467BB2-AA24-4F45-90AC-D6E6ACE7697A" LogicalName="OperatingSystem_d49651ea-407d-4469-a604-2c1a29e901fb" Version="1" DataType="Int64" SettingLogicalName="RegSetting_59c6677d-e4d1-4933-9273-a8deb7fa14c8" SettingSourceType="Registry" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <OperatingSystemDiscoveryRule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_x64_Windows_XP_Professional" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_XP" />
+          <RuleExpression RuleId="Windows/x64_Windows_XP_Professional_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_XP_Professional_Service_Pack_3" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x64_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_Client" />
+          <RuleExpression RuleId="Windows/x86_Windows_7_SP1" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8_Client" />
+          <RuleExpression RuleId="Windows/All_ARM_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_8.1_Client" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_Non_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2003_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_R2_SP2" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2003_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Server_2008" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_CORE" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_R2_SP1_Core" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/x64_Windows_Server_2008_SP2_Core" />
+          <RuleExpression RuleId="Windows/x86_Windows_Server_2008_SP2" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_8" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Server_2012_R2" />
+          <RuleExpression RuleId="Windows/All_Embedded_Windows_XP" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x64_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8.1_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Industry" />
+          <RuleExpression RuleId="Windows/All_x86_Windows_Embedded_8_Standard" />
+          <RuleExpression RuleId="Windows/x64_Embedded_Windows_7" />
+          <RuleExpression RuleId="Windows/x86_Embedded_Windows_7" />
+        </Operands>
+      </OperatingSystemExpression>
+    </OperatingSystemDiscoveryRule>
+  </OperatingSystem>
+</DesiredConfigurationDigest>
