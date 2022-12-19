@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-16"?>
+<DesiredConfigurationDigest xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/07/10/DesiredConfiguration">
+  <!--Authored against the following schema version: 5-->
+  <Application AuthoringScopeId="ScopeId_99467BB2-AA24-4F45-90AC-D6E6ACE7697A" LogicalName="Application_4a0ef230-8afd-4741-a41c-702a555a036e" Version="1" Is64Bit="false">
+    <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <DisplayName Text="CI_file settings" ResourceId="ID-4b11c7b5-e9c6-4a93-8eb0-aed2ffa59011" />
+      <Description Text="" />
+    </Annotation>
+    <Parts>
+      <SuppressionReferences />
+      <File Is64Bit="false" LogicalName="File_718b7f52-64ed-495b-a7f9-5985f302788c">
+        <Annotation xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+          <DisplayName Text="file settings file" ResourceId="ID-748678e8-6249-484e-b85b-2ea9fdb99d52" />
+          <Description Text="file" ResourceId="ID-05b918f2-02ac-4188-87b1-48dd65600238" />
+        </Annotation>
+        <Path>%windir%\system32\</Path>
+        <Filter>notepad.exe</Filter>
+      </File>
+    </Parts>
+    <Settings>
+      <RootComplexSetting />
+    </Settings>
+    <Rules>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_0763f220-314c-475b-a935-c564ac4bd925" Severity="Warning" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="New_Rule" ResourceId="ID-4fa905cb-fe2a-451c-82a5-ffb4bffb2d1e" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>NotEquals</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_99467BB2-AA24-4F45-90AC-D6E6ACE7697A" LogicalName="Application_4a0ef230-8afd-4741-a41c-702a555a036e" Version="1" DataType="Int64" SettingLogicalName="File_718b7f52-64ed-495b-a7f9-5985f302788c" SettingSourceType="File" Method="Count" Changeable="false" />
+            <ConstantValue Value="0" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+      <Rule xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules" id="Rule_d0dd046c-e4f0-4b80-a8b7-db929d9fe3db" Severity="Warning" NonCompliantWhenSettingIsNotFound="false">
+        <Annotation>
+          <DisplayName Text="New_Rule_1" ResourceId="ID-ed69d15a-9595-492c-99fb-61f5319accd2" />
+          <Description Text="" />
+        </Annotation>
+        <Expression>
+          <Operator>GreaterThan</Operator>
+          <Operands>
+            <SettingReference AuthoringScopeId="ScopeId_99467BB2-AA24-4F45-90AC-D6E6ACE7697A" LogicalName="Application_4a0ef230-8afd-4741-a41c-702a555a036e" Version="1" DataType="Int64" SettingLogicalName="File_718b7f52-64ed-495b-a7f9-5985f302788c" SettingSourceType="File" Method="Value" PropertyPath="Size" Changeable="false" />
+            <ConstantValue Value="20" DataType="Int64" />
+          </Operands>
+        </Expression>
+      </Rule>
+    </Rules>
+    <PlatformApplicabilityCondition xmlns="http://schemas.microsoft.com/SystemsCenterConfigurationManager/2009/06/14/Rules">
+      <OperatingSystemExpression>
+        <Operator>OneOf</Operator>
+        <Operands>
+          <RuleExpression RuleId="Windows/All_Windows_Client_Server" />
+        </Operands>
+      </OperatingSystemExpression>
+    </PlatformApplicabilityCondition>
+    <ScriptDiscoveryInfo ScriptType="JScript">
+      <Script>WScript.echo("088eda47-b1c8-434a-8e84-8f707c8d1a76");</Script>
+    </ScriptDiscoveryInfo>
+  </Application>
+</DesiredConfigurationDigest>
